@@ -1,0 +1,907 @@
+\documentclass[mstat,12pt]{unswthesis}
+
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+% OK...Now we get to some actual input.  The first part sets up
+% the title etc that will appear on the front page
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title{Projet réalisé par\\[0.5cm] l'équipe PokéGirl du groupe de TD1 \\[3cm]Rapport
+de groupe des UE \newline  Bases de données + Sciences des Données 2}
+
+\authornameonly{Fenina Sara, Guilleminot Sarah, Rakoto Ambinintsoa
+Prisca, Sbircea Stephanie. }
+
+\author{\Authornameonly}
+
+\copyrightfalse
+\figurespagefalse
+\tablespagefalse
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  And now the document begins
+%  The \beforepreface and \afterpreface commands puts the
+%  contents page etc in
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\input{header.tex}
+
+\renewcommand{\contentsname}{Table des matières}
+
+\renewcommand{\chaptername}{Chapitre}
+
+
+
+
+\begin{document}
+
+\beforepreface
+
+%\afterpage{\blankpage}
+
+% plagiarism
+
+\prefacesection{Déclaration de non plagiat}
+
+\textcolor{red}{À compléter avant la remise du rapport.}
+
+\vskip 2pc \noindent Nous déclarons que ce rapport est le fruit de notre seul travail, à part lorsque cela est indiqué  explicitement. 
+
+\vskip 2pc  \noindent Nous acceptons que la personne évaluant ce rapport puisse, pour les besoins de cette évaluation:
+\begin{itemize}
+\item la reproduire et en fournir une copie à un autre membre de l'université; et/ou,
+\item en communiquer une copie à un service en ligne de détection de plagiat (qui pourra en retenir une copie pour les besoins d'évaluation future).
+\end{itemize}
+
+\vskip 2pc \noindent Nous certifions que nous avons lu et compris les règles ci-dessus.\vspace{24pt}
+
+\vskip 2pc \noindent En signant cette déclaration, nous acceptons ce qui précède.
+\vskip 2pc \noindent
+%%Signature: \rule{7cm}{0.25pt} \hfill Date: \rule{4cm}{0.25pt} \\[1cm]
+%%Signature: \rule{7cm}{0.25pt} \hfill Date: \rule{4cm}{0.25pt} \\[1cm]
+%%Signature: \rule{7cm}{0.25pt} \hfill Date: \rule{4cm}{0.25pt} \\[1cm]
+%%Signature: \rule{7cm}{0.25pt} \hfill Date: \rule{4cm}{0.25pt} \\[1cm]
+%%\vskip 1pc
+Signature : Fenina Sara \hfill Date: 30/03/2026 \\[1cm]
+Signature : Guilleminot Sarah \hfill Date: 30/03/2026\\[1cm]
+Signature : Rakoto Ambinintsoa Prisca \hfill Date: 30/03/2026 \\[1cm]
+Signature : Sbircea Stephanie \hfill Date: 30/03/2026 \\[1cm]
+
+%\textcolor{red}{Mettre à jour la date.}
+
+{\bigskip\bigskip\bigskip\noindent} \today
+%\afterpage{\blankpage}
+
+% Acknowledgements are optional
+
+
+\prefacesection{Remerciements}
+
+\textcolor{red}{À compléter avant la remise du rapport.}
+
+{\bigskip}Nos plus sincères remerciements vont à notre encadrant
+pédagogique pour les conseils avisés sur notre travail.\\[1cm] Nous
+remercions aussi \ldots{}\\[1cm] 
+
+{\bigskip\bigskip\bigskip\noindent} \today
+
+%\afterpage{\blankpage}
+
+% Abstract
+
+\prefacesection{Résumé}
+
+L'image ci-dessous vous donne quelques conseils pour rédiger un bon
+résumé.\newline \includegraphics[width=10cm,height=10cm]{good-abstract.png}
+
+%\afterpage{\blankpage}
+
+
+\afterpreface
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Now we can start on the first chapter
+% Within chapters we have sections, subsections and so forth
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\afterpage{\blankpage}
+
+
+\chapter{Introduction}\label{introduction}
+
+Dans le cadre de ce projet, nous nous intéressons au système d'échange
+Wonder Trade du jeu vidéo Pokémon Sun and Moon, qui permet aux joueurs
+d'échanger des Pokémon de manière aléatoire avec d'autres joueurs à
+travers le monde. Ce système constitue un exemple intéressant
+d'interactions entre joueurs, où les décisions d'échange peuvent
+refléter des stratégies, des préférences ou encore une certaine gestion
+des ressources disponibles dans le jeu. En effet, chaque joueur dispose
+de Pokémon ayant des caractéristiques différentes, notamment en termes
+de puissance, de rareté ou de type, ce qui peut influencer leur choix de
+les conserver ou de les échanger.
+
+\bigskip
+
+\begin{center}
+
+**caractéristiques statistiques d’un Pokémon (puissance, rareté, type) influencent-elles sa probabilité d’être échangé dans le système Wonder Trade de Pokémon Sun and Moon?**
+
+\end{center}
+\medskip
+
+\justifying
+
+Ainsi, on peut se demander si les échanges réalisés dans le Wonder Trade
+sont réellement aléatoires du point de vue de la qualité des Pokémon, ou
+s'ils révèlent des comportements spécifiques de la part des joueurs.
+Autrement dit, les joueurs ont-ils tendance à échanger des Pokémon moins
+performants ou moins rares, ou observe-t-on également la présence de
+Pokémon puissants et recherchés dans ce système ? Cette interrogation
+est centrale pour comprendre la logique des échanges et les stratégies
+adoptées par les joueurs.
+
+\medskip
+
+Cette question présente un intérêt à la fois en analyse de données et en
+compréhension des comportements dans les environnements numériques. En
+effet, si les joueurs échangent majoritairement des Pokémon faibles ou
+communs, cela pourrait indiquer une logique d'optimisation individuelle.
+À l'inverse, la présence de Pokémon rares ou puissants dans les échanges
+pourrait révéler des comportements différents, comme la recherche
+d'aléatoire, la générosité ou des stratégies spécifiques. Ainsi, l'étude
+de cette problématique permet de mieux comprendre les dynamiques
+d'échange dans ce système et d'appliquer des outils statistiques pour
+analyser ces comportements.
+
+\bigskip 
+\bigskip
+
+\#Rôles
+
+\medskip
+
+Fenina Sara : Étudiante n°22411291, Resp. de la collecte des données.
+
+Guilleminot Sarah : Étudiante n°22405827, Resp. recherche bases de
+données.
+
+Rakoto Ambinintsoa : Étudiante n°22402951, Resp. Descriptif des tables.
+
+Sbircea Stephanie : Étudiante n°22304694, Resp. import des données.
+
+\section{Quelques détails
+techniques}\label{quelques-duxe9tails-techniques}
+
+\textbf{Ortographe} : Il est important de soigner l'orthographe. Vous
+devriez utiliser un correcteur en ligne tel que
+\texttt{languagetool}\footnote{Voir \href{https://www.overleaf.com/blog/635-languagetool-a-free-browser-add-on-to-check-your-grammar-and-spelling}{https://www.overleaf.com/blog/635-languagetool-a-free-browser-add-on-to-check-your-grammar-and-spelling} et \url{https://fr.overleaf.com/learn/how-to/Can_I_change_the_spell_check_language_to_e.g._Spanish\%3F}.}
+(\url{https://languagetool.org/fr}).
+
+\bigskip
+
+\textbf{R Markdown :} Pour créer ce rapport, on vous demande d'utiliser
+\texttt{R\ Markdown}, via le logiciel \texttt{RStudio}.
+
+Pour vous aider, on vous fournit un fichier \texttt{.Rmd} qui contient
+la structure du projet et qui présente quelques exemples de la syntaxe à
+utiliser. Vous pouvez donc partir de ce fichier et le modifier à votre
+guise. (Nous suggérons que vous organisiez votre rapport en utilisant
+des chapitres mais, en fonction de votre projet, rien ne vous empêche
+d'adopter une structure différente.)
+
+La «compilation» (\emph{i.e.}, «Kniter») du \texttt{Rmd} permet de créer
+soit un fichier PDF, soit un fichier Word, soit un fichier HTML (le PDF
+étant celui pour lequel les choses se passent le mieux, et aussi le
+format attendu pour ce cours).
+
+Vous pouvez incorporer des \emph{chunks} R qui seront exécutés à la
+volée. Vous pouvez inclure des commandes \LaTeX.
+
+Le désavantage de travailler avec un \texttt{.Rmd} sous \texttt{RStudio}
+est que vous travaillez en local : il faudra donc bien faire attention
+de prendre en compte les modifications de chacun.
+
+\bigskip
+
+\textbf{Editeur collaboratif : } Lorsque votre rapport sera proche de sa
+version finale, i.e.~lorsqu'il ne restera que du texte à modifier, vous
+pourrez utilier le logiciel Overleaf (\url{https://overleaf.com}) pour
+collaborer avec les autres membres de votre équipe directement sur la
+version \LaTeX~de ce document (qui est un sous-produit créé quand vous
+cliquez sur Knit depuis RStudio).
+
+\bigskip
+
+\textbf{Figure : } Pour inclure une figure, il faut qu'elle ait une
+légende (ce qui est le cas pour la Figure\(~\)\ref{myfigure} ci-après)
+et qu'elle soit référencée quelque part dans le document (ce qui est le
+cas dans les parenthèses qui précédent).
+
+\begin{figure}
+\centering
+\includegraphics[width=4cm,height=2cm]{logo-upvm_4.jpg}
+\caption{Université Montpellier Paul Valéry.}\label{myfigure}
+\end{figure}
+
+\bigskip
+
+\textbf{Tableau} : Notez que contrairement à une figure, la légende d'un
+tableau doit être mise \textbf{au-dessus} de celui-ci (\emph{e.g.}, voir
+la Table\(~\)\ref{tab7.1} ci-dessous). Comme pour les figures, tout
+tableau doit également être discuté dans le texte du rapport.
+
+Utiliser \url{https://www.tablesgenerator.com/markdown_tables} pour
+créer des tables Markdown simples, ou bien utiliser \LaTeX. Plus de
+précisions sur l'utilisation des tableaux sont données en Annexe
+
+\begin{longtable}[]{@{}lcr@{}}
+\toprule\noalign{}
+Les tables & sont & cool \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+col 1 est & alignée à gauche & \$1600 \\
+col 2 est & centrée & \$12 \\
+col 3 est & alignée à droite & \$1 \\
+\end{longtable}
+
+library(knitr)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{install.packages}\NormalTok{(}\StringTok{"knitr"}\NormalTok{)}
+\FunctionTok{library}\NormalTok{(knitr)}
+\CommentTok{\# Créer un tableau simple avec kable}
+\NormalTok{df }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{Nom =} \FunctionTok{c}\NormalTok{(}\StringTok{"Alice"}\NormalTok{, }\StringTok{"Bob"}\NormalTok{), }\AttributeTok{Age =} \FunctionTok{c}\NormalTok{(}\DecValTok{25}\NormalTok{, }\DecValTok{30}\NormalTok{))}
+\FunctionTok{kable}\NormalTok{(df, }\AttributeTok{format =} \StringTok{"latex"}\NormalTok{) }\CommentTok{\# Peut aussi être "html", "latex"}
+\end{Highlighting}
+\end{Shaded}
+
+Table: une légende au-dessus du tableau. \label{tab7.1}
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|c|}
+        \hline
+        Nom & Âge & Ville \\
+        \hline
+        Alice & 25 & Paris \\
+        Bob & 30 & Lyon \\
+        Charlie & 22 & Marseille \\
+        \hline
+    \end{tabular}
+    \caption{Exemple de tableau en LaTeX}
+    \label{tab:exemple}
+\end{table}
+
+\chapter{Base de données}\label{base-de-donnuxe9es}
+
+\section{Provenance des données}\label{provenance-des-donnuxe9es}
+
+pokemon: \url{https://www.kaggle.com/datasets/rounakbanik/pokemon}) et
+data\_world:
+(\url{https://data.world/notgibs/pokemon-wonder-trade-results/workspace/file?filename=Wonder+Trade.csv})
+
+\bigskip
+
+On a sélectionné la table pokemon car elle contient les données
+relatives à la description des Pokémon, et la table wonder trade car
+elle contient les informations concernant les échanges.
+
+Les données sont stockées sous format CSV : le fichier pokemon.csv
+contient 38 colonnes et 802 lignes, tandis que le fichier wonder
+trade.csv contient 15 colonnes et 501 lignes.
+
+\bigskip
+
+Afin de faciliter l'analyse, nous avons choisi de filtrer certaines
+colonnes. En effet, toutes les variables n'étaient pas nécessaires pour
+répondre à notre problématique.
+
+Dans la table pokemon, nous avons conservé uniquement les colonnes les
+plus pertinentes, notamment celles liées aux caractéristiques
+principales comme les statistiques (attack, defense, speed,
+base\_total), les types (type1, type2), ainsi que des informations
+générales comme la génération et le caractère légendaire.
+
+Dans la table wonder trade, nous avons également sélectionné un
+sous-ensemble de colonnes parmi les 15 colonnes initiales, en conservant
+celles décrivant les échanges (niveau, région, nature, objets, etc.).
+
+\bigskip
+
+Ce filtrage permet de réduire le nombre de variables tout en gardant les
+informations essentielles, ce qui rend l'analyse plus claire et plus
+pertinente.
+
+Concernant les lignes, nous avons choisi de conserver l'ensemble des
+observations, soit 802 Pokémon et 501 échanges, afin de ne pas biaiser
+les résultats et de garder une vision globale des données.
+
+\bigskip
+
+La population étudiée correspond à l'ensemble des Pokémon du fichier
+pokemon.csv ainsi qu'aux échanges du fichier wonder trade.csv.
+
+\bigskip 
+\bigskip 
+\medskip
+
+\section{Descriptif des tables}\label{descriptif-des-tables}
+
+\begin{longtable}{|p{3cm}|p{2cm}|p{4cm}|p{5cm}|}
+\caption{Table : pokemon ($802 \times 41$)} \label{tab:pokemon} \\
+\hline
+\textbf{Nom colonne} & \textbf{Type} & \textbf{Signification} & \textbf{Caractéristique} \\ \hline
+\endfirsthead
+\multicolumn{4}{c}{{\bfseries \tablename\ \thetable{} -- suite de la page précédente}} \\ \hline
+\textbf{Nom colonne} & \textbf{Type} & \textbf{Signification} & \textbf{Caractéristique} \\ \hline
+\endhead
+\hline \multicolumn{4}{|r|}{{Suite sur la page suivante}} \\ \hline
+\endfoot
+\hline
+\endlastfoot
+pokedex\_number & Entier & Numéro Pokédex National & \textbf{Clé primaire}, unique \\ \hline
+name & Chaîne & Nom anglais du Pokémon & Texte obligatoire \\ \hline
+japanese\_name & Chaîne & Nom original japonais & Optionnel \\ \hline
+type1 & Chaîne & Type primaire & Obligatoire (18 types) \\ \hline
+type2 & Chaîne & Type secondaire & Optionnel (peut être vide) \\ \hline
+classification & Chaîne & Classification de l'espèce & Ex : Pokémon Graine \\ \hline
+capture\_rate & Entier & Facilité de capture & Plus élevé = plus facile \\ \hline
+base\_egg\_steps & Entier & Pas pour l'éclosion d'un œuf & Indicateur de rareté \\ \hline
+abilities & Chaîne & Liste des capacités spéciales & Chaîne formatée (liste) \\ \hline
+experience\_growth & Chaîne & Courbe de progression d'XP & Ex : Slow, Fast, Medium \\ \hline
+base\_happiness & Entier & Niveau de bonheur initial & Valeur de 0 à 255 \\ \hline
+hp & Entier & Points de vie de base & Statistique de combat \\ \hline
+attack & Entier & Force d'attaque physique & Statistique de combat \\ \hline
+defense & Entier & Résistance physique & Statistique de combat \\ \hline
+sp\_attack & Entier & Force d'attaque spéciale & Statistique de combat \\ \hline
+sp\_defense & Entier & Résistance spéciale & Statistique de combat \\ \hline
+speed & Entier & Vitesse de base & Détermine l'ordre d'action \\ \hline
+base\_total & Entier & Somme des 6 statistiques & Puissance globale du Pokémon \\ \hline
+generation & Entier & Numéro de génération d'origine & Valeur de 1 à 7 \\ \hline
+is\_legendary & Booléen & Statut légendaire & 0 = Non, 1 = Oui \\ \hline
+percentage\_male & Réel & Pourcentage de mâles & Vide si le Pokémon est asexué \\ \hline
+against\_? & Réel & Multiplicateurs de dégâts (18 colonnes) & 0.5=résistant, 1=neutre, 2=faible \\ \hline
+\end{longtable}
+
+\smallskip
+
+\begin{longtable}{|p{3cm}|p{2cm}|p{4cm}|p{5cm}|}
+\caption{Table : wonder\_trade ($500 \times 17$)} \label{tab:wonder} \\
+\hline
+\textbf{Nom colonne} & \textbf{Type} & \textbf{Signification} & \textbf{Caractéristique} \\ \hline
+\endfirsthead
+\multicolumn{4}{c}{{\bfseries \tablename\ \thetable{} -- suite de la page précédente}} \\ \hline
+\textbf{Nom colonne} & \textbf{Type} & \textbf{Signification} & \textbf{Caractéristique} \\ \hline
+\endhead
+\hline \multicolumn{4}{|r|}{{Suite sur la page suivante}} \\ \hline
+\endfoot
+\hline
+\endlastfoot
+id\_trade & Entier & Identifiant unique de l'échange & \textbf{Clé primaire} \\ \hline
+Date & Date & Date de réalisation du trade & Format AAAA-MM-JJ \\ \hline
+Time & Heure & Heure de l'échange (CST) & Format HH:MM \\ \hline
+pokedex\_number & Entier & Numéro Pokédex du Pokémon reçu & \textbf{Clé étrangère} \\ \hline
+Pokemon & Chaîne & Nom du Pokémon reçu & Texte \\ \hline
+Trainer\_Region & Chaîne & Région d'origine du partenaire & Donnée géographique \\ \hline
+Trainer\_Subregion & Chaîne & État ou province du partenaire & Optionnel (souvent USA) \\ \hline
+Pokemon\_Language & Chaîne & Langue d'origine du Pokémon & Ex : English, Japanese \\ \hline
+Level & Entier & Niveau actuel du Pokémon reçu & Valeur de 1 à 100 \\ \hline
+Level\_Met & Entier & Niveau lors de la capture initiale & Historique du Pokémon \\ \hline
+Gender & Chaîne & Sexe du Pokémon reçu & M, F ou Vide \\ \hline
+Type1 & Chaîne & Type primaire du spécimen & Doit correspondre à la table Pokémon \\ \hline
+Type2 & Chaîne & Type secondaire du spécimen & Optionnel \\ \hline
+Nature & Chaîne & Nature influençant les stats & 25 variantes possibles \\ \hline
+Pokeball & Chaîne & Type de Pokéball utilisée & Ex : Great Ball, Ultra Ball \\ \hline
+Held\_Item & Chaîne & Présence d'un objet tenu & Indique si un item est présent \\ \hline
+Perfect\_IVs & Entier & Nombre de stats parfaites (31) & Valeur de 0 à 6 \\ \hline
+\end{longtable}
+
+\section{Modèles MCD et MOD}\label{moduxe8les-mcd-et-mod}
+
+\subsection{MCD}\label{mcd}
+
+\begin{figure}
+\centering
+\includegraphics[width=10cm,height=19cm]{tuto-0019(1).png}
+\caption{\textbf{MCD}.}\label{MCD}
+\end{figure}
+
+\smallskip
+
+\subsection{MOD :}\label{mod}
+
+\begin{figure}
+\centering
+\includegraphics[width=18cm,height=21cm]{pokewonder (1).png}
+\caption{** MOD.**}\label{MOD}
+\end{figure}
+
+\bigskip 
+\bigskip 
+\bigskip 
+\bigskip
+
+MOD :
+
+USERS (id\_user)
+
+TRAINER (id\_trainer, original\_trainer\_id, trainer\_name, gender,
+country, country\_sub1)
+
+POKEMON (pokedex\_number, name, abilities, classification, type1, type2,
+hp, attack, defense, sp\_attack, sp\_defense, speed, base\_total,
+base\_happiness, base\_egg\_steps, experience\_growth, percentage\_male,
+capture\_rate, against\_bug, against\_dark, against\_dragon,
+against\_electric, against\_fairy, against\_fight, against\_fire,
+against\_flying, against\_ghost, against\_grass, against\_ground,
+against\_ice, against\_normal, against\_poison, against\_psychic,
+against\_rock, against\_steel, against\_water, is\_legendary,
+generation)
+
+TRADE (id\_trade, pokemon\_nickname, has\_item, has\_hidden\_ability,
+has\_egg\_move, has\_pokerus, has\_perfect\_iv, is\_shiny, level, date,
+time, liked, \#id\_user, \#id\_trainer, \#pokedex\_number)
+
+\bigskip 
+\bigskip
+
+\section{Import des données}\label{import-des-donnuxe9es}
+
+Source de données 1 : wonder\_trade
+
+Suppression de certaines colonnes jugées inutiles (comme weight et
+height), car elles n'étaient pas pertinentes pour l'analyse réalisée.
+
+Vérification de la cohérence des noms de Pokémon : une requête a permis
+d'identifier les noms présents dans ``wonder\_trade'' mais absents de la
+table ``pokemon'' :
+
+\begin{verbatim}
+SELECT DISTINCT wonder_trade.Pokemon
+FROM wonder_trade
+WHERE wonder_trade.Pokemon NOT IN (SELECT name FROM pokemon);
+\end{verbatim}
+
+\begin{figure}
+\centering
+\includegraphics[width=12cm,height=9cm]{normalisation.png}
+\caption{\textbf{Figure 3 Normalisation des nom de pokemon}.}\label{uml}
+\end{figure}
+
+\bigskip 
+\bigskip
+
+Cette vérification a montré des noms commençant par ``A.'' suivi du nom
+du pokémon. Une correction a été effectuée directement dans la base avec
+la requête suivante :
+
+\begin{verbatim}
+UPDATE wonder_trade
+SET Pokemon = REPLACE(Pokemon, 'A.', '')
+WHERE Pokemon LIKE 'A.%';
+\end{verbatim}
+
+Après correction, tous les noms de Pokémon de wonder\_trade''
+correspondent bien à ceux de la table ``pokemon''.
+
+Ajout d'une clé primaire afin de respecter le modèle relationnel :
+
+\begin{verbatim}
+ALTER TABLE wonder_trade
+ADD id_trade INT AUTO_INCREMENT PRIMARY KEY;
+\end{verbatim}
+
+Source de données 2 : pokemon
+
+Mise en place d'une clé primaire sur la colonne ``pokedex\_number'' afin
+d'identifier de manière unique chaque Pokémon :
+
+\begin{verbatim}
+ALTER TABLE pokemon
+ADD PRIMARY KEY (pokedex_number);
+\end{verbatim}
+
+Renommage de la colonne ``pokedex\_number'' en ``id\_pokemon'' pour une
+meilleure lecture :
+
+\begin{verbatim}
+ALTER TABLE pokemon
+RENAME COLUMN pokedex_number TO id_pokemon;
+\end{verbatim}
+
+\section{Requêtes réalisées}\label{requuxeates-ruxe9alisuxe9es}
+
+Pour chaque requête, l'exprimer en langage naturel puis en SQL. Puis
+donner le résultat obtenu (ou un extrait) et expliquer ce résultat.
+
+L'objectif est de varier le type de requêtes et de répondre à votre
+problématique initiale.
+
+\section{Quelques détails
+techniques}\label{quelques-duxe9tails-techniques-1}
+
+On peut interagir avec une base de données directement depuis RMarkdown
+: i.e.~requêter puis récupérer et afficher le résultat directement
+depuis le .Rmd. Un fichier connexionBDD.Rmd est fourni pour donner des
+exemples.
+
+\chapter{Matériel et Méthodes}\label{matuxe9riel-et-muxe9thodes}
+
+\section{Logiciels}\label{logiciels}
+
+Lister tous les logiciels utilisés pour la partie statistique du rapport
+(et également ceux pour gérer et communiquer entre les membres du projet
+s'il y en a en particulier)
+
+\medskip
+
+R (ou Python) est le logiciel à privilégier pour la Science des Données.
+Pour assurer une reproductibilité maximale, vous devriez utiliser R
+Markdown (ou un Notebook Jupyter, et éventuellement un outil de gestion
+des versions tel que \texttt{Git}), par exemple via Google Colab ou
+RStudio dans les nuages. Évitez d'utiliser Word!
+
+\bigskip
+
+Il est de votre responsabilité de donner les versions des logiciels que
+vous utilisez, ainsi que de donner des informations techniques sur
+l'ordinateur qui vous a servi pour les analyses (système d'exploitation,
+vitesse du processeur, etc.). Penser à fournir des citations pour les
+logiciels utilisés, par exemple
+\footnote{L'entrée BibTeX ajoutée dans le fichier \texttt{references.bib} a été obtenue grâce à la commande  \texttt{citation(package = "tidyverse")} tapée dans la console de R.}.
+
+\section{Modélisation statistique}\label{moduxe9lisation-statistique}
+
+Quels outils ou méthodes de statistiques allez-vous utiliser? Donner des
+équations mathématiques s'il y a lieu et lister les éventuels
+présupposés («assumptions» en anglais) que vous devez faire sur les
+données afin d'utiliser ces outils ou méthodes (\emph{e.g.}, normalité,
+absence de valeurs aberrantes, etc.).
+
+Il est également bon d'indiquer quelles sont les avantages et les
+limites de ces méthodes.
+
+Vous pourrez consulter avec profit les Chapitre 11--13 du livre sur R :
+
+\url{http://biostatisticien.eu/springeR/livreR.pdf}
+
+\chapter{Analyse Exploratoire des
+Données}\label{analyse-exploratoire-des-donnuxe9es}
+
+Toute étude impliquant des données doit \textbf{obligatoirement} inclure
+une analyse exploratoire préalable. Celle-ci permet de mieux comprendre
+l'information contenue dans les données.
+
+Il faut produire de nombreux résumés graphiques (\emph{e.g.},
+histogrammes, nuages de points, boxplots, etc.) et numériques
+(\emph{e.g.}, médiane, moyenne, variance, etc.). Ainsi, il faut faire
+une analyse descriptive uni- et bivariée systématique de toutes les
+variables du jeu de données. Puis, il faut uniquement conserver les plus
+pertinents (les autres pouvant être gardés en Annexe), c'est-à-dire ceux
+qui permettront de dégager des éléments de réponse pour la question de
+recherche envisagée. Chaque figure et tableau doit être commenté. Mais
+il ne faut pas extrapoler et dire des choses qui ne sont pas visibles
+dans ces graphiques ou tableaux. Pour chaque analyse, vous pourrez
+préciser le nombre d'individus/ d'unités statistiques concernés au
+total.
+
+Vous pourrez consulter avec profit le Chapitre 9 du livre sur R :
+
+\url{http://biostatisticien.eu/springeR/livreR.pdf}
+
+\section{Utiliser R}\label{utiliser-r}
+
+Il est facile d'inclure des codes R dans votre rapport, qui seront
+exécutés à la volée (\emph{i.e.}, lors de la traduction de votre fichier
+\texttt{Rmd} en fichier \texttt{PDF} ou \texttt{DOC}). Par exemple:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{boxplot}\NormalTok{(cars, }\AttributeTok{col =} \FunctionTok{c}\NormalTok{(}\StringTok{"\#5975a4"}\NormalTok{, }\StringTok{"\#cc8963"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}
+
+{\centering \includegraphics[width=7cm]{scdon2-UPV-report-template_files/figure-latex/unnamed-chunk-2-1} 
+
+}
+
+\caption{\label{fig:boxplots}Deux boxplots.}\label{fig:unnamed-chunk-2}
+\end{figure}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{colMeans}\NormalTok{(cars)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## speed  dist 
+## 15.40 42.98
+\end{verbatim}
+
+Les lignes de code ne doivent pas dépasser dans la marge de droite.
+Ainsi on pourrait remplacer le chunk ci-dessous:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{boxplot}\NormalTok{(cars, }\AttributeTok{main =} \StringTok{"Un titre qui est vraiment beaucoup trop long et qui dépasse dans la marge de droite"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}
+
+{\centering \includegraphics[width=7cm]{scdon2-UPV-report-template_files/figure-latex/unnamed-chunk-3-1} 
+
+}
+
+\caption{Pas super.}\label{fig:unnamed-chunk-3}
+\end{figure}
+
+par celui-ci:
+
+\tiny
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{boxplot}\NormalTok{(cars, }
+        \AttributeTok{main =} \StringTok{"Un titre qui est vraiment beaucoup trop long}\SpecialCharTok{\textbackslash{}n}\StringTok{ mais qui ne dépasse plus dans la marge de droite"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}
+
+{\centering \includegraphics[width=7cm]{scdon2-UPV-report-template_files/figure-latex/unnamed-chunk-4-1} 
+
+}
+
+\caption{Déjà mieux.}\label{fig:unnamed-chunk-4}
+\end{figure}
+
+\normalsize
+
+où l'on a:
+
+\begin{itemize}
+\tightlist
+\item
+  utilisé la commande \LaTeX~\texttt{\textbackslash{}tiny} pour changer
+  la taille de la police (suivi de de
+  \texttt{\textbackslash{}normalsize} pour revenir à la taille normale),
+\item
+  mis l'instruction \texttt{main\ =\ ...} sur la deuxième ligne,
+\item
+  utilisé \texttt{\textbackslash{}n} pour afficher le titre sur deux
+  lignes.
+\end{itemize}
+
+\vspace{3em}
+
+\textbf{Remarques} : Contrairement aux graphiques précédents, nous vous
+demandons, pour effectuer les graphiques, d'utiliser le package
+\texttt{ggplot2}. Voir
+\url{https://juba.github.io/tidyverse/08-ggplot2.html} pour une courte
+introduction.
+
+\chapter{Inférence statistique et
+modélisation}\label{infuxe9rence-statistique-et-moduxe9lisation}
+
+Dans cette partie, vous pourrez utiliser les outils et méthodes vus au
+semestre précédent pour analyser les liens entre les variables.
+
+Pour cela, vous pourrez utiliser les tests du \(\chi^2\), test du
+coefficient de corrélation linéaire, test d'Anova, la droite de
+régression linéaire.
+
+Vous pourrez également proposer des modèles pour faire du clustering
+(k-means, CAH), de la classification (K plus proches voisins par
+exemple) comme vu en Science des données 1.
+
+\section{La droite de régression linéaire : un premier
+exemple}\label{la-droite-de-ruxe9gression-linuxe9aire-un-premier-exemple}
+
+Si on souhaite expliquer les variations d'une variables réponse \(Y\) en
+fonction d'un certain nombre de prédicteurs \(x_1,\ldots,x_p\), on peut
+utiliser un modèle de régression linéaire simple (\(p=1\)) ou multiple
+(\(p>1\))
+
+\[
+Y_i = \beta_0 + \beta_1 x_{1i} + \cdots +\beta_p x_{pi} + \epsilon_i, \qquad i=1,\ldots,n.
+\] où l'on présuppose que les \(\epsilon_i\) sont i.i.d.~\(N(0,1)\) pour
+tout \(i=1,\ldots,n\) (\(n\) étant la taille de l'échantillon).
+
+Vous pourrez toujours consulter avec profit les Chapitre 11--13 du livre
+sur R :
+
+\url{http://biostatisticien.eu/springeR/livreR.pdf}
+
+Ces chapitres détaillent l'utilisation de certains tests et modèles sous
+\texttt{R}.
+
+\chapter{Discussion}\label{discussion}
+
+Placer les résultats que vous avez obtenus dans le chapitre précédent en
+perspective par rapport au problème étudié.
+
+\chapter{Conclusion et perspectives}\label{conclusion-et-perspectives}
+
+Quelles sont les conclusions principales? Quelles sont vos
+recommandations pour le commanditaire? Quelles analyses subséquentes
+pourraient être faites dans le futur?
+
+\bigskip
+
+On attend de vous deux types de perspectives : des perspectives à court
+terme pour améliorer rapidement votre approche et des perspectives à
+plus long terme qu'elles soient liées à la science des données ou au
+domaine métier pour lequel vous avez travaillé.
+
+\bigskip
+
+Lister également les difficultés rencontrées dans la partie BD (e.g.,
+taille de la base, manque de données, \ldots) et dans la partie
+statistique.
+
+\chapter*{Bibliographie}\label{bibliographie}
+\addcontentsline{toc}{chapter}{Bibliographie}
+
+\phantomsection\label{refs}
+
+\bibliographystyle{elsarticle-harv}
+\bibliography{references}
+
+\chapter*{Annexes}\label{annexes}
+\addcontentsline{toc}{chapter}{Annexes}
+
+Il faut utiliser les annexes de façon judicieuse. C'est ici que l'on
+place des résultats trop volumineux pour apparaître dans le corps du
+rapport. Ou bien des résultats (e.g., graphiques) moins intéressants que
+les autres. Cela permet de limiter le nombre de pages du coeur du
+rapport, et d'ajouter des détails dans cette partie pour le lecteur
+désireux d'en savoir plus.
+
+\section*{\texorpdfstring{\textbf{Codes}}{Codes}}\label{codes}
+\addcontentsline{toc}{section}{\textbf{Codes}}
+
+Ajouter vos codes informatique ici. Les codes doivent être correctement
+indentés et commentés.
+
+\section*{\texorpdfstring{\textbf{Tables}}{Tables}}\label{tables}
+\addcontentsline{toc}{section}{\textbf{Tables}}
+
+Si vous avez des tableaux supplémentaires, vous pouvez les ajouter ici.
+
+Utiliser \url{https://www.tablesgenerator.com/markdown_tables} pour
+créer des tables Markdown simples, ou bien utiliser \LaTeX.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Table Markdown
+\end{enumerate}
+
+\begin{longtable}[]{@{}lcr@{}}
+\caption{une légende au-dessus du tableau.
+\label{tab7.2}}\tabularnewline
+\toprule\noalign{}
+Les tables & sont & cool \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Les tables & sont & cool \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+col 1 est & alignée à gauche & \$1600 \\
+col 2 est & centrée & \$12 \\
+col 3 est & alignée à droite & \$1 \\
+\end{longtable}
+
+Aligner les nombres de la troisième colonne sur la droite permet
+d'afficher les unités au-dessus des unités, les dizaines au-dessus des
+dizaines, etc. Il faut toujours privilégier cette présentation.
+
+\vspace{3em}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Table Latex
+\end{enumerate}
+
+\begin{table}[h]
+\centering
+\caption{une légende au-dessus du tableau}
+\label{tab7.3}
+\begin{tabular}{lcr}
+\hline
+Les tables & sont & cool \\
+\hline
+col 1 est & alignée à gauche & 1600 \\
+col 2 est & centrée & 12 \\
+col 3 est & alignée à droite & 1 \\
+\hline
+\end{tabular}
+\end{table}
+
+\textbf{Remarques}
+
+\begin{itemize}
+  \item \{lcr\} : gauche (l), centré (c), droite (r)
+  \item \verb|\caption| place la légende au-dessus
+  \item \verb|\label| permet de référencer le tableau (\verb|\ref{tab7.2}|)
+  \item Les nombres sont bien alignés à droite dans la 3\ieme{} colonne
+\end{itemize}
+
+
+
+
+
+
+
+\end{document}
+
