@@ -244,9 +244,9 @@ pokemon.csv ainsi qu'aux échanges du fichier wonder trade.csv.
 
 La table Pokemon sert de dictionnaire de référence. Elle contient toutes
 les statistiques immuables et globale de chaque espèce de Pokémon
-(force, types, résistances). \smallskip
+(force, types, résistances).
 
-\begin{longtable}{|p{3cm}|p{2cm}|p{4cm}|p{5cm}|}
+\begin{longtable}{|m{3cm}|m{2cm}|m{4cm}|m{5cm}|}
 \caption{Table : pokemon ($802 \times 41$)} \label{tab:pokemon} \\
 \hline
 \textbf{Nom colonne} & \textbf{Type} & \textbf{Signification} & \textbf{Caractéristique} \\ \hline
@@ -259,13 +259,37 @@ pokedex\_number & Entier & Numéro officiel du Pokédex & Unique par espèce \\ 
 name & Chaîne & Nom anglais de l'espèce & EX : Abra \\ \hline
 abilities & Liste & Capacités spéciales possibles & EX : ['Overgrow'] \\ \hline
 type1 / type2 & Chaîne & Types élémentaires & type2 peut être \textbf{vide} (NULL) \\ \hline
-hp/\smallskip attack/\smallskip defense/\smallskip sp\_attack/\smallskip sp\_defense/\smallskip  speed & Entier & Statistiques de combat de base & Valeurs numériques (ex: 45, 120) \\ \hline
+
+\begin{minipage}[c]{3cm}
+\scriptsize\renewcommand{\arraystretch}{0.8}
+\begin{tabular}{@{}l l@{}} 
+hp & sp\_attack \\ 
+attack & sp\_defense \\ 
+defense & speed 
+\end{tabular}
+\end{minipage} & Entier & Statistiques de combat & Valeurs numériques \\ \hline
+
+
 base\_total & Entier & Somme des statistiques & Puissance globale \\ \hline
 is\_legendary & Booléen & Statut de Pokémon légendaire & 0 = Non, 1 = Oui \\ \hline
-against\_water / bug / fire / etc. & Réel & Multiplicateurs de dégâts subis & 0.5 = Résistant, 1 = Neutre, 2 = Faible \\ \hline
+
+
+\begin{minipage}[c]{3cm}
+\scriptsize \renewcommand{\arraystretch}{0.6}
+\begin{tabular}{@{}l@{}}
+against\_bug \\ against\_dark \\ against\_dragon \\ against\_electric \\
+against\_fairy \\ against\_fight \\ against\_fire \\ against\_flying \\
+against\_ghost \\ against\_grass \\ against\_ground \\ against\_ice \\
+against\_normal \\ against\_poison \\ against\_psychic \\ against\_rock \\
+against\_steel \\ against\_water
+\end{tabular}
+\end{minipage} & Réel & Multiplicateurs de dégâts & 0.5=résistant, 2=faible \\ \hline
+
+
 \end{longtable}
 
 \smallskip
+\bigskip
 
 \begin{longtable}{|p{3cm}|p{2cm}|p{4cm}|p{5cm}|}
 \caption{Table : trades} \label{tab:trades} \\
