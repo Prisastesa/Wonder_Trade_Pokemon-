@@ -5,7 +5,7 @@ author:
 - Guilleminot Sarah, 
 - Rakoto Ambinintsoa Prisca,
 - Sbircea Stephanie.
-date: "03 avril 2026"
+date: "14 avril 2026"
 output:
   pdf_document:
     fig_caption: yes
@@ -90,77 +90,6 @@ Sbircea Stephanie : Étudiante n°22304694, Resp. import des données.
 
 
 
-## Quelques détails techniques
-
-
-**Ortographe** : Il est important de soigner l'orthographe. Vous devriez utiliser un correcteur en ligne tel que \texttt{languagetool}\footnote{Voir \href{https://www.overleaf.com/blog/635-languagetool-a-free-browser-add-on-to-check-your-grammar-and-spelling}{https://www.overleaf.com/blog/635-languagetool-a-free-browser-add-on-to-check-your-grammar-and-spelling} et \url{https://fr.overleaf.com/learn/how-to/Can_I_change_the_spell_check_language_to_e.g._Spanish\%3F}.} (\url{https://languagetool.org/fr}).
-
-\bigskip
-
-**R Markdown :** Pour créer ce rapport, on vous demande d'utiliser `R Markdown`, via le logiciel `RStudio`.
-
-Pour vous aider, on vous fournit un fichier `.Rmd` qui contient la structure du projet et qui présente quelques exemples de la syntaxe à utiliser. Vous pouvez donc partir de ce fichier et le modifier à votre guise. (Nous suggérons que vous organisiez votre rapport en utilisant des chapitres mais, en fonction de votre projet, rien ne vous empêche d'adopter une structure différente.) 
-
-La «compilation» (_i.e._, «Kniter») du `Rmd` permet de créer soit un fichier PDF, soit un fichier Word, soit un fichier HTML (le PDF étant celui pour lequel les choses se passent le mieux, et aussi le format attendu pour ce cours).
-
-Vous pouvez incorporer des _chunks_ R qui seront exécutés à la volée. Vous pouvez inclure des commandes \LaTeX. 
-
-Le désavantage de travailler avec un `.Rmd` sous `RStudio` est que vous travaillez en local : il faudra donc bien faire attention de prendre en compte les modifications de chacun. 
-
-\bigskip
-
-**Editeur collaboratif : ** Lorsque votre rapport sera proche de sa version finale, i.e. lorsqu'il ne restera que du texte à modifier, vous pourrez utilier le logiciel Overleaf (https://overleaf.com) pour collaborer avec les autres membres de votre équipe directement sur la version \LaTeX\ de ce document (qui est un sous-produit créé quand vous cliquez sur Knit depuis RStudio).
-
-\bigskip
-
-
-
-**Figure : ** Pour inclure une figure, il faut qu'elle ait une légende (ce qui est le cas pour la Figure$~$\ref{myfigure} ci-après) et qu'elle soit référencée quelque part dans le document (ce qui est le cas dans les parenthèses qui précédent). 
-
-
-![Université Montpellier Paul Valéry.](logo-upvm_4.jpg){#myfigure width="4cm" height="2cm"}
-
-\bigskip
-
-**Tableau** : 
-Notez que contrairement à une figure, la légende d'un tableau doit être mise **au-dessus** de celui-ci (_e.g._, voir la Table$~$\ref{tab7.1} ci-dessous). Comme pour les figures, tout tableau doit également être discuté dans le texte du rapport.
-
-Utiliser https://www.tablesgenerator.com/markdown_tables pour créer des tables Markdown simples, ou bien utiliser \LaTeX. Plus de précisions sur l'utilisation des tableaux sont données en Annexe
-
-| Les tables   |        sont       |  cool |
-|--------------|:-----------------:|------:|
-| col 1 est    |  alignée à gauche | $1600 |
-| col 2 est    |     centrée       |   $12 |
-| col 3 est    | alignée à droite  |    $1 |
-
-library(knitr)
-
-
-``` r
-install.packages("knitr")
-library(knitr)
-# Créer un tableau simple avec kable
-df <- data.frame(Nom = c("Alice", "Bob"), Age = c(25, 30))
-kable(df, format = "latex") # Peut aussi être "html", "latex"
-```
-
-Table: une légende au-dessus du tableau. \label{tab7.1}
-
-\begin{table}[h]
-    \centering
-    \begin{tabular}{|c|c|c|}
-        \hline
-        Nom & Âge & Ville \\
-        \hline
-        Alice & 25 & Paris \\
-        Bob & 30 & Lyon \\
-        Charlie & 22 & Marseille \\
-        \hline
-    \end{tabular}
-    \caption{Exemple de tableau en LaTeX}
-    \label{tab:exemple}
-\end{table}
-
 # Base de données
 
 ## Provenance des données
@@ -197,76 +126,93 @@ La population étudiée correspond à l’ensemble des Pokémon du fichier pokem
 
 ## Descriptif des tables
 
+\bigskip
+
+La table Pokemon sert de dictionnaire de référence. Elle contient toutes les statistiques immuables et globale de chaque espèce de Pokémon (force, types, résistances).
+\smallskip
+
 \begin{longtable}{|p{3cm}|p{2cm}|p{4cm}|p{5cm}|}
 \caption{Table : pokemon ($802 \times 41$)} \label{tab:pokemon} \\
 \hline
 \textbf{Nom colonne} & \textbf{Type} & \textbf{Signification} & \textbf{Caractéristique} \\ \hline
 \endfirsthead
-\multicolumn{4}{c}{{\bfseries \tablename\ \thetable{} -- suite de la page précédente}} \\ \hline
+\hline
 \textbf{Nom colonne} & \textbf{Type} & \textbf{Signification} & \textbf{Caractéristique} \\ \hline
 \endhead
-\hline \multicolumn{4}{|r|}{{Suite sur la page suivante}} \\ \hline
-\endfoot
-\hline
-\endlastfoot
-pokedex\_number & Entier & Numéro Pokédex National & \textbf{Clé primaire}, unique \\ \hline
-name & Chaîne & Nom anglais du Pokémon & Texte obligatoire \\ \hline
-japanese\_name & Chaîne & Nom original japonais & Optionnel \\ \hline
-type1 & Chaîne & Type primaire & Obligatoire (18 types) \\ \hline
-type2 & Chaîne & Type secondaire & Optionnel (peut être vide) \\ \hline
-classification & Chaîne & Classification de l'espèce & Ex : Pokémon Graine \\ \hline
-capture\_rate & Entier & Facilité de capture & Plus élevé = plus facile \\ \hline
-base\_egg\_steps & Entier & Pas pour l'éclosion d'un œuf & Indicateur de rareté \\ \hline
-abilities & Chaîne & Liste des capacités spéciales & Chaîne formatée (liste) \\ \hline
-experience\_growth & Chaîne & Courbe de progression d'XP & Ex : Slow, Fast, Medium \\ \hline
-base\_happiness & Entier & Niveau de bonheur initial & Valeur de 0 à 255 \\ \hline
-hp & Entier & Points de vie de base & Statistique de combat \\ \hline
-attack & Entier & Force d'attaque physique & Statistique de combat \\ \hline
-defense & Entier & Résistance physique & Statistique de combat \\ \hline
-sp\_attack & Entier & Force d'attaque spéciale & Statistique de combat \\ \hline
-sp\_defense & Entier & Résistance spéciale & Statistique de combat \\ \hline
-speed & Entier & Vitesse de base & Détermine l'ordre d'action \\ \hline
-base\_total & Entier & Somme des 6 statistiques & Puissance globale du Pokémon \\ \hline
-generation & Entier & Numéro de génération d'origine & Valeur de 1 à 7 \\ \hline
-is\_legendary & Booléen & Statut légendaire & 0 = Non, 1 = Oui \\ \hline
-percentage\_male & Réel & Pourcentage de mâles & Vide si le Pokémon est asexué \\ \hline
-against\_? & Réel & Multiplicateurs de dégâts (18 colonnes) & 0.5=résistant, 1=neutre, 2=faible \\ \hline
+id\_pokemon & Entier & Identifiant interne du Pokémon & \textbf{Clé primaire} \\ \hline
+pokedex\_number & Entier & Numéro officiel du Pokédex & Unique par espèce \\ \hline
+name & Chaîne & Nom anglais de l'espèce & EX : Abra \\ \hline
+abilities & Liste & Capacités spéciales possibles & EX : ['Overgrow'] \\ \hline
+type1 / type2 & Chaîne & Types élémentaires & type2 peut être \textbf{vide} (NULL) \\ \hline
+hp/\smallskip attack/\smallskip defense/\smallskip sp\_attack/\smallskip sp\_defense/\smallskip  speed & Entier & Statistiques de combat de base & Valeurs numériques (ex: 45, 120) \\ \hline
+base\_total & Entier & Somme des statistiques & Puissance globale \\ \hline
+is\_legendary & Booléen & Statut de Pokémon légendaire & 0 = Non, 1 = Oui \\ \hline
+against\_water / bug / fire / etc. & Réel & Multiplicateurs de dégâts subis & 0.5 = Résistant, 1 = Neutre, 2 = Faible \\ \hline
 \end{longtable}
 
+\smallskip
+
+
+\begin{longtable}{|p{3cm}|p{2cm}|p{4cm}|p{5cm}|}
+\caption{Table : trades} \label{tab:trades} \\
+\hline
+\textbf{Nom colonne} & \textbf{Type} & \textbf{Signification} & \textbf{Caractéristique} \\ \hline
+\endfirsthead
+\hline
+\textbf{Nom colonne} & \textbf{Type} & \textbf{Signification} & \textbf{Caractéristique} \\ \hline
+\endhead
+pokemonId & Entier & ID du Pokémon échangé & \textbf{Clé étrangère} vers pokemon \\ \hline
+trainerId & Entier & ID du dresseur partenaire & \textbf{Clé étrangère} vers trainers \\ \hline
+userId & Entier & ID de l'utilisateur local & \textbf{Clé étrangère} vers users \\ \hline
+level & Entier & Niveau du Pokémon lors de l'échange & EX : 26 (peut être importé en texte) \\ \hline
+isShiny & Texte & Aspect chromatique rare & "VRAI" ou "FAUX" \\ \hline
+hasItem & Texte & Le Pokémon tient-il un objet ? & "VRAI" ou "FAUX" \\ \hline
+hasHiddenAbility & Texte & Possède un talent caché rare & "VRAI" ou "FAUX" \\ \hline
+hasPerfectIV & Texte & Possède des stats innées au max & "VRAI" ou "FAUX" \\ \hline
+hasPokerus & Texte & Infecté par le virus bénéfique & "VRAI" ou "FAUX" \\ \hline
+hasEggMove & Texte & Possède une capacité de reproduction & "VRAI" ou "FAUX" \\ \hline
+liked & Chaîne & Avis de l'utilisateur sur l'échange & "like", "dislike" ou \textbf{vide} \\ \hline
+date / time & Date / Heure & Moment précis de l'échange & EX : 2015-02-08 / 54817 \\ \hline
+\end{longtable}
+
+\smallskip
+La table Trades est centrale. Elle enregistre l'historique de tous les échanges effectués. Contrairement à la table précédente, les données ici (niveau, objet, shiny) sont spécifiques au spécimen précis qui a été reçu lors de l'échange.
 
 \smallskip
 
 \begin{longtable}{|p{3cm}|p{2cm}|p{4cm}|p{5cm}|}
-\caption{Table : wonder\_trade ($500 \times 17$)} \label{tab:wonder} \\
+\caption{Table : trainers} \label{tab:trainers} \\
 \hline
 \textbf{Nom colonne} & \textbf{Type} & \textbf{Signification} & \textbf{Caractéristique} \\ \hline
 \endfirsthead
-\multicolumn{4}{c}{{\bfseries \tablename\ \thetable{} -- suite de la page précédente}} \\ \hline
+\hline
 \textbf{Nom colonne} & \textbf{Type} & \textbf{Signification} & \textbf{Caractéristique} \\ \hline
 \endhead
-\hline \multicolumn{4}{|r|}{{Suite sur la page suivante}} \\ \hline
-\endfoot
-\hline
-\endlastfoot
-id\_trade & Entier & Identifiant unique de l'échange & \textbf{Clé primaire} \\ \hline
-Date & Date & Date de réalisation du trade & Format AAAA-MM-JJ \\ \hline
-Time & Heure & Heure de l'échange (CST) & Format HH:MM \\ \hline
-pokedex\_number & Entier & Numéro Pokédex du Pokémon reçu & \textbf{Clé étrangère} \\ \hline
-Pokemon & Chaîne & Nom du Pokémon reçu & Texte \\ \hline
-Trainer\_Region & Chaîne & Région d'origine du partenaire & Donnée géographique \\ \hline
-Trainer\_Subregion & Chaîne & État ou province du partenaire & Optionnel (souvent USA) \\ \hline
-Pokemon\_Language & Chaîne & Langue d'origine du Pokémon & Ex : English, Japanese \\ \hline
-Level & Entier & Niveau actuel du Pokémon reçu & Valeur de 1 à 100 \\ \hline
-Level\_Met & Entier & Niveau lors de la capture initiale & Historique du Pokémon \\ \hline
-Gender & Chaîne & Sexe du Pokémon reçu & M, F ou Vide \\ \hline
-Type1 & Chaîne & Type primaire du spécimen & Doit correspondre à la table Pokémon \\ \hline
-Type2 & Chaîne & Type secondaire du spécimen & Optionnel \\ \hline
-Nature & Chaîne & Nature influençant les stats & 25 variantes possibles \\ \hline
-Pokeball & Chaîne & Type de Pokéball utilisée & Ex : Great Ball, Ultra Ball \\ \hline
-Held\_Item & Chaîne & Présence d'un objet tenu & Indique si un item est présent \\ \hline
-Perfect\_IVs & Entier & Nombre de stats parfaites (31) & Valeur de 0 à 6 \\ \hline
+id\_trainer & Entier & Identifiant unique du dresseur & \textbf{Clé primaire} \\ \hline
+trainer\_name & Chaîne & Pseudo du dresseur & Peut être \textbf{vide} (si anonyme) \\ \hline
+gender & Chaîne & Sexe du dresseur & "male" ou "female" \\ \hline
+country & Chaîne & Code pays (ISO) & EX : US, JP, FR \\ \hline
+country\_sub1 & Chaîne & Région ou État d'origine & EX : California, Texas, Tokyo \\ \hline
 \end{longtable}
 
+\smallskip
+La table Trainers contient les profils des partenaires d'échange. Elle permet de savoir avec qui l'utilisateur a interagi et de quelle région du monde provient le Pokémon reçu.
+\smallskip
+
+
+\begin{longtable}{|p{3cm}|p{2cm}|p{4cm}|p{5cm}|}
+\caption{Table : users} \label{tab:users} \\
+\hline
+\textbf{Nom colonne} & \textbf{Type} & \textbf{Signification} & \textbf{Caractéristique} \\ \hline
+\endfirsthead
+\hline
+\textbf{Nom colonne} & \textbf{Type} & \textbf{Signification} & \textbf{Caractéristique} \\ \hline
+\endhead
+id\_user & Entier & Identifiant unique de l'utilisateur & \textbf{Clé primaire} \\ \hline
+\end{longtable}
+\smallskip 
+La table Users est très courte et sert simplement à identifier les comptes locaux sur le logiciel du site web qui a enregistré les données.
+\smallskip
 
 
 ## Modèles MCD et MOD
@@ -302,214 +248,134 @@ TRADE (id_trade, pokemon_nickname, has_item, has_hidden_ability, has_egg_move, h
 
 ## Import des données 
 
+A partir des fichiers **Pokemon** et **WonderTrade**, nous avons créé les tables **Pokemon**, **Trades**, **Trainers** et **Users** comme indiqué si-dessous.
 
+\bigskip 
 
-Source de données 1 : wonder_trade
+### Transformation du fichier Json en csv : 
 
-Suppression de certaines colonnes jugées inutiles (comme weight et height), car elles n’étaient pas pertinentes pour l’analyse réalisée.
+Nous avons importé le fichier **WonderTrade** qui est en Json sur Excel en allant sur “obtenir des données” puis “à partir d’un fichier” puis “à partir de JSON” comme le montre la Figure.1, ce qui nous a permi de le convertir en table avec l'éditeur Power Query.
 
-Vérification de la cohérence des noms de Pokémon : une requête a permis d’identifier les noms présents dans "wonder_trade" mais absents de la table "pokemon" :
+\bigskip 
 
-    SELECT DISTINCT wonder_trade.Pokemon
-    FROM wonder_trade
-    WHERE wonder_trade.Pokemon NOT IN (SELECT name FROM pokemon);
-![**Figure 3 Normalisation des nom de pokemon**.](normalisation.png){#uml width="12cm" height="9cm"}
+Nous avons choisi de garder toutes les colonnes en cliquant sur la double flèche et en sélectionnant le tout comme le montre la Figure.3, puis nous avons pu avoir le fichier en csv grâce au bouton “fermer et charger”.
+
+### Création des nouveaux Trainer ID : 
+
+Directement dans le fichier CSV **WonderTrade** ouvert dans LibreOffice, nous avons procédé de la manière suivante :
+
+\bigskip 
+
+Nous avons d’abord activé l’autofiltre sur l’ensemble des données afin de faciliter les opérations de tri, pour ensuite trier par ordre croissant ***trainerGender*** puis ***TrainerCountry*** puis ***TrainerCountrySub1***.
+
+\bigskip 
+
+Ce tri permet de regrouper les lignes présentant des caractéristiques similaires, ce qui est nécessaire pour la suite du traitement.
+
+\bigskip 
+
+Nous avons ensuite trié la colonne ***trainerId*** par ordre croissant. Nous avons constaté que les lignes situées en bas du tableau correspondent aux échanges avec un trainerId vide. Ce sont ces lignes pour lesquelles nous devons créer de nouveaux identifiants.
+
+\bigskip 
+
+Nous faisons ici l’hypothèse que des individus ayant le même genre, le même pays et la même sous-localisation correspond à une seule et même personne. Sachant qu’il y a environ 100 lignes sans ID et que les identifiants existants commencent à 783, il n’y aura pas de problème pour créer les nouveaux.
+
+\bigskip 
+
+Sous le dernier ***trainerId*** connu, nous saisissons la valeur 1, puis dans la cellule suivante, nous entrons la formule :
+
+\bigskip 
+
+      “=SI(J103=J104;SI(K103=K104;SI(L103=L104;Q103;Q103+1);Q103+1);Q103+1)”
+
+\bigskip 
+
+Nous étirons ensuite cette formule jusqu’à la dernière ligne du tableau.
+
+\bigskip 
+
+Cette formule permet de comparer chaque ligne à la précédente : si le genre, le pays et la sous-localisation sont identiques, l’identifiant reste le même ; dans le cas contraire, il est incrémenté de 1.
+
+\bigskip 
+
+Nous avons choisi cette méthode en considérant que les trainers partageant les mêmes caractéristiques correspondent à une seule personne. Il aurait également été possible d’attribuer un identifiant distinct à chaque trainer anonyme, mais ce choix n’a pas d’impact sur notre analyse, qui porte sur les caractéristiques des individus (genre, pays, etc.) et non sur leur identification individuelle.
+
+\bigskip 
+
+### Création des tables dérivées de WonderTrade : 
+
+À partir du fichier **WonderTrade** modifié, nous avons construit plusieurs tables : 
+
+\bigskip 
+
+**Users** contenant uniquement la colonne ***userId***
+
+\bigskip 
+
+**Trades** avec les colonnes suivantes : ***id_trade, hasItem, hasHiddenAbility, hasEggMove, hasPokerus, hasPerfectIV, isShiny, level, date, time, liked, #id_user, #id_trainer, #pokedex_number*** 
+
+\bigskip 
+
+**Trainers** avec les colonnes suivantes : ***id_trainer, trainerGender, trainerCountry et trainerCountrySub1***
+
+\bigskip 
+
+### Dernières modifications : 
+
+Table **Pokemon** : 
+Nous avons ouvert le fichier CSV pokemon avec LibreOffice afin de supprimer les colonnes inutiles, notamment ***weight*** et ***height***
+
+\bigskip 
+
+Tables **Traders** et **Users** : 
+Nous avons ouvert ces tables dans LibreOffice, puis nous avons trié les données par identifiant croissant, et enfin nous avons ensuite supprimé manuellement les lignes en double.
+
+\bigskip 
+
+Table **Trades** : 
+Nous avons ajouté une clé primaire auto-incrémentée directement dans phpMyAdmin en utilisant la requête SQL suivante :
+
+\bigskip 
+
+      “ALTER TABLE trades ADD IdTrade INT AUTO_INCREMENT PRIMARY KEY;”
+
 
 \bigskip 
 \bigskip 
-
-Cette vérification a montré des noms commençant par "A." suivi du nom du pokémon. Une correction a été effectuée directement dans la base avec la requête suivante :
-
-    UPDATE wonder_trade
-    SET Pokemon = REPLACE(Pokemon, 'A.', '')
-    WHERE Pokemon LIKE 'A.%';
-
-Après correction, tous les noms de Pokémon de wonder_trade" correspondent bien à ceux de la table "pokemon".
-
-Ajout d’une clé primaire afin de respecter le modèle relationnel :
-
-    ALTER TABLE wonder_trade
-    ADD id_trade INT AUTO_INCREMENT PRIMARY KEY;
-
-
-Source de données 2 : pokemon
-
-Mise en place d’une clé primaire sur la colonne "pokedex_number" afin d’identifier de manière unique chaque Pokémon :
-
-    ALTER TABLE pokemon
-    ADD PRIMARY KEY (pokedex_number);
-
-Renommage de la colonne "pokedex_number" en "id_pokemon" pour une meilleure lecture :
-
-    ALTER TABLE pokemon
-    RENAME COLUMN pokedex_number TO id_pokemon;
-
 
 
 
 ## Requêtes réalisées
 
 
-Pour chaque requête, l'exprimer en langage naturel puis en SQL. Puis donner le résultat obtenu (ou un extrait) et expliquer ce résultat.
-
-L'objectif est de varier le type de requêtes et de répondre à votre problématique initiale.
 
 ## Quelques détails techniques
 
 
-On peut interagir avec une base de données directement depuis RMarkdown : i.e. requêter puis récupérer et afficher le résultat directement depuis le .Rmd. Un fichier connexionBDD.Rmd est fourni pour donner des exemples.
 
 # Matériel et Méthodes
 
+
 ## Logiciels
-
-Lister tous les logiciels utilisés pour la partie statistique du rapport (et également ceux pour gérer et communiquer entre les membres du projet s'il y en a en particulier)
-
-\medskip
-
-R (ou Python) est le logiciel à privilégier pour la Science des Données. Pour assurer une reproductibilité maximale, vous devriez utiliser R Markdown (ou un Notebook Jupyter, et éventuellement un outil de gestion des versions tel que `Git`), par exemple via Google Colab ou RStudio dans les nuages. Évitez d'utiliser Word!
-
-\bigskip
-
-Il est de votre responsabilité de donner les versions des logiciels que vous utilisez, ainsi que de donner des informations techniques sur l'ordinateur qui vous a servi pour les analyses (système d'exploitation, vitesse du processeur, etc.). Penser à fournir des citations pour les logiciels utilisés, par exemple \footnote{L'entrée BibTeX ajoutée dans le fichier \texttt{references.bib} a été obtenue grâce à la commande  \texttt{citation(package = "tidyverse")} tapée dans la console de R.}.
- 
-
-
 
 
 ## Modélisation statistique
 
-Quels outils ou méthodes de statistiques allez-vous utiliser? Donner des équations mathématiques s'il y a lieu et lister les éventuels présupposés («assumptions» en anglais) que vous devez faire sur les données afin d'utiliser ces outils ou méthodes (_e.g._, normalité, absence de valeurs aberrantes, etc.).
-
-Il est également bon d'indiquer quelles sont les avantages et les limites de ces méthodes.
-
-Vous pourrez consulter avec profit les Chapitre 11--13 du livre sur R :
-
-<http://biostatisticien.eu/springeR/livreR.pdf>
 
 # Analyse Exploratoire des Données
 
-Toute étude impliquant des données doit **obligatoirement** inclure une analyse exploratoire préalable. Celle-ci permet de mieux comprendre l'information contenue dans les données.
-
-Il faut produire de nombreux résumés graphiques (_e.g._, histogrammes, nuages de points, boxplots, etc.) et numériques (_e.g._, médiane, moyenne, variance, etc.). Ainsi, il faut faire une analyse descriptive uni- et bivariée systématique de toutes les variables du jeu de données. Puis, il faut uniquement conserver les plus pertinents (les autres pouvant être gardés en Annexe), c'est-à-dire ceux qui permettront de dégager des éléments de réponse pour la question de recherche envisagée.  Chaque figure et tableau doit être commenté. Mais il ne faut pas extrapoler et dire des choses qui ne sont pas visibles dans ces graphiques ou tableaux. Pour chaque analyse, vous pourrez préciser le nombre d'individus/ d'unités statistiques concernés au total.
-
-Vous pourrez consulter avec profit le Chapitre 9 du livre sur R :
-
-<http://biostatisticien.eu/springeR/livreR.pdf>
-
-## Utiliser R {.fragile}
-
-Il est facile d'inclure des codes R dans votre rapport, qui seront exécutés à la volée (_i.e._, lors de la traduction de votre fichier `Rmd` en fichier `PDF` ou `DOC`). Par exemple:
-
-
-``` r
-boxplot(cars, col = c("#5975a4", "#cc8963"))
-```
-
-\begin{figure}
-
-{\centering \includegraphics[width=7cm]{scdon2-UPV-report-template_files/figure-latex/unnamed-chunk-2-1} 
-
-}
-
-\caption{\label{fig:boxplots}Deux boxplots.}\label{fig:unnamed-chunk-2}
-\end{figure}
-
-``` r
-colMeans(cars)
-```
-
-```
-## speed  dist 
-## 15.40 42.98
-```
-
-
-Les lignes de code ne doivent pas dépasser dans la marge de droite. Ainsi on pourrait remplacer le chunk ci-dessous:
-
-
-``` r
-boxplot(cars, main = "Un titre qui est vraiment beaucoup trop long et qui dépasse dans la marge de droite")
-```
-
-\begin{figure}
-
-{\centering \includegraphics[width=7cm]{scdon2-UPV-report-template_files/figure-latex/unnamed-chunk-3-1} 
-
-}
-
-\caption{Pas super.}\label{fig:unnamed-chunk-3}
-\end{figure}
-
-par celui-ci:
-
-\tiny
-
-
-``` r
-boxplot(cars, 
-        main = "Un titre qui est vraiment beaucoup trop long\n mais qui ne dépasse plus dans la marge de droite")
-```
-
-\begin{figure}
-
-{\centering \includegraphics[width=7cm]{scdon2-UPV-report-template_files/figure-latex/unnamed-chunk-4-1} 
-
-}
-
-\caption{Déjà mieux.}\label{fig:unnamed-chunk-4}
-\end{figure}
-
-\normalsize
-
-où l'on a:
-
-- utilisé la commande \LaTeX\ `\tiny` pour changer la taille de la police (suivi de de `\normalsize` pour revenir à la taille normale), 
-- mis l'instruction `main = ...` sur la deuxième ligne,
-- utilisé `\n` pour afficher le titre sur deux lignes.
-
-\vspace{3em}
-
-**Remarques** : Contrairement aux graphiques précédents, nous vous demandons, pour effectuer les graphiques, d'utiliser le package `ggplot2`. Voir [https://juba.github.io/tidyverse/08-ggplot2.html](https://juba.github.io/tidyverse/08-ggplot2.html) pour une courte introduction.
 
 # Inférence statistique et modélisation
 
-Dans cette partie, vous pourrez utiliser les outils et méthodes vus au semestre précédent pour analyser les liens entre les variables. 
-
-Pour cela, vous pourrez utiliser les tests du $\chi^2$, test du coefficient de corrélation linéaire, test d'Anova, la droite de régression linéaire.
-
-Vous pourrez également proposer des modèles pour faire du clustering (k-means, CAH), de la classification (K plus proches voisins par exemple) comme vu en Science des données 1.  
 
 ## La droite de régression linéaire : un premier exemple
 
-Si on souhaite expliquer les variations d'une variables réponse $Y$ en fonction d'un certain nombre de prédicteurs $x_1,\ldots,x_p$, on peut utiliser un modèle de régression linéaire simple ($p=1$) ou multiple ($p>1$)
-
-$$
-Y_i = \beta_0 + \beta_1 x_{1i} + \cdots +\beta_p x_{pi} + \epsilon_i, \qquad i=1,\ldots,n.
-$$
-où l'on présuppose que les $\epsilon_i$ sont i.i.d.\ $N(0,1)$ pour tout $i=1,\ldots,n$ ($n$ étant la taille de l'échantillon).
-
-Vous pourrez toujours consulter avec profit les Chapitre 11--13 du livre sur R :
-
-<http://biostatisticien.eu/springeR/livreR.pdf>
-
-Ces chapitres détaillent l'utilisation de certains tests et modèles sous `R`.
 
 # Discussion
 
-Placer les résultats que vous avez obtenus dans le chapitre précédent en perspective par rapport au problème étudié.
 
 # Conclusion et perspectives {.label:ccl}
 
-Quelles sont les conclusions principales? Quelles sont vos recommandations pour le commanditaire? Quelles analyses subséquentes pourraient être faites dans le futur?
-
-\bigskip
-
-On attend de vous deux types de perspectives : des perspectives à court terme pour améliorer rapidement votre approche et des perspectives à plus long terme qu'elles soient liées à la science des données ou au domaine métier pour lequel vous avez travaillé.
-
-\bigskip
-
-Lister également les difficultés rencontrées dans la partie BD (e.g., taille de la base, manque de données, ...) et dans la partie statistique.
 
 # Bibliographie {-}
 
@@ -521,55 +387,13 @@ Lister également les difficultés rencontrées dans la partie BD (e.g., taille 
 # Annexes {-}
 
 
-Il faut utiliser les annexes de façon judicieuse. C'est ici que l'on place des résultats trop volumineux pour apparaître dans le corps du rapport. Ou bien des résultats (e.g., graphiques) moins intéressants que les autres. Cela permet de limiter le nombre de pages du coeur du rapport, et d'ajouter des détails dans cette partie pour le lecteur désireux d'en savoir plus.
-
 ## **Codes** {-}
 
-Ajouter vos codes informatique ici. Les codes doivent être correctement indentés et commentés.
 
 ## **Tables** {-}
 
-Si vous avez des tableaux supplémentaires, vous pouvez les ajouter ici.
-
-Utiliser https://www.tablesgenerator.com/markdown_tables pour créer des tables Markdown simples, ou bien utiliser \LaTeX.
 
 1. Table Markdown
 
-| Les tables   |        sont       |  cool |
-|--------------|:-----------------:|------:|
-| col 1 est    |  alignée à gauche | $1600 |
-| col 2 est    |     centrée       |   $12 |
-| col 3 est    | alignée à droite  |    $1 |
-
-Table: une légende au-dessus du tableau. \label{tab7.2}
-
-Aligner les nombres de la troisième colonne sur la droite permet d'afficher les unités au-dessus des unités, les dizaines au-dessus des dizaines, etc. Il faut toujours privilégier cette présentation.
-
-\vspace{3em}
 
 2. Table Latex
-
-\begin{table}[h]
-\centering
-\caption{une légende au-dessus du tableau}
-\label{tab7.3}
-\begin{tabular}{lcr}
-\hline
-Les tables & sont & cool \\
-\hline
-col 1 est & alignée à gauche & 1600 \\
-col 2 est & centrée & 12 \\
-col 3 est & alignée à droite & 1 \\
-\hline
-\end{tabular}
-\end{table}
-
-
-\textbf{Remarques}
-
-\begin{itemize}
-  \item \{lcr\} : gauche (l), centré (c), droite (r)
-  \item \verb|\caption| place la légende au-dessus
-  \item \verb|\label| permet de référencer le tableau (\verb|\ref{tab7.2}|)
-  \item Les nombres sont bien alignés à droite dans la 3\ieme{} colonne
-\end{itemize}

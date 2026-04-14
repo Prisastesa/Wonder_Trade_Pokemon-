@@ -128,76 +128,93 @@ La population étudiée correspond à l’ensemble des Pokémon du fichier pokem
 
 ## Descriptif des tables
 
+\bigskip
+
+La table Pokemon sert de dictionnaire de référence. Elle contient toutes les statistiques immuables et globale de chaque espèce de Pokémon (force, types, résistances).
+\smallskip
+
 \begin{longtable}{|p{3cm}|p{2cm}|p{4cm}|p{5cm}|}
 \caption{Table : pokemon ($802 \times 41$)} \label{tab:pokemon} \\
 \hline
 \textbf{Nom colonne} & \textbf{Type} & \textbf{Signification} & \textbf{Caractéristique} \\ \hline
 \endfirsthead
-\multicolumn{4}{c}{{\bfseries \tablename\ \thetable{} -- suite de la page précédente}} \\ \hline
+\hline
 \textbf{Nom colonne} & \textbf{Type} & \textbf{Signification} & \textbf{Caractéristique} \\ \hline
 \endhead
-\hline \multicolumn{4}{|r|}{{Suite sur la page suivante}} \\ \hline
-\endfoot
-\hline
-\endlastfoot
-pokedex\_number & Entier & Numéro Pokédex National & \textbf{Clé primaire}, unique \\ \hline
-name & Chaîne & Nom anglais du Pokémon & Texte obligatoire \\ \hline
-japanese\_name & Chaîne & Nom original japonais & Optionnel \\ \hline
-type1 & Chaîne & Type primaire & Obligatoire (18 types) \\ \hline
-type2 & Chaîne & Type secondaire & Optionnel (peut être vide) \\ \hline
-classification & Chaîne & Classification de l'espèce & Ex : Pokémon Graine \\ \hline
-capture\_rate & Entier & Facilité de capture & Plus élevé = plus facile \\ \hline
-base\_egg\_steps & Entier & Pas pour l'éclosion d'un œuf & Indicateur de rareté \\ \hline
-abilities & Chaîne & Liste des capacités spéciales & Chaîne formatée (liste) \\ \hline
-experience\_growth & Chaîne & Courbe de progression d'XP & Ex : Slow, Fast, Medium \\ \hline
-base\_happiness & Entier & Niveau de bonheur initial & Valeur de 0 à 255 \\ \hline
-hp & Entier & Points de vie de base & Statistique de combat \\ \hline
-attack & Entier & Force d'attaque physique & Statistique de combat \\ \hline
-defense & Entier & Résistance physique & Statistique de combat \\ \hline
-sp\_attack & Entier & Force d'attaque spéciale & Statistique de combat \\ \hline
-sp\_defense & Entier & Résistance spéciale & Statistique de combat \\ \hline
-speed & Entier & Vitesse de base & Détermine l'ordre d'action \\ \hline
-base\_total & Entier & Somme des 6 statistiques & Puissance globale du Pokémon \\ \hline
-generation & Entier & Numéro de génération d'origine & Valeur de 1 à 7 \\ \hline
-is\_legendary & Booléen & Statut légendaire & 0 = Non, 1 = Oui \\ \hline
-percentage\_male & Réel & Pourcentage de mâles & Vide si le Pokémon est asexué \\ \hline
-against\_? & Réel & Multiplicateurs de dégâts (18 colonnes) & 0.5=résistant, 1=neutre, 2=faible \\ \hline
+id\_pokemon & Entier & Identifiant interne du Pokémon & \textbf{Clé primaire} \\ \hline
+pokedex\_number & Entier & Numéro officiel du Pokédex & Unique par espèce \\ \hline
+name & Chaîne & Nom anglais de l'espèce & EX : Abra \\ \hline
+abilities & Liste & Capacités spéciales possibles & EX : ['Overgrow'] \\ \hline
+type1 / type2 & Chaîne & Types élémentaires & type2 peut être \textbf{vide} (NULL) \\ \hline
+hp/\smallskip attack/\smallskip defense/\smallskip sp\_attack/\smallskip sp\_defense/\smallskip  speed & Entier & Statistiques de combat de base & Valeurs numériques (ex: 45, 120) \\ \hline
+base\_total & Entier & Somme des statistiques & Puissance globale \\ \hline
+is\_legendary & Booléen & Statut de Pokémon légendaire & 0 = Non, 1 = Oui \\ \hline
+against\_water / bug / fire / etc. & Réel & Multiplicateurs de dégâts subis & 0.5 = Résistant, 1 = Neutre, 2 = Faible \\ \hline
 \end{longtable}
 
+\smallskip
+
+
+\begin{longtable}{|p{3cm}|p{2cm}|p{4cm}|p{5cm}|}
+\caption{Table : trades} \label{tab:trades} \\
+\hline
+\textbf{Nom colonne} & \textbf{Type} & \textbf{Signification} & \textbf{Caractéristique} \\ \hline
+\endfirsthead
+\hline
+\textbf{Nom colonne} & \textbf{Type} & \textbf{Signification} & \textbf{Caractéristique} \\ \hline
+\endhead
+pokemonId & Entier & ID du Pokémon échangé & \textbf{Clé étrangère} vers pokemon \\ \hline
+trainerId & Entier & ID du dresseur partenaire & \textbf{Clé étrangère} vers trainers \\ \hline
+userId & Entier & ID de l'utilisateur local & \textbf{Clé étrangère} vers users \\ \hline
+level & Entier & Niveau du Pokémon lors de l'échange & EX : 26 (peut être importé en texte) \\ \hline
+isShiny & Texte & Aspect chromatique rare & "VRAI" ou "FAUX" \\ \hline
+hasItem & Texte & Le Pokémon tient-il un objet ? & "VRAI" ou "FAUX" \\ \hline
+hasHiddenAbility & Texte & Possède un talent caché rare & "VRAI" ou "FAUX" \\ \hline
+hasPerfectIV & Texte & Possède des stats innées au max & "VRAI" ou "FAUX" \\ \hline
+hasPokerus & Texte & Infecté par le virus bénéfique & "VRAI" ou "FAUX" \\ \hline
+hasEggMove & Texte & Possède une capacité de reproduction & "VRAI" ou "FAUX" \\ \hline
+liked & Chaîne & Avis de l'utilisateur sur l'échange & "like", "dislike" ou \textbf{vide} \\ \hline
+date / time & Date / Heure & Moment précis de l'échange & EX : 2015-02-08 / 54817 \\ \hline
+\end{longtable}
+
+\smallskip
+La table Trades est centrale. Elle enregistre l'historique de tous les échanges effectués. Contrairement à la table précédente, les données ici (niveau, objet, shiny) sont spécifiques au spécimen précis qui a été reçu lors de l'échange.
 
 \smallskip
 
 \begin{longtable}{|p{3cm}|p{2cm}|p{4cm}|p{5cm}|}
-\caption{Table : wonder\_trade ($500 \times 17$)} \label{tab:wonder} \\
+\caption{Table : trainers} \label{tab:trainers} \\
 \hline
 \textbf{Nom colonne} & \textbf{Type} & \textbf{Signification} & \textbf{Caractéristique} \\ \hline
 \endfirsthead
-\multicolumn{4}{c}{{\bfseries \tablename\ \thetable{} -- suite de la page précédente}} \\ \hline
+\hline
 \textbf{Nom colonne} & \textbf{Type} & \textbf{Signification} & \textbf{Caractéristique} \\ \hline
 \endhead
-\hline \multicolumn{4}{|r|}{{Suite sur la page suivante}} \\ \hline
-\endfoot
-\hline
-\endlastfoot
-id\_trade & Entier & Identifiant unique de l'échange & \textbf{Clé primaire} \\ \hline
-Date & Date & Date de réalisation du trade & Format AAAA-MM-JJ \\ \hline
-Time & Heure & Heure de l'échange (CST) & Format HH:MM \\ \hline
-pokedex\_number & Entier & Numéro Pokédex du Pokémon reçu & \textbf{Clé étrangère} \\ \hline
-Pokemon & Chaîne & Nom du Pokémon reçu & Texte \\ \hline
-Trainer\_Region & Chaîne & Région d'origine du partenaire & Donnée géographique \\ \hline
-Trainer\_Subregion & Chaîne & État ou province du partenaire & Optionnel (souvent USA) \\ \hline
-Pokemon\_Language & Chaîne & Langue d'origine du Pokémon & Ex : English, Japanese \\ \hline
-Level & Entier & Niveau actuel du Pokémon reçu & Valeur de 1 à 100 \\ \hline
-Level\_Met & Entier & Niveau lors de la capture initiale & Historique du Pokémon \\ \hline
-Gender & Chaîne & Sexe du Pokémon reçu & M, F ou Vide \\ \hline
-Type1 & Chaîne & Type primaire du spécimen & Doit correspondre à la table Pokémon \\ \hline
-Type2 & Chaîne & Type secondaire du spécimen & Optionnel \\ \hline
-Nature & Chaîne & Nature influençant les stats & 25 variantes possibles \\ \hline
-Pokeball & Chaîne & Type de Pokéball utilisée & Ex : Great Ball, Ultra Ball \\ \hline
-Held\_Item & Chaîne & Présence d'un objet tenu & Indique si un item est présent \\ \hline
-Perfect\_IVs & Entier & Nombre de stats parfaites (31) & Valeur de 0 à 6 \\ \hline
+id\_trainer & Entier & Identifiant unique du dresseur & \textbf{Clé primaire} \\ \hline
+trainer\_name & Chaîne & Pseudo du dresseur & Peut être \textbf{vide} (si anonyme) \\ \hline
+gender & Chaîne & Sexe du dresseur & "male" ou "female" \\ \hline
+country & Chaîne & Code pays (ISO) & EX : US, JP, FR \\ \hline
+country\_sub1 & Chaîne & Région ou État d'origine & EX : California, Texas, Tokyo \\ \hline
 \end{longtable}
 
+\smallskip
+La table Trainers contient les profils des partenaires d'échange. Elle permet de savoir avec qui l'utilisateur a interagi et de quelle région du monde provient le Pokémon reçu.
+\smallskip
+
+
+\begin{longtable}{|p{3cm}|p{2cm}|p{4cm}|p{5cm}|}
+\caption{Table : users} \label{tab:users} \\
+\hline
+\textbf{Nom colonne} & \textbf{Type} & \textbf{Signification} & \textbf{Caractéristique} \\ \hline
+\endfirsthead
+\hline
+\textbf{Nom colonne} & \textbf{Type} & \textbf{Signification} & \textbf{Caractéristique} \\ \hline
+\endhead
+id\_user & Entier & Identifiant unique de l'utilisateur & \textbf{Clé primaire} \\ \hline
+\end{longtable}
+\smallskip 
+La table Users est très courte et sert simplement à identifier les comptes locaux sur le logiciel du site web qui a enregistré les données.
+\smallskip
 
 
 ## Modèles MCD et MOD
@@ -382,4 +399,3 @@ Nous avons ajouté une clé primaire auto-incrémentée directement dans phpMyAd
 
 
 2. Table Latex
-
