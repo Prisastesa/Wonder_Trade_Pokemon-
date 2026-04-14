@@ -303,47 +303,91 @@ TRADE (id_trade, pokemon_nickname, has_item, has_hidden_ability, has_egg_move, h
 
 ## Import des données 
 
+A partir des fichiers csv **Pokemon** et **WonderTrade**, nous avons créé les tables ***Pokemon**, **Trades**, **Trainers** et **Users** comme indiqué si-dessous.
 
+\bigskip 
 
-Source de données 1 : wonder_trade
+### 1 - Création des nouveaux Trainer ID : 
+Directement dans le fichier CSV **WonderTrade** ouvert dans LibreOffice, nous avons procédé de la manière suivante :
 
-Suppression de certaines colonnes jugées inutiles (comme weight et height), car elles n’étaient pas pertinentes pour l’analyse réalisée.
+\bigskip 
 
-Vérification de la cohérence des noms de Pokémon : une requête a permis d’identifier les noms présents dans "wonder_trade" mais absents de la table "pokemon" :
+Nous avons d’abord activé l’autofiltre sur l’ensemble des données afin de faciliter les opérations de tri, pour ensuite trier par ordre croissant ***trainerGender*** puis ***TrainerCountry*** puis ***TrainerCountrySub1***.
 
-    SELECT DISTINCT wonder_trade.Pokemon
-    FROM wonder_trade
-    WHERE wonder_trade.Pokemon NOT IN (SELECT name FROM pokemon);
-![**Figure 3 Normalisation des nom de pokemon**.](normalisation.png){#uml width="12cm" height="9cm"}
+\bigskip 
+
+Ce tri permet de regrouper les lignes présentant des caractéristiques similaires, ce qui est nécessaire pour la suite du traitement.
+
+\bigskip 
+
+Nous avons ensuite trié la colonne ***trainerId*** par ordre croissant. Nous avons constaté que les lignes situées en bas du tableau correspondent aux échanges avec un trainerId vide. Ce sont ces lignes pour lesquelles nous devons créer de nouveaux identifiants.
+
+\bigskip 
+
+Nous faisons ici l’hypothèse que des individus ayant le même genre, le même pays et la même sous-localisation correspond à une seule et même personne. Sachant qu’il y a environ 100 lignes sans ID et que les identifiants existants commencent à 783, il n’y aura pas de problème pour créer les nouveaux.
+
+\bigskip 
+
+Sous le dernier ***trainerId*** connu, nous saisissons la valeur 1, puis dans la cellule suivante, nous entrons la formule :
+
+\bigskip 
+
+      “=SI(J103=J104;SI(K103=K104;SI(L103=L104;Q103;Q103+1);Q103+1);Q103+1)”
+
+\bigskip 
+
+Nous étirons ensuite cette formule jusqu’à la dernière ligne du tableau.
+
+\bigskip 
+
+Cette formule permet de comparer chaque ligne à la précédente : si le genre, le pays et la sous-localisation sont identiques, l’identifiant reste le même ; dans le cas contraire, il est incrémenté de 1.
+
+\bigskip 
+
+Nous avons choisi cette méthode en considérant que les trainers partageant les mêmes caractéristiques correspondent à une seule personne. Il aurait également été possible d’attribuer un identifiant distinct à chaque trainer anonyme, mais ce choix n’a pas d’impact sur notre analyse, qui porte sur les caractéristiques des individus (genre, pays, etc.) et non sur leur identification individuelle.
+
+\bigskip 
+
+### 2 - création des tables dérivées de WonderTrade : 
+
+À partir du fichier **WonderTrade** modifié, nous avons construit plusieurs tables : 
+
+\bigskip 
+
+**Users** contenant uniquement la colonne ***userId***
+
+\bigskip 
+
+**Trades** avec les colonnes suivantes : ***id_trade, hasItem, hasHiddenAbility, hasEggMove, hasPokerus, hasPerfectIV, isShiny, level, date, time, liked, #id_user, #id_trainer, #pokedex_number*** 
+
+\bigskip 
+
+**Trainers** avec les colonnes suivantes : ***id_trainer, trainerGender, trainerCountry et trainerCountrySub1***
+
+\bigskip 
+
+### 3 - dernières modifications : 
+
+Table **Pokemon** : 
+Nous avons ouvert le fichier CSV pokemon avec LibreOffice afin de supprimer les colonnes inutiles, notamment ***weight*** et ***height***
+
+\bigskip 
+
+Tables **Traders** et **Users** : 
+Nous avons ouvert ces tables dans LibreOffice, puis nous avons trié les données par identifiant croissant, et enfin nous avons ensuite supprimé manuellement les lignes en double.
+
+\bigskip 
+
+Table **Trades** : 
+Nous avons ajouté une clé primaire auto-incrémentée directement dans phpMyAdmin en utilisant la requête SQL suivante :
+
+\bigskip 
+
+      “ALTER TABLE trades ADD IdTrade INT AUTO_INCREMENT PRIMARY KEY;”
+
 
 \bigskip 
 \bigskip 
-
-Cette vérification a montré des noms commençant par "A." suivi du nom du pokémon. Une correction a été effectuée directement dans la base avec la requête suivante :
-
-    UPDATE wonder_trade
-    SET Pokemon = REPLACE(Pokemon, 'A.', '')
-    WHERE Pokemon LIKE 'A.%';
-
-Après correction, tous les noms de Pokémon de wonder_trade" correspondent bien à ceux de la table "pokemon".
-
-Ajout d’une clé primaire afin de respecter le modèle relationnel :
-
-    ALTER TABLE wonder_trade
-    ADD id_trade INT AUTO_INCREMENT PRIMARY KEY;
-
-
-Source de données 2 : pokemon
-
-Mise en place d’une clé primaire sur la colonne "pokedex_number" afin d’identifier de manière unique chaque Pokémon :
-
-    ALTER TABLE pokemon
-    ADD PRIMARY KEY (pokedex_number);
-
-Renommage de la colonne "pokedex_number" en "id_pokemon" pour une meilleure lecture :
-
-    ALTER TABLE pokemon
-    RENAME COLUMN pokedex_number TO id_pokemon;
 
 
 
