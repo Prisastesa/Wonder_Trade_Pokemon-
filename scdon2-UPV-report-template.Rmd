@@ -36,7 +36,7 @@ bibliography: references.bib
 coursecode: TV15MI-TV25MI
 csl: iso690-author-date-fr-no-abstract.csl
 Acknowledgements:
-Nous tenons à exprimer notre profonde gratitude envers les personnes suivantes qui
+Nous tenons à exprimer notre profonde gratitude envers les personnes suivantes qui 
 ont contribué à la réalisation de ce projet.
 Mme Sandra Bringay pour ses précieux conseils et son soutien constant tout au
 long de ce projet.
@@ -376,6 +376,20 @@ Nous avons ajouté une clé primaire auto-incrémentée directement dans phpMyAd
 
 
 ## Requêtes réalisées
+REQUETE N°1:
+Pour commencer, nous avons interrogé le logiciel pour connaître le nombre de pokémons ayant  été échangé au moins une fois
+ ( individus). Puis, le nombre de pokémons jamais échangé ( individus). Ces deux premières requêtes vont être à l’origine des autres requêtes qui vous surtout se concentrer sur les pokémons échangés.
+
+
+REQUETE N°2:
+Nous avons alors décidé de comparer HP pokémons échangés et HP des pokémons jamais échangés ainsi que les moyennes (distinct ou non) en sachant qu'il y a .. pokémons échangés et .. pokémons jamains échangés.
+
+
+
+REQUETE N°3:
+Ensuite, nous nous sommes interessés à savoir si le genre du trainer influence sur le type de pokémons échangé.
+
+
 
 
 
