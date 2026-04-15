@@ -376,23 +376,34 @@ Nous avons ajouté une clé primaire auto-incrémentée directement dans phpMyAd
 
 
 ## Requêtes réalisées
-REQUETE N°1:
-Pour commencer, nous avons interrogé le logiciel pour connaître le nombre de pokémons ayant  été échangé au moins une fois
- ( individus). Puis, le nombre de pokémons jamais échangé ( individus). Ces deux premières requêtes vont être à l’origine des autres requêtes qui vous surtout se concentrer sur les pokémons échangés.
+#Requête n°1 :
+
+Pour commencer, nous avons interrogé la base de données afin de distinguer les Pokémon ayant déjà été échangés de ceux qui ne l’ont jamais été. Cette première étape est essentielle car elle constitue la base des analyses suivantes, qui se concentreront principalement sur les Pokémon échangés.
+
+Table : Pokémon échangés vs non échangés
+
+Pokémon échangés | Pokémon jamais échangés
 
 
 REQUETE N°2:
-Nous avons alors décidé de comparer HP pokémons échangés et HP des pokémons jamais échangés ainsi que les moyennes (distinct ou non) en sachant qu'il y a .. pokémons échangés et .. pokémons jamains échangés.
+Nous avons ensuite comparé les points de vie moyens (HP) des Pokémon échangés et non échangés.
+
+L’objectif est de déterminer si les dresseurs ont tendance à échanger des Pokémon plus faibles, plus forts ou équivalents à la moyenne.
 
 
 
 REQUETE N°3:
-Ensuite, nous nous sommes interessés à savoir si le genre du trainer influence sur le type de pokémons échangé.
+Nous avons étudié le lien entre le genre des dresseurs et les types de Pokémon échangés.
+
+L’objectif est de vérifier s’il existe une corrélation entre le genre et ses préférences d’échange.
+
+Cette requête permet de  révéler des préférences de types (ex : feu, eau, normal…)
+ou l’absence totale de différence (comportement homogène).
+Cela permet d’introduire une dimension sociologique dans l’analyse.
 
 
-REQUETE N°3:
+REQUETE N°4:
 Puis on a analyser les type de les détails pour étudier les quels sont les moins appréciés.
-
 
 Le type Normal est le moins aimé car il regroupe les Pokémon les plus communs et faciles à capturer dès le début du jeu. Statistiquement, ils possèdent souvent des caractéristiques de combat plus faibles (HP, Attaque, Défense) que les types plus rares ou "exotiques".
 Enfin, comme les dresseurs utilisent souvent le Wonder Trade comme un outil d'optimisation pour se débarrasser de leurs spécimens les plus faibles, le système se retrouve saturé de Pokémon de type Normal, provoquant une déception systématique enregistrée dans la colonne liked (dislike) par les destinataires
