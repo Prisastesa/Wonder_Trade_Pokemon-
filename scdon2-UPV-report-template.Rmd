@@ -44,8 +44,6 @@ biblio-style: elsarticle-harv
 session: 2026
 team: PokéGirl
 groupeTD : TD1
-Abstract: L'image ci-dessous vous donne quelques conseils pour rédiger un bon résumé.\newline
-  ![](good-abstract.png){width=10cm height=10cm}
 always_allow_html: true
 ---
 
