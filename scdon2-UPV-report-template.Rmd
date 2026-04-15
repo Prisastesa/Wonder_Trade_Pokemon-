@@ -390,6 +390,12 @@ REQUETE N°3:
 Ensuite, nous nous sommes interessés à savoir si le genre du trainer influence sur le type de pokémons échangé.
 
 
+REQUETE N°3:
+Puis on a analyser les type de les détails pour étudier les quels sont les moins appréciés.
+
+
+Le type Normal est le moins aimé car il regroupe les Pokémon les plus communs et faciles à capturer dès le début du jeu. Statistiquement, ils possèdent souvent des caractéristiques de combat plus faibles (HP, Attaque, Défense) que les types plus rares ou "exotiques".
+Enfin, comme les dresseurs utilisent souvent le Wonder Trade comme un outil d'optimisation pour se débarrasser de leurs spécimens les plus faibles, le système se retrouve saturé de Pokémon de type Normal, provoquant une déception systématique enregistrée dans la colonne liked (dislike) par les destinataires
 
 
 
