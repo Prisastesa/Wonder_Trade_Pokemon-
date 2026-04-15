@@ -36,15 +36,10 @@ bibliography: references.bib
 coursecode: TV15MI-TV25MI
 csl: iso690-author-date-fr-no-abstract.csl
 Acknowledgements:
-Nous tenons à exprimer notre profonde gratitude envers les personnes suivantes qui 
-ont contribué à la réalisation de ce projet.
-Mme Sandra Bringay pour ses précieux conseils et son soutien constant tout au
-long de ce projet.
-Mme Marine Demangeot pour son accompagnement et son aide au cours des
-séances.
-L’équipe de ce groupe pour leur collaboration et leur dévouement, chaque membre
-de ce projet a apporté des idées originales et a fait preuve de rigueur et de
-sérieux dans la réalisation de nos objectifs communs.
+- Nous tenons à exprimer notre profonde gratitude   envers les personnes suivantes qui ont contribué à la réalisation de ce projet.
+- Mme Sandra Bringay pour ses précieux conseils et son soutien constant tout au long de ce projet.
+- Mme Marine Demangeot pour son accompagnement et son aide au cours des séances.
+- L’équipe de ce groupe pour leur collaboration et leur dévouement, chaque membre de ce projet a apporté des idées originales et a fait preuve de rigueur et de sérieux dans la réalisation de nos objectifs communs.
 biblio-style: elsarticle-harv
 session: 2026
 team: PokéGirl
