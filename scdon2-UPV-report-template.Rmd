@@ -369,13 +369,18 @@ Nous avons ajouté une clé primaire auto-incrémentée directement dans phpMyAd
 
 
 ## Requêtes réalisées
-##Requête n°1 :
+REQUETE N°1:
 
 Pour commencer, nous avons interrogé la base de données afin de distinguer les Pokémon ayant déjà été échangés de ceux qui ne l’ont jamais été. Cette première étape est essentielle car elle constitue la base des analyses suivantes, qui se concentreront principalement sur les Pokémon échangés.
 
-Table : Pokémon échangés vs non échangés
 
-Pokémon échangés | Pokémon jamais échangés
+Pokémon échangés
+
+![**Requête 1**.](Requête0.png){#Requête width="10cm" height="4cm"} 
+
+Pokémon non échangés
+
+![**Requête 1**.](Requête0bis.png){#Requête width="10cm" height="4cm"}
 
 
 REQUETE N°2:
