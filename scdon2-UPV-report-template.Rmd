@@ -239,7 +239,7 @@ La table Users est très courte et sert simplement à identifier les comptes loc
 
 ### MOD :
 
-  ![** MOD.**](pokewonder (1).png){#MOD width="18cm" height="21cm"}
+  ![** MOD.**](pokewonder (1).png){#MOD width="16cm"height="8cm"}
   
 
 \bigskip 
