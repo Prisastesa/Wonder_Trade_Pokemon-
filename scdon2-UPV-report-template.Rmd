@@ -61,14 +61,14 @@ Dans le cadre de ce projet, nous nous intéressons au système d’échange Wond
 
 \begin{center}
 
-**caractéristiques statistiques d’un Pokémon (puissance, rareté, type) influencent-elles sa probabilité d’être échangé dans le système Wonder Trade de Pokémon Sun and Moon?**
+** Les caractéristiques des Pokémon et des dresseurs influencent-elles la qualité des échanges ? **
 
 \end{center}
 \medskip 
 
 \justifying
 
-Ainsi, on peut se demander si les échanges réalisés dans le Wonder Trade sont réellement aléatoires du point de vue de la qualité des Pokémon, ou s’ils révèlent des comportements spécifiques de la part des joueurs. Autrement dit, les joueurs ont-ils tendance à échanger des Pokémon moins performants ou moins rares, ou observe-t-on également la présence de Pokémon puissants et recherchés dans ce système ? Cette interrogation est centrale pour comprendre la logique des échanges et les stratégies adoptées par les joueurs.
+Ainsi, on peut se demander si les échanges réalisés dans le Wonder Trade sont réellement aléatoires du point de vue de la qualité des Pokémon, ou s’ils révèlent des comportements spécifiques de la part des joueurs. Autrement dit, certains joueurs ont-ils tendance à échanger des Pokémon moins performants ou moins rares, ou observe-t-on également la présence de Pokémon puissants et recherchés dans ce système ? Cette interrogation est centrale pour comprendre la logique des échanges et les stratégies adoptées par les joueurs.
 
 \medskip 
 Cette question présente un intérêt à la fois en analyse de données et en compréhension des comportements dans les environnements numériques. En effet, si les joueurs échangent majoritairement des Pokémon faibles ou communs, cela pourrait indiquer une logique d’optimisation individuelle. À l’inverse, la présence de Pokémon rares ou puissants dans les échanges pourrait révéler des comportements différents, comme la recherche d’aléatoire, la générosité ou des stratégies spécifiques. Ainsi, l’étude de cette problématique permet de mieux comprendre les dynamiques d’échange dans ce système et d’appliquer des outils statistiques pour analyser ces comportements.
@@ -95,13 +95,15 @@ Sbircea Stephanie : Étudiante n°22304694, Resp. import des données.
 
 ## Provenance des données
 pokemon: https://www.kaggle.com/datasets/rounakbanik/pokemon) et
-data_world: (https://data.world/notgibs/pokemon-wonder-trade-results/workspace/file?filename=Wonder+Trade.csv)
+wonder trades: (https://data.world/notgibs/pokemon-wonder-trade-results/workspace/file?filename=Wonder+Trade.csv)
 
 
 \bigskip
 On a sélectionné la table pokemon car elle contient les données relatives à la description des Pokémon, et la table wonder trade car elle contient les informations concernant les échanges.
 
-Les données sont stockées sous format CSV : le fichier pokemon.csv contient 38 colonnes et 802 lignes, tandis que le fichier wonder trade.csv contient 15 colonnes et 501 lignes.
+Les données des Pokémons sont stockées sous format CSV : le fichier contient 38 colonnes et 802 lignes.
+
+Le fichier wonder trade est sous format Json, il contient 18 colonnes et 201 lignes.
 
 \bigskip
 
@@ -109,17 +111,17 @@ Afin de faciliter l’analyse, nous avons choisi de filtrer certaines colonnes. 
 
 Dans la table pokemon, nous avons conservé uniquement les colonnes les plus pertinentes, notamment celles liées aux caractéristiques principales comme les statistiques (attack, defense, speed, base_total), les types (type1, type2), ainsi que des informations générales comme la génération et le caractère légendaire.
 
-Dans la table wonder trade, nous avons également sélectionné un sous-ensemble de colonnes parmi les 15 colonnes initiales, en conservant celles décrivant les échanges (niveau, région, nature, objets, etc.).
+Dans la table wonder trade, nous avons également sélectionné un sous-ensemble de colonnes parmi les 18 colonnes initiales, pour créer les tables trades, trainers et users comme explicité dans la partie import des données.
 
 \bigskip
 
 Ce filtrage permet de réduire le nombre de variables tout en gardant les informations essentielles, ce qui rend l’analyse plus claire et plus pertinente.
 
-Concernant les lignes, nous avons choisi de conserver l’ensemble des observations, soit 802 Pokémon et 501 échanges, afin de ne pas biaiser les résultats et de garder une vision globale des données.
+Concernant les lignes, nous avons choisi de conserver l’ensemble des observations, soit 802 Pokémon et 201 échanges, afin de ne pas biaiser les résultats et de garder une vision globale des données.
 
 \bigskip
 
-La population étudiée correspond à l’ensemble des Pokémon du fichier pokemon.csv ainsi qu’aux échanges du fichier wonder trade.csv.
+La population étudiée correspond à l’ensemble des Pokémon du fichier pokemon.csv ainsi qu’aux échanges du fichier wonder trade.json.
 
 \bigskip 
 \bigskip 
@@ -157,18 +159,7 @@ defense & speed
 
 base\_total & Entier & Somme des statistiques & Puissance globale \\ \hline
 is\_legendary & Booléen & Statut de Pokémon légendaire & 0 = Non, 1 = Oui \\ \hline
-
-
-\begin{minipage}[c]{3cm}
-\scriptsize \renewcommand{\arraystretch}{0.6}
-\begin{tabular}{@{}l@{}}
-against\_bug \\ against\_dark \\ against\_dragon \\ against\_electric \\
-against\_fairy \\ against\_fight \\ against\_fire \\ against\_flying \\
-against\_ghost \\ against\_grass \\ against\_ground \\ against\_ice \\
-against\_normal \\ against\_poison \\ against\_psychic \\ against\_rock \\
-against\_steel \\ against\_water
-\end{tabular}
-\end{minipage} & Réel & Multiplicateurs de dégâts & 0.5=résistant, 2=faible \\ \hline
+resistance & Réel & Multiplicateurs de dégâts & entre 0 et 36 \\ \hline
 
 
 \end{longtable}
@@ -262,9 +253,9 @@ USERS (id_user)
 
 TRAINER (id_trainer, original_trainer_id, trainer_name, gender, country, country_sub1)
 
-POKEMON (pokedex_number, name, abilities, classification, type1, type2, hp, attack, defense, sp_attack, sp_defense, speed, base_total, base_happiness, base_egg_steps, experience_growth, percentage_male, capture_rate, against_bug, against_dark, against_dragon, against_electric, against_fairy, against_fight, against_fire, against_flying, against_ghost, against_grass, against_ground, against_ice, against_normal, against_poison, against_psychic, against_rock, against_steel, against_water, is_legendary, generation)
+POKEMON (pokedex_number, name, abilities, classication, type1, type2, hp, attack, défense, sp_attack, sp_defense, speed, base_total, base_egg_steps, percentage_male, capture_rate, résistence, is_legendary, generation)
 
-TRADE (id_trade, pokemon_nickname, has_item, has_hidden_ability, has_egg_move, has_pokerus, has_perfect_iv, is_shiny, level, date, time, liked, #id_user, #id_trainer, #pokedex_number) 
+TRADE (id_trade, hasItem, hasHiddenAbility, hasEggMove,hasPokerus, hasPerfectIV, isShiny, level, date, time, liked, #id_user, #id_trainer, #pokedex_number) 
 
 \bigskip 
 \bigskip 
@@ -346,7 +337,12 @@ Nous avons choisi cette méthode en considérant que les trainers partageant les
 ### Dernières modifications : 
 
 Table **Pokemon** : 
-Nous avons ouvert le fichier CSV pokemon avec LibreOffice afin de supprimer les colonnes inutiles, notamment ***weight*** et ***height***
+Nous avons ouvert le fichier CSV pokemon avec LibreOffice afin de supprimer les colonnes inutiles : ***weight_kg, japanese_name, height_m, experience_growth, base_happiness***.
+
+Pour diminuer les colonnes en gardant les données de résistance nécessaire, nous commençons par rechercher et remplacer les “.” par des “,” pour que les réels soient bien tous considérés comme des nombres par LibreOffice. 
+\bigskip 
+Ensuite nous créons une nouvelle colonne ***résistance*** avec le code “=SOMME(B2:S2)” donc la somme de toutes les colonnes commençant par “against”. Puis nous faisons un copié collé de cette colonne ***résistance*** au même endroit en texte non formaté avec un séparateur qui n’est pas ”,”afin de conserver les données après avoir supprimé les autres colonnes, et enfin dernier nous pouvons supprimer toutes les colonnes ***against...***.
+
 
 \bigskip 
 
