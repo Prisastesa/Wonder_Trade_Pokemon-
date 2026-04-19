@@ -390,6 +390,8 @@ Nous avons ensuite comparé les points de vie moyens (HP) des Pokémon échangé
 L’objectif est de déterminer si les dresseurs ont tendance à échanger des Pokémon plus faibles, plus forts ou équivalents à la moyenne.
 
 
+![**Requête 2**.](Requête1.png){#Requête width="10cm" height="4cm"}
+
 
 REQUETE N°3:
 Nous avons étudié le lien entre le genre des dresseurs et les types de Pokémon échangés.
@@ -400,9 +402,12 @@ Cette requête permet de  révéler des préférences de types (ex : feu, eau, n
 ou l’absence totale de différence (comportement homogène).
 Cela permet d’introduire une dimension sociologique dans l’analyse.
 
+![**Requête 3**.](Requête3.png){#Requête width="15cm" height="6cm"}
 
 REQUETE N°4:
-Puis nous avons analyser les type de les détails pour étudier les quels sont les moins appréciés.
+Puis on a analyser les types des Pokémons dans les détails pour étudier lesquels sont les moins appréciés.
+
+![**Requête 4**.](Requête4.png){#Requête width="10cm" height="4cm"}
 
 Le type Normal est le moins aimé car il regroupe les Pokémon les plus communs et faciles à capturer dès le début du jeu. Statistiquement, ils possèdent souvent des caractéristiques de combat plus faibles (HP, Attaque, Défense) que les types plus rares ou "exotiques".
 Enfin, comme les dresseurs utilisent souvent le Wonder Trade comme un outil d'optimisation pour se débarrasser de leurs spécimens les plus faibles, le système se retrouve saturé de Pokémon de type Normal, provoquant une déception systématique enregistrée dans la colonne liked (dislike) par les destinataires
@@ -417,6 +422,8 @@ Nous avons cherché à identifier les Pokémon shiny présents dans les échange
 
 L’objectif est d’évaluer si les Pokémon rares sont fréquemment échangés.
 
+![**Requête 5**.](Requête5.png){#Requête width="10cm" height="4cm"}
+
 Interprétation :
 Les résultats montrent qu’ils sont très peu échangés, ce qui est logique car :
 
@@ -425,15 +432,15 @@ ils ont une forte valeur pour les joueurs
 
 Cela confirme un comportement de rétention des ressources rares.
 
-REQUETE n°7 : 
+REQUETE n°6 : 
 
 Nous avons calculé le niveau moyen des Pokémon échangés. L’objectif est de mesurer le niveau global des échanges.Plus le niveau est élevé plus l"échange est stratégique et plus il est faible plus l'échange est commun.
 
-REQUETE N°8:
+REQUETE N°7:
 
 Nous avons analysé si la présence d’une capacité spéciale (Egg Move) influence les HP moyens afin de voir  si cette caractéristique apporte un avantage mesurable.
 
-REQUETE N°9:
+REQUETE N°8:
 
 Nous avons filtré les Pokémon commençant par “P” avec un niveau supérieur à 10.
 
@@ -442,13 +449,13 @@ L’objectif est de tester une requête de sélection combinée (texte + conditi
 Cela permet d’illustrer la capacité à croiser plusieurs critères et extraire des sous-ensembles précis
 
 
-Requête n°10 : 
+Requête n°9 : 
 
 Nous avons identifié le niveau maximal du Pokémon appartenant au dresseur ayant effectué le plus d’échanges.
 
 L’objectif est de relier activité (nombre d’échanges) et performance (niveau du Pokémon)
 
-Requête n°11 : 
+Requête n°10 : 
 
 Nous avons comparé les échanges entre dresseurs anonymes et identifiés à partir de plusieurs indicateurs (niveau, shiny, objets, IV…).
 
@@ -457,13 +464,13 @@ ou si aucune différence significative n’existe
 
 En revanche La qualité est multidimensionnelle, donc une analyse SQL seule ne suffit pas. Il faudrait pondérer les variables pour créer un score global.
 
-Requête n°12 : 
+Requête n°11 : 
 
 Nous avons étudié la relation entre la facilité de capture et le nombre d’échanges. L’objectif est de tester si les Pokémon faciles à capturer sont plus échangés.
 
 
 
-Requête n°13 : 
+Requête n°12 : 
 
 Nous avons créé un indicateur simple de performance basé sur l’attaque et la défense.
 
