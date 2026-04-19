@@ -413,16 +413,12 @@ Le type Normal est le moins aimé car il regroupe les Pokémon les plus communs 
 Enfin, comme les dresseurs utilisent souvent le Wonder Trade comme un outil d'optimisation pour se débarrasser de leurs spécimens les plus faibles, le système se retrouve saturé de Pokémon de type Normal, provoquant une déception systématique enregistrée dans la colonne liked (dislike) par les destinataires
 
 REQUETE N°5:
-Nous avons analysé le nombre d’échanges par pays.
+Nous avons analysé la proportion de Pokémon shiny présents dans les échanges afin d’évaluer l’influence de la rareté sur la qualité des échanges.
+Les Pokémon shiny étant particulièrement rares dans le jeu, nous cherchons à déterminer s’ils sont fréquemment échangés ou au contraire conservés par les dresseurs.
 
-L’objectif est d’identifier les zones géographiques où l’activité est la plus forte et permet de comprendre la répartition géographique des joueurs. Cela permet de voir si il y a une influence autour de soit selon où nous nous positionnons.
-
-
-Nous avons cherché à identifier les Pokémon shiny présents dans les échanges.
-
-L’objectif est d’évaluer si les Pokémon rares sont fréquemment échangés.
 
 ![**Requête 5**.](Requête5.png){#Requête width="10cm" height="4cm"}
+
 
 Interprétation :
 Les résultats montrent qu’ils sont très peu échangés, ce qui est logique car :
@@ -431,6 +427,7 @@ ils sont rares
 ils ont une forte valeur pour les joueurs
 
 Cela confirme un comportement de rétention des ressources rares.
+
 
 REQUETE n°6 : 
 
