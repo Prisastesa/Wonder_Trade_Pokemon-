@@ -59,16 +59,13 @@ Dans le cadre de ce projet, nous nous intéressons au système d’échange Wond
 
 \bigskip
 
-\begin{center}
+**Les caractéristiques des Pokémon et des dresseurs influencent-elles la qualité des échanges ?**
 
-** Les caractéristiques des Pokémon et des dresseurs influencent-elles la qualité des échanges ? **
-
-\end{center}
 \medskip 
 
 \justifying
 
-Ainsi, on peut se demander si les échanges réalisés dans le Wonder Trade sont réellement aléatoires du point de vue de la qualité des Pokémon, ou s’ils révèlent des comportements spécifiques de la part des joueurs. Autrement dit, certains joueurs ont-ils tendance à échanger des Pokémon moins performants ou moins rares, ou observe-t-on également la présence de Pokémon puissants et recherchés dans ce système ? Cette interrogation est centrale pour comprendre la logique des échanges et les stratégies adoptées par les joueurs.
+Ainsi, nous pouvons nous demander si les échanges réalisés dans le Wonder Trade sont réellement aléatoires du point de vue de la qualité des Pokémon, ou s’ils révèlent des comportements spécifiques de la part des joueurs. Autrement dit, certains joueurs ont-ils tendance à échanger des Pokémon moins performants ou moins rares, ou observe-t-on également la présence de Pokémon puissants et recherchés dans ce système ? Cette interrogation est centrale pour comprendre la logique des échanges et les stratégies adoptées par les joueurs.
 
 \medskip 
 Cette question présente un intérêt à la fois en analyse de données et en compréhension des comportements dans les environnements numériques. En effet, si les joueurs échangent majoritairement des Pokémon faibles ou communs, cela pourrait indiquer une logique d’optimisation individuelle. À l’inverse, la présence de Pokémon rares ou puissants dans les échanges pourrait révéler des comportements différents, comme la recherche d’aléatoire, la générosité ou des stratégies spécifiques. Ainsi, l’étude de cette problématique permet de mieux comprendre les dynamiques d’échange dans ce système et d’appliquer des outils statistiques pour analyser ces comportements.
@@ -99,7 +96,7 @@ wonder trades: (https://data.world/notgibs/pokemon-wonder-trade-results/workspac
 
 
 \bigskip
-On a sélectionné la table pokemon car elle contient les données relatives à la description des Pokémon, et la table wonder trade car elle contient les informations concernant les échanges.
+Nous avons sélectionné la table pokemon car elle contient les données relatives à la description des Pokémon, et la table wonder trade car elle contient les informations concernant les échanges.
 
 Les données des Pokémons sont stockées sous format CSV : le fichier contient 38 colonnes et 802 lignes.
 
@@ -249,13 +246,13 @@ La table Users est très courte et sert simplement à identifier les comptes loc
 
   MOD :
   
-USERS (id_user)
+**USERS** (id_user)
 
-TRAINER (id_trainer, original_trainer_id, trainer_name, gender, country, country_sub1)
+**TRAINER** (id_trainer, original_trainer_id, trainer_name, gender, country, country_sub1)
 
-POKEMON (pokedex_number, name, abilities, classication, type1, type2, hp, attack, défense, sp_attack, sp_defense, speed, base_total, base_egg_steps, percentage_male, capture_rate, résistence, is_legendary, generation)
+**POKEMON** (pokedex_number, name, abilities, classication, type1, type2, hp, attack, défense, sp_attack, sp_defense, speed, base_total, base_egg_steps, percentage_male, capture_rate, résistence, is_legendary, generation)
 
-TRADE (id_trade, hasItem, hasHiddenAbility, hasEggMove,hasPokerus, hasPerfectIV, isShiny, level, date, time, liked, #id_user, #id_trainer, #pokedex_number) 
+**TRADE** (id_trade, hasItem, hasHiddenAbility, hasEggMove,hasPokerus, hasPerfectIV, isShiny, level, date, time, liked, #id_user, #id_trainer, #pokedex_number) 
 
 \bigskip 
 \bigskip 
@@ -322,15 +319,15 @@ Nous avons choisi cette méthode en considérant que les trainers partageant les
 
 \bigskip 
 
-**Users** contenant uniquement la colonne ***userId***
+**- Users** contenant uniquement la colonne ***userId***
 
 \bigskip 
 
-**Trades** avec les colonnes suivantes : ***id_trade, hasItem, hasHiddenAbility, hasEggMove, hasPokerus, hasPerfectIV, isShiny, level, date, time, liked, #id_user, #id_trainer, #pokedex_number*** 
+**- Trades** avec les colonnes suivantes : ***id_trade, hasItem, hasHiddenAbility, hasEggMove, hasPokerus, hasPerfectIV, isShiny, level, date, time, liked, #id_user, #id_trainer, #pokedex_number*** 
 
 \bigskip 
 
-**Trainers** avec les colonnes suivantes : ***id_trainer, trainerGender, trainerCountry et trainerCountrySub1***
+**- Trainers** avec les colonnes suivantes : ***id_trainer, trainerGender, trainerCountry et trainerCountrySub1***
 
 \bigskip 
 
@@ -338,10 +335,14 @@ Nous avons choisi cette méthode en considérant que les trainers partageant les
 
 Table **Pokemon** : 
 Nous avons ouvert le fichier CSV pokemon avec LibreOffice afin de supprimer les colonnes inutiles : ***weight_kg, japanese_name, height_m, experience_growth, base_happiness***.
+
 \bigskip 
+
 Pour diminuer les colonnes en gardant les données de résistance nécessaire, nous commençons par rechercher et remplacer les “.” par des “,” pour que les réels soient bien tous considérés comme des nombres par LibreOffice. 
+
 \bigskip 
-Ensuite nous créons une nouvelle colonne ***résistance*** avec le code “=SOMME(B2:S2)” donc la somme de toutes les colonnes commençant par ***“against”***. Puis nous faisons un copié collé de cette colonne ***résistance*** au même endroit en texte non formaté avec un séparateur qui n’est pas ”,”afin de conserver les données après avoir supprimé les autres colonnes, et enfin dernier nous pouvons supprimer toutes les colonnes ***against...***.
+
+Ensuite nous créons une nouvelle colonne ***résistance*** avec le code “=SOMME(B2:S2)” donc la somme de toutes les colonnes commençant par ***against***, que nous étirons jusqu'à la dernière ligne. Puis nous faisons un copié collé de cette colonne ***résistance*** au même endroit en texte non formaté avec un séparateur qui n’est pas ”,”afin de conserver les données après avoir supprimé les autres colonnes, et enfin dernier nous pouvons supprimer toutes les colonnes ***against...***.
 
 
 \bigskip 
@@ -353,8 +354,11 @@ Nous avons ouvert ces tables dans LibreOffice, puis nous avons trié les donnée
 
 Table **Trades** : 
 Afin de simplifier l'analyse future, dans LibreOffice nous faisons un copié-collé des noms de colonnes ***hasItem, hasHiddenAbility, hasEggMove, hasPokerus, hasPerfectIV et isShiny*** à droite des autres colonnes. Nous écrivons ensuite le code “=SI(B2="FAUX";0;1)” dans la case sous ***hasItem*** que nous étirons jusqu’à la dernière case du nouveau ***isShiny***. Comme précédemment nous copions et collons en texte non formaté et supprimons les colonnes de trop.
+
 \bigskip 
+
 Nous ajoutons ensuite une clé primaire auto-incrémentée dans phpMyAdmin en utilisant la requête SQL suivante :
+
 \bigskip 
 
       “ALTER TABLE trades ADD IdTrade INT AUTO_INCREMENT PRIMARY KEY;”
@@ -398,7 +402,7 @@ Cela permet d’introduire une dimension sociologique dans l’analyse.
 
 
 REQUETE N°4:
-Puis on a analyser les type de les détails pour étudier les quels sont les moins appréciés.
+Puis nous avons analyser les type de les détails pour étudier les quels sont les moins appréciés.
 
 Le type Normal est le moins aimé car il regroupe les Pokémon les plus communs et faciles à capturer dès le début du jeu. Statistiquement, ils possèdent souvent des caractéristiques de combat plus faibles (HP, Attaque, Défense) que les types plus rares ou "exotiques".
 Enfin, comme les dresseurs utilisent souvent le Wonder Trade comme un outil d'optimisation pour se débarrasser de leurs spécimens les plus faibles, le système se retrouve saturé de Pokémon de type Normal, provoquant une déception systématique enregistrée dans la colonne liked (dislike) par les destinataires
@@ -406,7 +410,7 @@ Enfin, comme les dresseurs utilisent souvent le Wonder Trade comme un outil d'op
 REQUETE N°5:
 Nous avons analysé le nombre d’échanges par pays.
 
-L’objectif est d’identifier les zones géographiques où l’activité est la plus forte et permet de comprendre la répartition géographique des joueurs. Cela permet de voir si il y a une influence autour de soit selon où on est.
+L’objectif est d’identifier les zones géographiques où l’activité est la plus forte et permet de comprendre la répartition géographique des joueurs. Cela permet de voir si il y a une influence autour de soit selon où nous nous positionnons.
 
 
 Nous avons cherché à identifier les Pokémon shiny présents dans les échanges.
