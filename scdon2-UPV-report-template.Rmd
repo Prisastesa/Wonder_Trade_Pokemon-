@@ -393,119 +393,106 @@ Nous avons ajouté une clé primaire auto-incrémentée directement dans phpMyAd
 
 
 ## Requêtes réalisées
+REQUETE N°1:  Pokémon de niveau 1
 
-**Requête 1 : Puissance moyenne des Pokémon échangés**
-
-On cherche à calculer la puissance moyenne des Pokémon échangés afin de déterminer si les joueurs envoient plutôt des Pokémon faibles ou puissants.
-
-
-SELECT AVG(base_total) AS puissance_moyenne
-FROM trades
-JOIN pokemon ON trades.pokemonId = pokemon.pokedex_number;
+Pour commencer, nous cherchons à savoir combien de Pokémon échangés sont de niveau 1, ce qui correspond souvent à des Pokémon issus d’élevage.
 
 
-La puissance moyenne est relativement modérée. Cela suggère que les joueurs échangent majoritairement des Pokémon peu puissants, ce qui indique une stratégie consistant à conserver les meilleurs Pokémon.
-
-
-**Requête 2 : Taux de Pokémon Shiny**
-
-
-On cherche à mesurer la proportion de Pokémon shiny, qui sont très rares, afin d’évaluer la générosité des joueurs.
-
-
-SELECT isShiny, COUNT(*) AS effectif,
-COUNT(*) * 100.0 / (SELECT COUNT(*) FROM trades) AS pourcentage
-FROM trades
-GROUP BY isShiny;
-
-Les Pokémon shiny sont extrêmement rares dans les échanges. Cela montre que les joueurs préfèrent garder leurs Pokémon rares, confirmant un comportement non aléatoire.
-
-
-**Requête 3 : Types de Pokémon les plus échangés**
-
-
-On cherche à identifier les types de Pokémon les plus échangés pour voir si certains types communs dominent.
-
-
-SELECT type1, COUNT(*) AS volume
-FROM trades
-JOIN pokemon ON trades.pokemonId = pokemon.pokedex_number
-GROUP BY type1
-ORDER BY volume DESC;
-
-Les types communs comme Normal et Insecte dominent. Cela montre que les joueurs utilisent le Wonder Trade pour se débarrasser de Pokémon faciles à obtenir.
-
-**Requête 4 : Présence de Pokémon légendaires**
-
-
-On analyse la présence de Pokémon légendaires dans les échanges pour voir si les joueurs partagent des Pokémon rares et puissants.
-
-
-SELECT is_legendary, COUNT(*) AS nb_echanges
-FROM trades
-JOIN pokemon ON trades.pokemonId = pokemon.pokedex_number
-GROUP BY is_legendary;
-
-Les Pokémon légendaires sont très peu échangés. Cela confirme que les joueurs conservent leurs Pokémon les plus rares et précieux.
-
-**Requête 5 : Pokémon de niveau 1 (breeding)**
-
-
-On cherche à savoir combien de Pokémon échangés sont de niveau 1, ce qui correspond souvent à des Pokémon issus d’élevage.
-
-
-SELECT COUNT(*) AS nb_pokemon_niveau_1
-FROM trades
-WHERE level = 1;
+![**Requête 1**.](Requête0.png){#Requête width="10cm" height="4cm"} 
 
 
 Un grand nombre de Pokémon sont de niveau 1. Cela montre que les joueurs pratiquent le breeding et échangent les Pokémon non optimaux.
 
-**Requête 6 : Pokémon avec IV parfaits**
+REQUETE N°2:
+Nous avons ensuite comparé les points de vie moyens (HP) des Pokémon échangés et non échangés.
+
+L’objectif est de déterminer si les dresseurs ont tendance à échanger des Pokémon plus faibles, plus forts ou équivalents à la moyenne.
 
 
-On analyse la présence de Pokémon avec des statistiques parfaites pour voir si les joueurs partagent des Pokémon compétitifs.
+![**Requête 2**.](Requête1.png){#Requête width="10cm" height="4cm"}
 
 
-SELECT hasPerfectIV, COUNT(*) AS total
-FROM trades
-GROUP BY hasPerfectIV;
+REQUETE N°3:
+Nous avons étudié le lien entre le genre des dresseurs et les types de Pokémon échangés.
+
+L’objectif est de vérifier s’il existe une corrélation entre le genre et ses préférences d’échange.
+
+Cette requête permet de  révéler des préférences de types (ex : feu, eau, normal…)
+ou l’absence totale de différence (comportement homogène).
+Cela permet d’introduire une dimension sociologique dans l’analyse.
+
+![**Requête 3**.](Requête3.png){#Requête width="15cm" height="6cm"}
+
+REQUETE N°4:
+Puis on a analyser les types des Pokémons dans les détails pour étudier lesquels sont les moins appréciés.
+
+![**Requête 4**.](Requête4.png){#Requête width="10cm" height="4cm"}
+
+Le type Normal est le moins aimé car il regroupe les Pokémon les plus communs et faciles à capturer dès le début du jeu. Statistiquement, ils possèdent souvent des caractéristiques de combat plus faibles (HP, Attaque, Défense) que les types plus rares ou "exotiques".
+Enfin, comme les dresseurs utilisent souvent le Wonder Trade comme un outil d'optimisation pour se débarrasser de leurs spécimens les plus faibles, le système se retrouve saturé de Pokémon de type Normal, provoquant une déception systématique enregistrée dans la colonne liked (dislike) par les destinataires
+
+REQUETE N°5:
+Nous avons analysé le nombre d’échanges par pays.
+
+L’objectif est d’identifier les zones géographiques où l’activité est la plus forte et permet de comprendre la répartition géographique des joueurs. Cela permet de voir si il y a une influence autour de soit selon où nous nous positionnons.
 
 
-Les Pokémon parfaits sont rares dans les échanges. Cela indique que les joueurs gardent leurs Pokémon optimisés pour eux-mêmes
+Nous avons cherché à identifier les Pokémon shiny présents dans les échanges.
+
+L’objectif est d’évaluer si les Pokémon rares sont fréquemment échangés.
+
+![**Requête 5**.](Requête5.png){#Requête width="10cm" height="4cm"}
+
+Interprétation :
+Les résultats montrent qu’ils sont très peu échangés, ce qui est logique car :
+
+ils sont rares
+ils ont une forte valeur pour les joueurs
+
+Cela confirme un comportement de rétention des ressources rares.
 
 
+REQUETE n°6 : 
 
-**Requête 7 : Présence d’objets tenus**
+Nous avons calculé le niveau moyen des Pokémon échangés. L’objectif est de mesurer le niveau global des échanges.Plus le niveau est élevé plus l"échange est stratégique et plus il est faible plus l'échange est commun.
 
+![**Requête 6**.](Requête6.png){#Requête width="10cm" height="4cm"}
 
-On cherche à savoir si les Pokémon échangés tiennent des objets, ce qui peut refléter un comportement généreux.
+REQUETE N°7:
 
+Nous avons analysé si la présence d’une capacité spéciale (Egg Move) influence les HP moyens afin de voir  si cette caractéristique apporte un avantage mesurable.
 
-SELECT hasItem, COUNT(*) AS nb_echanges
-FROM trades
-GROUP BY hasItem;
-
-
-La majorité des Pokémon n’ont pas d’objet. Les échanges sont donc principalement fonctionnels, et non généreux.
-
-**Requête 8 : Lien entre puissance et satisfaction**
+![**Requête 7**.](Requête7.png){#Requête width="10cm" height="4cm"}
 
 
-On cherche à savoir si les joueurs apprécient davantage les Pokémon puissants.
+Requête N°8 : 
+NB : Nous avons eu recours à une IA pour formuler cette requête.
 
-SELECT liked, AVG(base_total) AS puissance_moyenne_recue
-FROM trades
-JOIN pokemon ON trades.pokemonId = pokemon.pokedex_number
-WHERE liked IS NOT NULL
-GROUP BY liked;
+Nous avons comparé les échanges entre dresseurs anonymes et identifiés à partir de plusieurs indicateurs (niveau, shiny, objets, IV…).
 
-Les Pokémon appréciés sont en moyenne plus puissants. Cela montre que la satisfaction des joueurs dépend directement de la qualité du Pokémon reçu.
+L’objectif est de mesurer si l’anonymat influence la qualité des échanges.Elle permet de vérifier si les joueurs anonymes proposent des échanges moins intéressants
+ou si aucune différence significative n’existe
 
-##conclusion générale
+En revanche La qualité est multidimensionnelle, donc une analyse SQL seule ne suffit pas. Il faudrait pondérer les variables pour créer un score global.
+
+
+![**Requête 8**.](Requête8.png){#Requête width="10cm" height="4cm"}
+
+
+REQUETE N°9:
+
+Nous avons identifié le niveau maximal du Pokémon appartenant au dresseur ayant effectué le plus d’échanges.
+
+L’objectif est de relier activité (nombre d’échanges) et performance (niveau du Pokémon)
+
+![**Requête 9**.](Requête9.png){#Requête width="10cm" height="4cm"}
+
+
+##Conclusion générale
 
 L’ensemble des requêtes montre que les échanges Wonder Trade ne sont pas totalement aléatoires.
 Les joueurs ont tendance à échanger des Pokémon communs, faibles ou non optimisés, tout en conservant les plus rares et puissants.
+
 
 ## Quelques détails techniques
 
