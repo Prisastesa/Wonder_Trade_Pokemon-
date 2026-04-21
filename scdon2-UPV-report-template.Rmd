@@ -274,7 +274,7 @@ Perfect\_IVs & Entier & Nombre de stats parfaites (31) & Valeur de 0 à 6 \\ \hl
 
 ### MCD
 
-  ![**MCD**.](tuto-0019(1).png){#MCD width="10cm" height="19cm"}
+  ![**MCD**.](tuto-0019(1).png){#MCD width="18cm"}
   
 \smallskip 
 
