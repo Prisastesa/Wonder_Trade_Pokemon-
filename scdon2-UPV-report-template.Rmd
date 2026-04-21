@@ -398,7 +398,7 @@ REQUETE N°1:  Pokémon de niveau 1
 Pour commencer, nous cherchons à savoir combien de Pokémon échangés sont de niveau 1, ce qui correspond souvent à des Pokémon issus d’élevage.
 
 
-![**Requête 1**.](Requête0.png){#Requête width="10cm" height="4cm"} 
+![**Requête 1**.](Requête01.png){#Requête width="10cm" height="4cm"} 
 
 
 Un grand nombre de Pokémon sont de niveau 1. Cela montre que les joueurs pratiquent le breeding et échangent les Pokémon non optimaux.
