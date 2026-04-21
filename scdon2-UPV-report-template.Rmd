@@ -393,7 +393,7 @@ Nous avons ajouté une clé primaire auto-incrémentée directement dans phpMyAd
 
 
 ## Requêtes réalisées
-REQUETE N°1:  Pokémon de niveau 1
+REQUETE N°1:  Pokémon de niveau 1(breeding)
 
 Pour commencer, nous cherchons à savoir combien de Pokémon échangés sont de niveau 1, ce qui correspond souvent à des Pokémon issus d’élevage.
 
@@ -403,7 +403,7 @@ Pour commencer, nous cherchons à savoir combien de Pokémon échangés sont de 
 
 Un grand nombre de Pokémon sont de niveau 1. Cela montre que les joueurs pratiquent le breeding et échangent les Pokémon non optimaux.
 
-REQUETE N°2:
+REQUETE N°2: HP échangés vs non échangés
 Nous avons ensuite comparé les points de vie moyens (HP) des Pokémon échangés et non échangés.
 
 L’objectif est de déterminer si les dresseurs ont tendance à échanger des Pokémon plus faibles, plus forts ou équivalents à la moyenne.
@@ -412,7 +412,7 @@ L’objectif est de déterminer si les dresseurs ont tendance à échanger des P
 ![**Requête 2**.](Requête1.png){#Requête width="10cm" height="4cm"}
 
 
-REQUETE N°3:
+REQUETE N°3: Genre du dresseur et type de Pokémon
 Nous avons étudié le lien entre le genre des dresseurs et les types de Pokémon échangés.
 
 L’objectif est de vérifier s’il existe une corrélation entre le genre et ses préférences d’échange.
@@ -423,7 +423,8 @@ Cela permet d’introduire une dimension sociologique dans l’analyse.
 
 ![**Requête 3**.](Requête3.png){#Requête width="15cm" height="6cm"}
 
-REQUETE N°4:
+REQUETE N°4: Types les moins appréciés
+
 Puis on a analyser les types des Pokémons dans les détails pour étudier lesquels sont les moins appréciés.
 
 ![**Requête 4**.](Requête4.png){#Requête width="10cm" height="4cm"}
@@ -431,11 +432,7 @@ Puis on a analyser les types des Pokémons dans les détails pour étudier lesqu
 Le type Normal est le moins aimé car il regroupe les Pokémon les plus communs et faciles à capturer dès le début du jeu. Statistiquement, ils possèdent souvent des caractéristiques de combat plus faibles (HP, Attaque, Défense) que les types plus rares ou "exotiques".
 Enfin, comme les dresseurs utilisent souvent le Wonder Trade comme un outil d'optimisation pour se débarrasser de leurs spécimens les plus faibles, le système se retrouve saturé de Pokémon de type Normal, provoquant une déception systématique enregistrée dans la colonne liked (dislike) par les destinataires
 
-REQUETE N°5:
-Nous avons analysé le nombre d’échanges par pays.
-
-L’objectif est d’identifier les zones géographiques où l’activité est la plus forte et permet de comprendre la répartition géographique des joueurs. Cela permet de voir si il y a une influence autour de soit selon où nous nous positionnons.
-
+REQUETE N°5: Shiny
 
 Nous avons cherché à identifier les Pokémon shiny présents dans les échanges.
 
@@ -452,20 +449,20 @@ ils ont une forte valeur pour les joueurs
 Cela confirme un comportement de rétention des ressources rares.
 
 
-REQUETE n°6 : 
+REQUETE N°6 : Niveau moyen
 
 Nous avons calculé le niveau moyen des Pokémon échangés. L’objectif est de mesurer le niveau global des échanges.Plus le niveau est élevé plus l"échange est stratégique et plus il est faible plus l'échange est commun.
 
 ![**Requête 6**.](Requête6.png){#Requête width="10cm" height="4cm"}
 
-REQUETE N°7:
+REQUETE N°7: Egg Move et HP
 
 Nous avons analysé si la présence d’une capacité spéciale (Egg Move) influence les HP moyens afin de voir  si cette caractéristique apporte un avantage mesurable.
 
 ![**Requête 7**.](Requête7.png){#Requête width="10cm" height="4cm"}
 
 
-Requête N°8 : 
+Requête N°8 : Anonymat vs qualité
 NB : Nous avons eu recours à une IA pour formuler cette requête.
 
 Nous avons comparé les échanges entre dresseurs anonymes et identifiés à partir de plusieurs indicateurs (niveau, shiny, objets, IV…).
@@ -479,7 +476,7 @@ En revanche La qualité est multidimensionnelle, donc une analyse SQL seule ne s
 ![**Requête 8**.](Requête8.png){#Requête width="10cm" height="4cm"}
 
 
-REQUETE N°9:
+REQUETE N°9: Dresseur le plus actif
 
 Nous avons identifié le niveau maximal du Pokémon appartenant au dresseur ayant effectué le plus d’échanges.
 
@@ -488,10 +485,26 @@ L’objectif est de relier activité (nombre d’échanges) et performance (nive
 ![**Requête 9**.](Requête9.png){#Requête width="10cm" height="4cm"}
 
 
+Requête N°10 : Relation entre la facilité de capture et le nombre d’échanges
+
+Nous avons étudié la relation entre la facilité de capture et le nombre d’échanges. L’objectif est de tester si les Pokémon faciles à capturer sont plus échangés.
+
+
+![**Requête 10**.](Requête10.png){#Requête width="10cm" height="8cm"}
+
+
+
 ##Conclusion générale
 
-L’ensemble des requêtes montre que les échanges Wonder Trade ne sont pas totalement aléatoires.
-Les joueurs ont tendance à échanger des Pokémon communs, faibles ou non optimisés, tout en conservant les plus rares et puissants.
+L’ensemble des analyses réalisées sur les échanges Wonder Trade met en évidence que les échanges ne sont pas totalement aléatoires.
+
+Plusieurs facteurs semblent influencer les décisions des joueurs, notamment les caractéristiques des Pokémon et leur niveau de performance. Les résultats montrent que les Pokémon échangés sont fréquemment de niveau faible ou intermédiaire, ce qui suggère une tendance des joueurs à se séparer des Pokémon les moins optimisés.
+
+Par ailleurs, les analyses liées à la rareté (comme les Pokémon shiny ou la facilité de capture) indiquent que les Pokémon les plus rares ou difficiles à obtenir sont moins souvent échangés, confirmant un comportement de conservation des ressources précieuses par les joueurs.
+
+Enfin, l’étude des profils de dresseurs montre que certains comportements peuvent varier selon les caractéristiques des utilisateurs, mais ces différences restent globalement modérées.
+
+Dans l’ensemble, ces résultats suggèrent que les échanges Wonder Trade sont influencés par une logique d’optimisation des joueurs, plutôt que purement aléatoire : les Pokémon jugés faibles ou communs sont davantage échangés, tandis que les Pokémon rares ou performants sont majoritairement conservés.
 
 
 ## Quelques détails techniques
