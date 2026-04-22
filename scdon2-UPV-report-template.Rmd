@@ -371,6 +371,17 @@ Nous ajoutons ensuite une clé primaire auto-incrémentée dans phpMyAdmin en ut
 
 
 ## Requêtes réalisées
+REQUETE N°0: Pokémon échangés vs non échangés
+
+\bigskip
+
+Pour commencer, nous avons interrogé le logiciel pour connaître le nombre de pokémon
+échangé vs le nombre de pokémon jamais échangé. Ces deux premières requêtes vont être à l’origine des autres requêtes qui vous surtout se concentrer sur les pokémons échangés. 
+
+![**Requête 0**.](Requête0.png){#Requête width="10cm" height="4cm"} 
+
+On observe que tous les Pokémon ne sont pas échangés, ce qui montre que certains sont conservés par les joueurs. Cela suggère que les décisions d’échange ne sont pas aléatoires mais dépendent de certaines caractéristiques.
+
 \bigskip 
 
 REQUETE N°1:  Pokémon de niveau 1(breeding)
