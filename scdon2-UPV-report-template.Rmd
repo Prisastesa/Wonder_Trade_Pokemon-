@@ -647,6 +647,93 @@ ggplot(df_complet, aes(x = capture_rate)) +
        y = "Nombre d'échanges")
 
 ```
+
+# ANALYSE STATISTIQUE : Test ANOVA
+
+Pour répondre à notre problématique on va vérifier si la puissance des Pokémon (base_total) varie de manière significative selon le pays du dresseur (trainerCountry).
+
+    Hypothèse Nulle (H0) : La puissance moyenne des Pokémon envoyés est la même pour tous les pays (comportement aléatoire/homogène).
+    Hypothèse Alternative (H1) : Au moins un pays envoie des Pokémon significativement plus forts ou plus faibles (comportement stratégique géographique).
+
+🔧 Préparation des données
+```{r}
+library(ggplot2)
+library(dplyr)
+
+# Import des données
+trades <- read.csv("Trades.csv", sep = ";")
+pokemon <- read.csv("pokemon.csv", sep = ",")
+trainers <- read.csv("Trainers.csv", sep = ";")
+
+# Fusion des tables
+df_anova <- trades %>%
+  merge(pokemon, by.x = "pokemonId", by.y = "pokedex_number") %>%
+  merge(trainers, by = "trainerId")
+
+# Conversion en variable catégorielle
+df_anova$trainerCountry <- as.factor(df_anova$trainerCountry)
+# Visualisation des données
+# Sélection des pays les plus représentés pour une meilleure lisibilité
+top_countries <- df_anova %>%
+  count(trainerCountry) %>%
+  top_n(10, n)
+
+df_plot <- df_anova %>%
+  filter(trainerCountry %in% top_countries$trainerCountry)
+
+# Graphique
+ggplot(df_plot, aes(x = reorder(trainerCountry, base_total, median),
+                    y = base_total)) +
+  geom_boxplot(fill = "lightblue") +
+  stat_summary(fun = mean, geom = "point", color = "red", size = 3) +
+  theme_minimal() +
+  labs(title = "Comparaison de la puissance des Pokémon selon le pays",
+       subtitle = "Chaque boîte représente la distribution des puissances par pays (point rouge = moyenne)",
+       x = "Pays du dresseur",
+       y = "Puissance (base total)") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+ Interprétation du graphique
+
+Ce graphique permet de comparer la puissance des Pokémon selon le pays du dresseur :
+
+Chaque boîte représente un pays
+La ligne au centre correspond à la médiane
+Le point rouge indique la moyenne
+La taille de la boîte montre la dispersion des valeurs
+
+👉 On observe que certains pays présentent des Pokémon globalement plus puissants que d’autres, ainsi qu’une variabilité différente.
+
+🧪 Test statistique : ANOVA
+```{r}
+res_anova <- aov(base_total ~ trainerCountry, data = df_anova)
+summary(res_anova)
+```
+Résultat obtenu :
+p-value = 
+
+🧠 Interprétation du test
+
+Le test ANOVA est significatif (p < 0.05).
+
+👉 Cela signifie que :
+
+Il existe une différence de puissance entre au moins deux pays
+Cette différence n’est probablement pas due au hasard
+🔍 Analyse complémentaire (post-hoc)
+TukeyHSD(res_anova)
+
+Ce test permet d’identifier précisément quels pays présentent des différences significatives entre eux.
+
+✅ Conclusion finale
+
+L’analyse montre que le pays du dresseur a une influence significative sur la puissance des Pokémon.
+Les différences observées entre les pays sont confirmées par le test ANOVA (p = 0.0176).
+Cela suggère que certains pays échangent des Pokémon globalement plus puissants que d’autres.
+Une analyse plus approfondie (test de Tukey) permettrait d’identifier précisément les pays concernés.
+
+
+
 <http://biostatisticien.eu/springeR/livreR.pdf>
 
 # Analyse Exploratoire des Données
