@@ -371,9 +371,24 @@ Nous ajoutons ensuite une clé primaire auto-incrémentée dans phpMyAdmin en ut
 
 
 ## Requêtes réalisées
+REQUETE N°0: Pokémon échangés vs non échangés
+
+\bigskip
+
+Pour commencer, nous avons interrogé le logiciel pour connaître le nombre de pokémon
+échangé vs le nombre de pokémon jamais échangé. Ces deux premières requêtes vont être à l’origine des autres requêtes qui vous surtout se concentrer sur les pokémons échangés. 
+
+![**Requête 0**.](Requête0.png){#Requête width="10cm" height="4cm"} 
+
+On observe que tous les Pokémon ne sont pas échangés, ce qui montre que certains sont conservés par les joueurs. Cela suggère que les décisions d’échange ne sont pas aléatoires mais dépendent de certaines caractéristiques.
+
+\bigskip 
+
 REQUETE N°1:  Pokémon de niveau 1(breeding)
 
-Pour commencer, nous cherchons à savoir combien de Pokémon échangés sont de niveau 1, ce qui correspond souvent à des Pokémon issus d’élevage.
+\bigskip
+
+Nous cherchons à savoir combien de Pokémon échangés sont de niveau 1, ce qui correspond souvent à des Pokémon issus d’élevage.
 
 
 ![**Requête 1**.](Requête01.png){#Requête width="10cm" height="4cm"} 
@@ -381,7 +396,12 @@ Pour commencer, nous cherchons à savoir combien de Pokémon échangés sont de 
 
 Un grand nombre de Pokémon sont de niveau 1. Cela montre que les joueurs pratiquent le breeding et échangent les Pokémon non optimaux.
 
+\bigskip
+
 REQUETE N°2: HP échangés vs non échangés
+
+\bigskip
+
 Nous avons ensuite comparé les points de vie moyens (HP) des Pokémon échangés et non échangés.
 
 L’objectif est de déterminer si les dresseurs ont tendance à échanger des Pokémon plus faibles, plus forts ou équivalents à la moyenne.
@@ -389,8 +409,15 @@ L’objectif est de déterminer si les dresseurs ont tendance à échanger des P
 
 ![**Requête 2**.](Requête1.png){#Requête width="10cm" height="4cm"}
 
+Si les Pokémon échangés ont en moyenne moins de HP, cela suggère que les joueurs échangent plutôt des Pokémon plus faibles. À l’inverse, une moyenne similaire indiquerait que le HP n’est pas un critère déterminant dans les échanges.
+
+\bigskip
+
 
 REQUETE N°3: Genre du dresseur et type de Pokémon
+
+\bigskip
+
 Nous avons étudié le lien entre le genre des dresseurs et les types de Pokémon échangés.
 
 L’objectif est de vérifier s’il existe une corrélation entre le genre et ses préférences d’échange.
@@ -401,7 +428,13 @@ Cela permet d’introduire une dimension sociologique dans l’analyse.
 
 ![**Requête 3**.](Requête3.png){#Requête width="15cm" height="6cm"}
 
+Les résultats permettent d’observer s’il existe une différence de comportement entre les dresseurs selon leur genre. Toutefois, toute différence observée doit être interprétée avec prudence, car elle peut être faible ou non significative.
+
+\bigskip
+
 REQUETE N°4: Types les moins appréciés
+
+\bigskip
 
 Puis on a analyser les types des Pokémons dans les détails pour étudier lesquels sont les moins appréciés.
 
@@ -410,7 +443,11 @@ Puis on a analyser les types des Pokémons dans les détails pour étudier lesqu
 Le type Normal est le moins aimé car il regroupe les Pokémon les plus communs et faciles à capturer dès le début du jeu. Statistiquement, ils possèdent souvent des caractéristiques de combat plus faibles (HP, Attaque, Défense) que les types plus rares ou "exotiques".
 Enfin, comme les dresseurs utilisent souvent le Wonder Trade comme un outil d'optimisation pour se débarrasser de leurs spécimens les plus faibles, le système se retrouve saturé de Pokémon de type Normal, provoquant une déception systématique enregistrée dans la colonne liked (dislike) par les destinataires
 
+\bigskip 
+
 REQUETE N°5: Shiny
+
+\bigskip
 
 Nous avons cherché à identifier les Pokémon shiny présents dans les échanges.
 
@@ -426,21 +463,36 @@ ils ont une forte valeur pour les joueurs
 
 Cela confirme un comportement de rétention des ressources rares.
 
+\bigskip
 
 REQUETE N°6 : Niveau moyen
+
+\bigskip
 
 Nous avons calculé le niveau moyen des Pokémon échangés. L’objectif est de mesurer le niveau global des échanges.Plus le niveau est élevé plus l"échange est stratégique et plus il est faible plus l'échange est commun.
 
 ![**Requête 6**.](Requête6.png){#Requête width="10cm" height="4cm"}
 
+Le niveau moyen des Pokémon échangés permet d’évaluer la qualité globale des échanges. Un niveau relativement faible suggère que les joueurs échangent principalement des Pokémon peu stratégiques, tandis que les Pokémon de haut niveau sont davantage conservés.
+
+\bigskip
+
 REQUETE N°7: Egg Move et HP
+
+\bigskip
 
 Nous avons analysé si la présence d’une capacité spéciale (Egg Move) influence les HP moyens afin de voir  si cette caractéristique apporte un avantage mesurable.
 
 ![**Requête 7**.](Requête7.png){#Requête width="10cm" height="4cm"}
 
+Les résultats permettent de comparer les HP moyens selon la présence d’Egg Moves. Si la différence est faible, cela suggère que cette caractéristique n’a pas d’impact significatif sur les performances globales des Pokémon échangés.
+
+\bigskip
 
 Requête N°8 : Anonymat vs qualité
+
+\bigskip
+
 NB : Nous avons eu recours à une IA pour formuler cette requête.
 
 Nous avons comparé les échanges entre dresseurs anonymes et identifiés à partir de plusieurs indicateurs (niveau, shiny, objets, IV…).
@@ -451,10 +503,14 @@ ou si aucune différence significative n’existe
 En revanche La qualité est multidimensionnelle, donc une analyse SQL seule ne suffit pas. Il faudrait pondérer les variables pour créer un score global.
 
 
-![**Requête 8**.](Requête8.png){#Requête width="10cm" height="4cm"}
+![**Requête 8**.](Requête8.png){#Requête width="16cm" height="8cm"}
 
 
 REQUETE N°9: Dresseur le plus actif
+
+\bigskip
+
+Cette requête permet d’observer le comportement du dresseur le plus actif. Cependant, elle constitue une analyse de cas particulier et ne permet pas de généraliser à l’ensemble des joueurs.
 
 Nous avons identifié le niveau maximal du Pokémon appartenant au dresseur ayant effectué le plus d’échanges.
 
@@ -465,14 +521,20 @@ L’objectif est de relier activité (nombre d’échanges) et performance (nive
 
 Requête N°10 : Relation entre la facilité de capture et le nombre d’échanges
 
+\bigskip
+
 Nous avons étudié la relation entre la facilité de capture et le nombre d’échanges. L’objectif est de tester si les Pokémon faciles à capturer sont plus échangés.
 
 
 ![**Requête 10**.](Requête10.png){#Requête width="10cm" height="8cm"}
 
+Les résultats permettent d’analyser la relation entre la rareté des Pokémon et leur fréquence d’échange. Une forte présence de Pokémon faciles à capturer dans les échanges indiquerait que les joueurs privilégient l’échange de Pokémon communs, tandis que les Pokémon rares sont conservés.
 
 
-## Conclusion générale
+\bigskip
+\bigskip
+
+##Conclusion générale
 
 L’ensemble des analyses réalisées sur les échanges Wonder Trade met en évidence que les échanges ne sont pas totalement aléatoires.
 
