@@ -655,7 +655,7 @@ Pour répondre à notre problématique on va vérifier si la puissance des Poké
     Hypothèse Nulle (H0) : La puissance moyenne des Pokémon envoyés est la même pour tous les pays (comportement aléatoire/homogène).
     Hypothèse Alternative (H1) : Au moins un pays envoie des Pokémon significativement plus forts ou plus faibles (comportement stratégique géographique).
 
-🔧 Préparation des données
+Préparation des données
 ```{r}
 library(ggplot2)
 library(dplyr)
@@ -702,9 +702,9 @@ La ligne au centre correspond à la médiane
 Le point rouge indique la moyenne
 La taille de la boîte montre la dispersion des valeurs
 
-👉 On observe que certains pays présentent des Pokémon globalement plus puissants que d’autres, ainsi qu’une variabilité différente.
+On observe que certains pays présentent des Pokémon globalement plus puissants que d’autres, ainsi qu’une variabilité différente.
 
-🧪 Test statistique : ANOVA
+Test statistique : ANOVA
 ```{r}
 res_anova <- aov(base_total ~ trainerCountry, data = df_anova)
 summary(res_anova)
@@ -712,20 +712,20 @@ summary(res_anova)
 Résultat obtenu :
 p-value = 
 
-🧠 Interprétation du test
+Interprétation du test
 
 Le test ANOVA est significatif (p < 0.05).
 
-👉 Cela signifie que :
+Cela signifie que :
 
 Il existe une différence de puissance entre au moins deux pays
 Cette différence n’est probablement pas due au hasard
-🔍 Analyse complémentaire (post-hoc)
+Analyse complémentaire (post-hoc)
 TukeyHSD(res_anova)
 
 Ce test permet d’identifier précisément quels pays présentent des différences significatives entre eux.
 
-✅ Conclusion finale
+Conclusion finale
 
 L’analyse montre que le pays du dresseur a une influence significative sur la puissance des Pokémon.
 Les différences observées entre les pays sont confirmées par le test ANOVA (p = 0.0176).
