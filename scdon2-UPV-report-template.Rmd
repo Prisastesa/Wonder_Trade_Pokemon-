@@ -371,6 +371,19 @@ Nous ajoutons ensuite une clé primaire auto-incrémentée dans phpMyAdmin en ut
 
 
 ## Requêtes réalisées
+```{r, echo=FALSE}
+library(DBI)
+con <- DBI::dbConnect(
+  drv = RMySQL::MySQL(),    # database driver à utiliser
+  host = "localhost", 
+  port = 8889, 
+  username = "root", 
+  password = "root", 
+  dbname = "ProjetFinal",  
+  unix.sock = "/Applications/MAMP/tmp/mysql/mysql.sock"
+)
+```
+
 REQUETE N°0: Pokémon échangés vs non échangés
 
 \bigskip
@@ -378,7 +391,16 @@ REQUETE N°0: Pokémon échangés vs non échangés
 Pour commencer, nous avons interrogé le logiciel pour connaître le nombre de pokémon
 échangé vs le nombre de pokémon jamais échangé. Ces deux premières requêtes vont être à l’origine des autres requêtes qui vous surtout se concentrer sur les pokémons échangés. 
 
-![**Requête 0**.](Requête0.png){#Requête width="10cm" height="4cm"} 
+
+
+```{sql connection = con}
+SELECT 
+    COUNT(DISTINCT t.pokemonId) AS nb_pokemon_echanges,
+    (SELECT COUNT(*) FROM Pokemon) - COUNT(DISTINCT t.pokemonId)
+    AS nb_pokemon_non_echanges
+FROM Pokemon p
+LEFT JOIN Trades t ON p.pokedex_number = t.pokemonId;
+```
 
 On observe que tous les Pokémon ne sont pas échangés, ce qui montre que certains sont conservés par les joueurs. Cela suggère que les décisions d’échange ne sont pas aléatoires mais dépendent de certaines caractéristiques.
 
@@ -390,9 +412,11 @@ REQUETE N°1:  Pokémon de niveau 1(breeding)
 
 Nous cherchons à savoir combien de Pokémon échangés sont de niveau 1, ce qui correspond souvent à des Pokémon issus d’élevage.
 
-
-![**Requête 1**.](Requête01.png){#Requête width="10cm" height="4cm"} 
-
+```{sql connection = con}
+SELECT COUNT(*) AS nb_pokemon_niveau1
+FROM trades
+WHERE level = 1;
+```
 
 Un grand nombre de Pokémon sont de niveau 1. Cela montre que les joueurs pratiquent le breeding et échangent les Pokémon non optimaux.
 
@@ -731,6 +755,70 @@ L’analyse montre que le pays du dresseur a une influence significative sur la 
 Les différences observées entre les pays sont confirmées par le test ANOVA (p = 0.0176).
 Cela suggère que certains pays échangent des Pokémon globalement plus puissants que d’autres.
 Une analyse plus approfondie (test de Tukey) permettrait d’identifier précisément les pays concernés.
+
+\bigskip
+\bigskip
+
+## ANALYSE STATISTIQUE : CORRÉLATION Capture rate x échange
+
+\bigskip
+
+Nous cherchons à analyser la relation entre la facilité de capture d’un Pokémon (capture_rate) et son nombre d’échanges.
+
+L’objectif est de déterminer si les Pokémon faciles à capturer sont davantage échangés que les Pokémon rares.
+
+Hypothèses :
+
+H0 : aucune corrélation entre capture rate et nombre d’échanges
+H1 : il existe une corrélation
+
+
+```{r, echo = FALSE}
+#Import des données
+library(dplyr)
+
+trades <- read.csv("Trades.csv", sep = ";")
+pokemon <- read.csv("pokemon.csv", sep = ",")
+
+# 1. Normalisation du taux de capture
+pokemon$capture_rate_norm <- as.numeric(as.character(pokemon$capture_rate)) / 255
+
+# 2. Fusion et calcul du nombre d'échanges
+df_corr <- merge(trades, pokemon, by.x = "pokemonId", by.y = "pokedex_number")
+
+nb_echanges <- df_corr %>%
+  group_by(pokemonId, capture_rate_norm) %>%
+  summarise(nb = n(), .groups = "drop") %>%
+  filter(!is.na(capture_rate_norm))
+```
+
+```{r, echo = FALSE}
+# 3. Graphique avec échelle 0-1
+plot(nb_echanges$capture_rate_norm, nb_echanges$nb,
+     main = "Facilité de capture (0 à 1) vs Nombre d'échanges",
+     xlab = "Indice de facilité (1 = très facile)",
+     ylab = "Nombre d'échanges",
+     pch = 16, 
+     col = rgb(0.2, 0.4, 0.6, 0.5)) # Ajout de transparence pour voir la densité
+
+# Ajout de la droite de régression
+abline(lm(nb ~ capture_rate_norm, data = nb_echanges), col = "red", lwd = 2)
+```
+
+
+La p-value est de 0.01053.
+Comme elle est inférieure au seuil classique de 0,05, on rejette l'hypothèse nulle. Cela signifie qu'il existe une relation statistiquement significative entre le taux de capture et le nombre d'échanges dans tes données. Ce n'est pas dû au pur hasard.
+
+Le coefficient de corrélation (cor) est de 0.233.
+
+C'est une corrélation positive : quand le capture_rate augmente (donc quand le Pokémon est plus facile à capturer), le nombre d'échanges a tendance à augmenter aussi.
+
+Cependant, 0.23 est considéré comme une corrélation faible. La relation existe, mais elle n'est pas très forte. Beaucoup d'autres facteurs influencent probablement le nombre d'échanges.
+
+### Interprétation graphique 
+
+Le graphique présente le nombre d'échanges en fonction de l'indice de facilité de capture (normalisé de 0 à 1).On observe une dispersion importante des points, confirmant la faiblesse du coefficient de corrélation (cor = 0,23). Néanmoins, la droite de régression (en rouge) montre une pente ascendante vers la droite.Plus l'indice tend vers 1 (Pokémon techniquement très faciles à capturer comme les espèces communes), plus la fréquence des échanges augmente. À l'inverse, les Pokémon dont l'indice est proche de 0 (espèces rares ou légendaires) sont moins présents en volume. Cette observation suggère que le flux du Wonder Trade est 
+alimenté par l'abondance des captures faciles plutôt que par la rareté.
 
 
 
