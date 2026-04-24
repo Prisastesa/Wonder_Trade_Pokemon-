@@ -54,7 +54,10 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Introduction {.label:s-intro}
 
-Dans le cadre de ce projet, nous nous intéressons au système d’échange Wonder Trade du jeu vidéo Pokémon Sun and Moon, qui permet aux joueurs d’échanger des Pokémon de manière aléatoire avec d’autres joueurs à travers le monde. Ce système constitue un exemple intéressant d’interactions entre joueurs, où les décisions d’échange peuvent refléter des stratégies, des préférences ou encore une certaine gestion des ressources disponibles dans le jeu. En effet, chaque joueur dispose de Pokémon ayant des caractéristiques différentes, notamment en termes de puissance, de rareté ou de type, ce qui peut influencer leur choix de les conserver ou de les échanger.
+Dans ce projet, nous nous intéressons au système d’échange Wonder Trade du jeu Pokémon.Les joueurs y échangent des Pokémon de manière aléatoire avec d’autres utilisateurs dans le monde entier.
+La notion de qualité des échanges correspond ici à la valeur perçue des Pokémon échangés, c’est-à-dire leur niveau de satisfaction pour les joueurs.
+Cette qualité est mesurée à travers plusieurs dimensions :
+la puissance du Pokémon (statistiques globales),sa rareté (shiny, légendaire), son niveau d’investissement (niveau, objets, capacités spéciales), et le ressenti des joueurs lors de l’échange (liked). Ainsi, notre problématique est la suivante :
 
 
 \bigskip
