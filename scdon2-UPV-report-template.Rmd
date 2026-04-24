@@ -329,6 +329,13 @@ Nous avons choisi cette méthode en considérant que les trainers partageant les
 
 **- Trainers** avec les colonnes suivantes : ***id_trainer, trainerGender, trainerCountry et trainerCountrySub1***
 
+Ce découpage suit rigoureusement les règles de passage du MCD au MOD pour garantir la normalisation de la base de données.
+ Eviter de répéter inutilement les informations. Par exemple, les caractéristiques d'un dresseur (pays, genre) ne sont enregistrées qu'une seule fois dans la table Trainers, même s'il effectue des dizaines d'échanges.
+Chaque entité distincte identifiée dans notre analyse a été transformée en table indépendante : Users, Trainers et Trades.
+Pour maintenir les liens relationnels, les identifiants userId et id_trainer ont été intégrés à la table centrale Trades en tant que clés étrangères (#id_user, #id_trainer).
+
+Cette structure relationnelle est indispensable pour réaliser des jointures SQL optimisées et mener les analyses statistiques (ANOVA, Khi²) demandées sans biais de répétition
+
 \bigskip 
 
 ### Dernières modifications : 
@@ -589,7 +596,7 @@ Les caractéristiques liées au dresseur : comportement et investissement (nivea
 
 Afin de répondre à cette problématique, nous mobilisons plusieurs outils statistiques :
 le test du Khi², l’analyse de variance (ANOVA) et un test de corrélation.
-# Test du Khi² : Shiny × Satisfaction
+
 
 I. Influence de la rareté sur la satisfaction (Test du Khi²)
 ### Objectif
