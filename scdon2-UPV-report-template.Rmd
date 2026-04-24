@@ -81,13 +81,10 @@ Cette problématique s’inscrit à la fois dans le cadre de l’analyse de donn
 
 \medskip
 
-Fenina Sara : Étudiante n°22411291, Resp. de la collecte des données.
-
-Guilleminot Sarah : Étudiante n°22405827, Resp. recherche bases de données.
-
-Rakoto Ambinintsoa : Étudiante n°22402951, Resp. Descriptif des tables.
-
-Sbircea Stephanie : Étudiante n°22304694, Resp. import des données.
+Fenina Sara (Étudiante n°22411291) : resp. recherche des bases de données, l’analyse descriptive ,modélisation des tables ,l’interprétation des résultats et structuration globale de la base de données.
+Guilleminot Sarah (Étudiante n°22405827) : resp.  recherche des bases de données, élaboration des requêtes SQL, modélisation statistique, mise en forme du rapport,analyses et  interprétations.
+Rakoto Ambinintsoa Prisca (Étudiante n°22402951) : resp. élaboration, mise en forme des requêtes SQL; modélisation statistique,analyses et validation des résultats statistiques.
+Sbircea Stéphanie (Étudiante n°22304694) : resp. de l’import des données ,structuration de la base de données, nettoyage et de transformation des données afin de les rendre exploitables pour les analyses, élaboration du diaporama.
 
 
 
