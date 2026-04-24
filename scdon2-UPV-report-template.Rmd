@@ -52,26 +52,26 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-# Introduction {.label:s-intro}
+# Introduction 
 
-Dans ce projet, nous nous intéressons au système d’échange Wonder Trade du jeu Pokémon.Les joueurs y échangent des Pokémon de manière aléatoire avec d’autres utilisateurs dans le monde entier.
-La notion de qualité des échanges correspond ici à la valeur perçue des Pokémon échangés, c’est-à-dire leur niveau de satisfaction pour les joueurs.
-Cette qualité est mesurée à travers plusieurs dimensions :
-la puissance du Pokémon (statistiques globales),sa rareté (shiny, légendaire), son niveau d’investissement (niveau, objets, capacités spéciales), et le ressenti des joueurs lors de l’échange (liked). Ainsi, notre problématique est la suivante :
 
+Dans ce projet, nous nous intéressons au système d’échange Wonder Trade du jeu Pokémon, dans lequel les joueurs échangent des Pokémon de manière aléatoire avec d’autres utilisateurs à travers le monde.
+
+La notion de qualité des échanges correspond ici à la valeur perçue des Pokémon échangés, c’est-à-dire au niveau de satisfaction qu’ils procurent aux joueurs. Cette qualité est appréhendée à travers plusieurs dimensions : la puissance du Pokémon (statistiques globales), sa rareté (shiny, légendaire), son niveau d’investissement (niveau, objets, capacités spéciales), ainsi que le ressenti des joueurs lors de l’échange (variable liked).
+
+Ainsi, la problématique étudiée est la suivante :
 
 \bigskip
 
 **Les caractéristiques des Pokémon et des dresseurs influencent-elles la qualité des échanges ?**
 
-\medskip 
+\medskip
 
-\justifying
+Cette question conduit à s’interroger sur le caractère réellement aléatoire des échanges réalisés dans le Wonder Trade du point de vue de la qualité des Pokémon. Il s’agit notamment de déterminer si les joueurs adoptent des comportements différenciés en échangeant davantage des Pokémon moins performants ou moins rares, ou si des Pokémon puissants et recherchés circulent également dans ce système. Cette analyse vise à mettre en évidence les logiques sous-jacentes aux choix d’échange ainsi que les stratégies potentielles des joueurs.
 
-Ainsi, on peut se demander si les échanges réalisés dans le Wonder Trade sont réellement aléatoires du point de vue de la qualité des Pokémon, ou s’ils révèlent des comportements spécifiques de la part des joueurs. Autrement dit, les joueurs ont-ils tendance à échanger des Pokémon moins performants ou moins rares, ou observe-t-on également la présence de Pokémon puissants et recherchés dans ce système ? Cette interrogation est centrale pour comprendre la logique des échanges et les stratégies adoptées par les joueurs.
+\medskip
 
-\medskip 
-Cette question présente un intérêt à la fois en analyse de données et en compréhension des comportements dans les environnements numériques. En effet, si les joueurs échangent majoritairement des Pokémon faibles ou communs, cela pourrait indiquer une logique d’optimisation individuelle. À l’inverse, la présence de Pokémon rares ou puissants dans les échanges pourrait révéler des comportements différents, comme la recherche d’aléatoire, la générosité ou des stratégies spécifiques. Ainsi, l’étude de cette problématique permet de mieux comprendre les dynamiques d’échange dans ce système et d’appliquer des outils statistiques pour analyser ces comportements.
+Cette problématique s’inscrit à la fois dans le cadre de l’analyse de données et de l’étude des comportements en environnement numérique. Elle permet d’évaluer si les échanges relèvent d’une logique d’optimisation, caractérisée par la conservation des Pokémon à forte valeur, ou s’ils traduisent des dynamiques plus variées telles que l’aléatoire, la générosité ou des stratégies non systématiques. L’objectif est ainsi de caractériser les déterminants de la qualité des échanges à l’aide d’outils statistiques.
 
 \bigskip 
 \bigskip 
