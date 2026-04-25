@@ -81,10 +81,10 @@ Cette problématique s’inscrit à la fois dans le cadre de l’analyse de donn
 
 \medskip
 
-Fenina Sara (Étudiante n°22411291) : resp. recherche des bases de données, l’analyse descriptive ,modélisation des tables ,l’interprétation des résultats et structuration globale de la base de données.
-Guilleminot Sarah (Étudiante n°22405827) : resp.  recherche des bases de données, élaboration des requêtes SQL, modélisation statistique, mise en forme du rapport,analyses et  interprétations.
-Rakoto Ambinintsoa Prisca (Étudiante n°22402951) : resp. élaboration, mise en forme des requêtes SQL; modélisation statistique,analyses et validation des résultats statistiques.
-Sbircea Stéphanie (Étudiante n°22304694) : resp. de l’import des données ,structuration de la base de données, nettoyage et de transformation des données afin de les rendre exploitables pour les analyses, élaboration du diaporama.
+Fenina Sara (Étudiante n.22411291) : resp. recherche des bases de données, l’analyse descriptive ,modélisation des tables ,l’interprétation des résultats et structuration globale de la base de données.
+Guilleminot Sarah (Étudiante n.22405827) : resp.  recherche des bases de données, élaboration des requêtes SQL, modélisation statistique, mise en forme du rapport,analyses et  interprétations.
+Rakoto Ambinintsoa Prisca (Étudiante n.22402951) : resp. élaboration, mise en forme des requêtes SQL; modélisation statistique,analyses et validation des résultats statistiques.
+Sbircea Stéphanie (Étudiante n.22304694) : resp. de l’import des données ,structuration de la base de données, nettoyage et de transformation des données afin de les rendre exploitables pour les analyses, élaboration du diaporama.
 
 
 
@@ -391,7 +391,7 @@ con <- DBI::dbConnect(
 )
 ```
 
-REQUETE N°0: Pokémon échangés vs non échangés
+REQUETE N.0: Pokémon échangés vs non échangés
 
 \bigskip
 
@@ -413,7 +413,7 @@ On observe que tous les Pokémon ne sont pas échangés, ce qui montre que certa
 
 \bigskip 
 
-REQUETE N°1:  Pokémon de niveau 1(breeding)
+REQUETE N.1:  Pokémon de niveau 1(breeding)
 
 \bigskip
 
@@ -429,7 +429,7 @@ Un grand nombre de Pokémon sont de niveau 1. Cela montre que les joueurs pratiq
 
 \bigskip
 
-REQUETE N°2: HP échangés vs non échangés
+REQUETE N.2: HP échangés vs non échangés
 
 \bigskip
 
@@ -445,7 +445,7 @@ Si les Pokémon échangés ont en moyenne moins de HP, cela suggère que les jou
 \bigskip
 
 
-REQUETE N°3: Genre du dresseur et type de Pokémon
+REQUETE N.3: Genre du dresseur et type de Pokémon
 
 \bigskip
 
@@ -463,7 +463,7 @@ Les résultats permettent d’observer s’il existe une différence de comporte
 
 \bigskip
 
-REQUETE N°4: Types les moins appréciés
+REQUETE N.4: Types les moins appréciés
 
 \bigskip
 
@@ -476,7 +476,7 @@ Enfin, comme les dresseurs utilisent souvent le Wonder Trade comme un outil d'op
 
 \bigskip 
 
-REQUETE N°5: Shiny
+REQUETE N.5: Shiny
 
 \bigskip
 
@@ -496,7 +496,7 @@ Cela confirme un comportement de rétention des ressources rares.
 
 \bigskip
 
-REQUETE N°6 : Niveau moyen
+REQUETE N.6 : Niveau moyen
 
 \bigskip
 
@@ -508,7 +508,7 @@ Le niveau moyen des Pokémon échangés permet d’évaluer la qualité globale 
 
 \bigskip
 
-REQUETE N°7: Egg Move et HP
+REQUETE N.7: Egg Move et HP
 
 \bigskip
 
@@ -520,7 +520,7 @@ Les résultats permettent de comparer les HP moyens selon la présence d’Egg M
 
 \bigskip
 
-Requête N°8 : Anonymat vs qualité
+Requête N.8 : Anonymat vs qualité
 
 \bigskip
 
@@ -537,7 +537,7 @@ En revanche La qualité est multidimensionnelle, donc une analyse SQL seule ne s
 ![**Requête 8**.](Requête8.png){#Requête width="16cm" height="8cm"}
 
 
-REQUETE N°9: Dresseur le plus actif
+REQUETE N.9: Dresseur le plus actif
 
 \bigskip
 
@@ -550,7 +550,7 @@ L’objectif est de relier activité (nombre d’échanges) et performance (nive
 ![**Requête 9**.](Requête9.png){#Requête width="10cm" height="4cm"}
 
 
-Requête N°10 : Relation entre la facilité de capture et le nombre d’échanges
+Requête N.10 : Relation entre la facilité de capture et le nombre d’échanges
 
 \bigskip
 
