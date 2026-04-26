@@ -8,6 +8,7 @@ author:
 date: "`r format(Sys.Date(), '%d %B %Y')`"
 output:
   html_document:
+    latex_engine: xelatex
     df_print: paged
     toc: yes
     toc_depth: '2'
