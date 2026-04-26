@@ -7,20 +7,8 @@ author:
 - Sbircea Stephanie.
 date: "`r format(Sys.Date(), '%d %B %Y')`"
 output:
-  html_document:
-    latex_engine: xelatex
-    df_print: paged
-    toc: yes
-    toc_depth: '2'
-  word_document:
-    fig_caption: yes
-    number_sections: yes
-    pandoc_args: 
-    - --top-level-division="chapter"
-    - --to="odt+native_numbering"
-    toc: yes
-    toc_depth: '2'
   pdf_document:
+    latex_engine: xelatex
     fig_caption: yes
     keep_md: yes
     keep_tex: yes
@@ -32,6 +20,18 @@ output:
     template: template.tex
     toc: yes
     toc_depth: 1
+  word_document:
+    fig_caption: yes
+    number_sections: yes
+    pandoc_args: 
+    - --top-level-division="chapter"
+    - --to="odt+native_numbering"
+    toc: yes
+    toc_depth: '2'
+  html_document:
+    df_print: paged
+    toc: yes
+    toc_depth: '2'
 toc-title: "Table des matières"
 bibliography: references.bib
 coursecode: TV15MI-TV25MI
@@ -320,15 +320,7 @@ Nous avons choisi cette méthode en considérant que les trainers partageant les
 
 \bigskip 
 
-**- Users** contenant uniquement la colonne ***userId***
-
-\bigskip 
-
-**- Trades** avec les colonnes suivantes : ***id_trade, hasItem, hasHiddenAbility, hasEggMove, hasPokerus, hasPerfectIV, isShiny, level, date, time, liked, #id_user, #id_trainer, #pokedex_number*** 
-
-\bigskip 
-
-**- Trainers** avec les colonnes suivantes : ***id_trainer, trainerGender, trainerCountry et trainerCountrySub1***
+  ![**Schéma explication tables dérivées wondertrade.**](schema_wondertrade.png){#MOD width="12cm"}
 
 Ce découpage suit rigoureusement les règles de passage du MCD au MOD pour garantir la normalisation de la base de données.
  Eviter de répéter inutilement les informations. Par exemple, les caractéristiques d'un dresseur (pays, genre) ne sont enregistrées qu'une seule fois dans la table Trainers, même s'il effectue des dizaines d'échanges.
@@ -384,7 +376,7 @@ library(DBI)
 con <- DBI::dbConnect(
   drv = RMySQL::MySQL(),    # database driver à utiliser
   host = "localhost", 
-  port = 8889, 
+  port = 3306, 
   username = "root", 
   password = "root", 
   dbname = "ProjetFinal",  
