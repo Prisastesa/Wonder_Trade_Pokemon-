@@ -419,7 +419,7 @@ con <- DBI::dbConnect(
 )
 ```
 
-REQUETE N°0: Pokémon échangés vs non échangés
+REQUETE 0: Pokémon échangés vs non échangés
 
 \bigskip
 
@@ -441,7 +441,7 @@ On observe que tous les Pokémon ne sont pas échangés, ce qui montre que certa
 
 \bigskip 
 
-REQUETE N°1:  Pokémon de niveau 1(breeding)
+REQUETE 1:  Pokémon de niveau 1(breeding)
 
 \bigskip
 
@@ -457,7 +457,7 @@ Un grand nombre de Pokémon sont de niveau 1. Cela montre que les joueurs pratiq
 
 \bigskip
 
-REQUETE N°2: HP échangés vs non échangés
+REQUETE 2: HP échangés vs non échangés
 
 \bigskip
 
@@ -487,7 +487,7 @@ On constate que les Pokémon conservés par les dresseurs affichent une moyenne 
 \bigskip
 
 
-REQUETE N°3: Genre du dresseur et type de Pokémon
+REQUETE 3: Genre du dresseur et type de Pokémon
 
 \bigskip
 
@@ -516,7 +516,7 @@ Dans l’ensemble, les données mettent en évidence une forte diversité des ty
 
 \bigskip
 
-REQUETE N°4: Types les moins appréciés
+REQUETE 4: Types les moins appréciés
 
 \bigskip
 
@@ -538,7 +538,7 @@ Enfin, comme les dresseurs utilisent souvent le Wonder Trade comme un outil d'op
 
 \bigskip 
 
-REQUETE N°5: Shiny
+REQUETE 5: Shiny
 
 \bigskip
 
@@ -558,7 +558,7 @@ Cela confirme un comportement de rétention des ressources rares.
 
 \bigskip
 
-REQUETE N°6 : Niveau moyen
+REQUETE 6 : Niveau moyen
 
 \bigskip
 
@@ -574,7 +574,7 @@ Le niveau moyen des Pokémon échangés permet d’évaluer la qualité globale 
 
 \bigskip
 
-REQUETE N°7: Egg Move et HP
+REQUETE 7: Egg Move et HP
 
 \bigskip
 
@@ -594,7 +594,7 @@ Dans l’ensemble, les données mettent en évidence que l'avantage d'un Egg Mov
 
 \bigskip
 
-Requête N°8 : Anonymat vs qualité
+Requête 8 : Anonymat vs qualité
 
 \bigskip
 
@@ -615,7 +615,7 @@ FROM trades WHERE trainerId > 80;
 
 
 
-Requête N°9 : Relation entre la facilité de capture et le nombre d’échanges
+Requête 9 : Relation entre la facilité de capture et le nombre d’échanges
 
 \bigskip
 
