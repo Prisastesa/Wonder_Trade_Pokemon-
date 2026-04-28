@@ -77,15 +77,39 @@ Cette problématique s’inscrit à la fois dans le cadre de l’analyse de donn
 \bigskip 
 \bigskip 
 
-#Rôles
+
 
 
 \medskip
 
-Fenina Sara (Étudiante n.22411291) : resp. recherche des bases de données, l’analyse descriptive ,modélisation des tables ,l’interprétation des résultats et structuration globale de la base de données.
-Guilleminot Sarah (Étudiante n.22405827) : resp.  recherche des bases de données, élaboration des requêtes SQL, modélisation statistique, mise en forme du rapport,analyses et  interprétations.
-Rakoto Ambinintsoa Prisca (Étudiante n.22402951) : resp. élaboration, mise en forme des requêtes SQL; modélisation statistique,analyses et validation des résultats statistiques.
-Sbircea Stéphanie (Étudiante n.22304694) : resp. de l’import des données ,structuration de la base de données, nettoyage et de transformation des données afin de les rendre exploitables pour les analyses, élaboration du diaporama.
+
+\noindent
+\begin{minipage}{\textwidth}
+\hypertarget{uxf4les}{%
+\section*{Rôles}}\label{uxf4les} % Utilisation d'une vraie section non numérotée
+
+\textbf{Fenina Sara (22411291)}\\
+Recherche des bases de données, analyse descriptive, modélisation des tables, interprétation des résultats, structuration globale.
+
+\nopagebreak % Empêche de couper juste après
+\vspace{0.3cm}
+
+\textbf{Guilleminot Sarah (22405827)}\\
+Recherche des bases de données, requêtes SQL, modélisation statistique, mise en forme du rapport, analyses et interprétations.
+
+\nopagebreak
+\vspace{0.3cm}
+
+\textbf{Rakoto Ambinintsoa Prisca (22402951)}\\
+Élaboration SQL, modélisation statistique, analyses et validation des résultats.
+
+\nopagebreak
+\vspace{0.3cm}
+
+\textbf{Sbircea Stéphanie (22304694)}\\
+Import des données, structuration base, nettoyage, transformation des données, diaporama.
+\end{minipage}
+\vspace{0.5cm}
 
 
 
@@ -93,7 +117,7 @@ Sbircea Stéphanie (Étudiante n.22304694) : resp. de l’import des données ,s
 
 ## Provenance des données
 pokemon: https://www.kaggle.com/datasets/rounakbanik/pokemon) et
-wonder trades: (https://data.world/notgibs/pokemon-wonder-trade-results/workspace/file?filename=Wonder+Trade.csv)
+wonder trades: (https://github.com/solash/pokemon-wondertrade-analytics/blob/master/data/wondertrades-03142015.json)
 
 
 \bigskip
@@ -152,12 +176,23 @@ hp & sp\_attack \\
 attack & sp\_defense \\ 
 defense & speed 
 \end{tabular}
-\end{minipage} & Entier & Statistiques de combat & Valeurs numériques \\ \hline
+\end{minipage} & Entier & Statistiques de combat & 
+\begin{minipage}[c]{6cm}
+\scriptsize
+\vspace{2mm}
+- HP : $[1 ; 255]$  \\
+- Attaque : $[5 ; 190]$  \\
+- Défense : $[5 ; 230]$ \\
+- Att. Spé : $[10 ; 216]$  \\
+- Déf. Spé : $[20 ; 230]$  \\
+- Vitesse : $[5 ; 200]$ 
+\vspace{2mm}
+\end{minipage} \\ \hline
 
 
-base\_total & Entier & Somme des statistiques & Puissance globale \\ \hline
+base\_total & Entier & Somme des statistiques AKA Puissance globale & base\_total : $[180 ; 780]$  \\ \hline
 is\_legendary & Booléen & Statut de Pokémon légendaire & 0 = Non, 1 = Oui \\ \hline
-resistance & Réel & Multiplicateurs de dégâts & entre 0 et 36 \\ \hline
+resistance & Réel & Multiplicateurs de dégâts & resistance : $[0 ; 36]$  \\ \hline
 
 
 \end{longtable}
@@ -176,7 +211,7 @@ resistance & Réel & Multiplicateurs de dégâts & entre 0 et 36 \\ \hline
 pokemonId & Entier & ID du Pokémon échangé & \textbf{Clé étrangère} vers pokemon \\ \hline
 trainerId & Entier & ID du dresseur partenaire & \textbf{Clé étrangère} vers trainers \\ \hline
 userId & Entier & ID de l'utilisateur local & \textbf{Clé étrangère} vers users \\ \hline
-level & Entier & Niveau du Pokémon lors de l'échange & EX : 26 (peut être importé en texte) \\ \hline
+level & Entier & Niveau du Pokémon lors de l'échange &$ level : [0 ;100]$  \\ \hline
 isShiny & Texte & Aspect chromatique rare & "VRAI" ou "FAUX" \\ \hline
 hasItem & Texte & Le Pokémon tient-il un objet ? & "VRAI" ou "FAUX" \\ \hline
 hasHiddenAbility & Texte & Possède un talent caché rare & "VRAI" ou "FAUX" \\ \hline
@@ -379,7 +414,7 @@ con <- DBI::dbConnect(
   port = 3306, 
   username = "root", 
   password = "root", 
-  dbname = "ProjetFinal",  
+  dbname = "wonderpoke",  
   unix.sock = "/Applications/MAMP/tmp/mysql/mysql.sock"
 )
 ```
@@ -434,7 +469,7 @@ Nous avons ensuite comparé les points de vie moyens (HP) des Pokémon échangé
 L’objectif est de déterminer si les dresseurs ont tendance à échanger des Pokémon plus faibles, plus forts ou équivalents à la moyenne.
 
 
-![**Requête 2**.](Requête1.png){#Requête width="10cm" height="4cm"}
+![**Requête 2**.](requete1.png){#requete1 width="10cm" height="4cm"}
 
 Si les Pokémon échangés ont en moyenne moins de HP, cela suggère que les joueurs échangent plutôt des Pokémon plus faibles. À l’inverse, une moyenne similaire indiquerait que le HP n’est pas un critère déterminant dans les échanges.
 
@@ -453,7 +488,7 @@ Cette requête permet de  révéler des préférences de types (ex : feu, eau, n
 ou l’absence totale de différence (comportement homogène).
 Cela permet d’introduire une dimension sociologique dans l’analyse.
 
-![**Requête 3**.](Requête3.png){#Requête width="15cm" height="6cm"}
+![**Requête 3**.](requete3.png){#requete3 width="15cm" height="6cm"}
 
 Les résultats permettent d’observer s’il existe une différence de comportement entre les dresseurs selon leur genre. Toutefois, toute différence observée doit être interprétée avec prudence, car elle peut être faible ou non significative.
 
@@ -465,7 +500,7 @@ REQUETE N.4: Types les moins appréciés
 
 Puis nous avons analysé les types des Pokémons dans les détails pour étudier lesquels sont les moins appréciés.
 
-![**Requête 4**.](Requête4.png){#Requête width="10cm" height="4cm"}
+![**Requête 4**.](requete4.png){#requete4 width="10cm" height="4cm"}
 
 Le type Normal est le moins aimé car il regroupe les Pokémon les plus communs et faciles à capturer dès le début du jeu. Statistiquement, ils possèdent souvent des caractéristiques de combat plus faibles (HP, Attaque, Défense) que les types plus rares ou "exotiques".
 Enfin, comme les dresseurs utilisent souvent le Wonder Trade comme un outil d'optimisation pour se débarrasser de leurs spécimens les plus faibles, le système se retrouve saturé de Pokémon de type Normal, provoquant une déception systématique enregistrée dans la colonne liked (dislike) par les destinataires
@@ -480,7 +515,7 @@ Nous avons cherché à identifier les Pokémon shiny présents dans les échange
 
 L’objectif est d’évaluer si les Pokémon rares sont fréquemment échangés.
 
-![**Requête 5**.](Requête5.png){#Requête width="10cm" height="4cm"}
+![**Requête 5**.](requete5.png){#requete5 width="10cm" height="4cm"}
 
 Interprétation :
 Les résultats montrent qu’ils sont très peu échangés, ce qui est logique car :
@@ -498,7 +533,7 @@ REQUETE N.6 : Niveau moyen
 
 Nous avons calculé le niveau moyen des Pokémon échangés. L’objectif est de mesurer le niveau global des échanges.Plus le niveau est élevé plus l"échange est stratégique et plus il est faible plus l'échange est commun.
 
-![**Requête 6**.](Requête6.png){#Requête width="10cm" height="4cm"}
+![**Requête 6**.](requete6.png){#requete6 width="10cm" height="4cm"}
 
 Le niveau moyen des Pokémon échangés permet d’évaluer la qualité globale des échanges. Un niveau relativement faible suggère que les joueurs échangent principalement des Pokémon peu stratégiques, tandis que les Pokémon de haut niveau sont davantage conservés.
 
@@ -510,7 +545,7 @@ REQUETE N.7: Egg Move et HP
 
 Nous avons analysé si la présence d’une capacité spéciale (Egg Move) influence les HP moyens afin de voir  si cette caractéristique apporte un avantage mesurable.
 
-![**Requête 7**.](Requête7.png){#Requête width="10cm" height="4cm"}
+![**Requête 7**.](requete7.png){#requete7 width="10cm" height="4cm"}
 
 Les résultats permettent de comparer les HP moyens selon la présence d’Egg Moves. Si la différence est faible, cela suggère que cette caractéristique n’a pas d’impact significatif sur les performances globales des Pokémon échangés.
 
@@ -530,7 +565,7 @@ ou si aucune différence significative n’existe
 En revanche La qualité est multidimensionnelle, donc une analyse SQL seule ne suffit pas. Il faudrait pondérer les variables pour créer un score global.
 
 
-![**Requête 8**.](Requête8.png){#Requête width="16cm" height="8cm"}
+![**Requête 8**.](requete8.png){#requete8 width="16cm" height="8cm"}
 
 
 REQUETE N.9: Dresseur le plus actif
@@ -543,7 +578,7 @@ Nous avons identifié le niveau maximal du Pokémon appartenant au dresseur ayan
 
 L’objectif est de relier activité (nombre d’échanges) et performance (niveau du Pokémon)
 
-![**Requête 9**.](Requête9.png){#Requête width="10cm" height="4cm"}
+![**Requête 9**.](requete9.png){#requete width="10cm" height="4cm"}
 
 
 Requête N.10 : Relation entre la facilité de capture et le nombre d’échanges
@@ -553,7 +588,7 @@ Requête N.10 : Relation entre la facilité de capture et le nombre d’échange
 Nous avons étudié la relation entre la facilité de capture et le nombre d’échanges. L’objectif est de tester si les Pokémon faciles à capturer sont plus échangés.
 
 
-![**Requête 10**.](Requête10.png){#Requête width="10cm" height="8cm"}
+![**Requête 10**.](requete10.png){#requete10 width="10cm" height="8cm"}
 
 Les résultats permettent d’analyser la relation entre la rareté des Pokémon et leur fréquence d’échange. Une forte présence de Pokémon faciles à capturer dans les échanges indiquerait que les joueurs privilégient l’échange de Pokémon communs, tandis que les Pokémon rares sont conservés.
 
