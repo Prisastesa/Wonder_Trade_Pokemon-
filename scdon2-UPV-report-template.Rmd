@@ -606,10 +606,23 @@ L’objectif est de mesurer si l’anonymat influence la qualité des échanges.
 En revanche La qualité est multidimensionnelle, donc une analyse SQL seule ne suffit pas. Il faudrait pondérer les variables pour créer un score global.
 
 ```{sql connection = con}
-SELECT 'Anonyme' AS Statut, AVG(CAST(level AS UNSIGNED)) AS Niveau_Moyen, AVG(isShiny = 'VRAI') * 100 AS Pct_Shiny, AVG(hasItem = 'VRAI') * 100 AS Pct_Objet, AVG(hasPerfectIV = 'VRAI') * 100 AS Pct_IV_Parfait, AVG(hasHiddenAbility = 'VRAI') * 100 AS Pct_Talent_Cache, AVG(hasEggMove = 'VRAI') * 100 AS Pct_EggMoves 
+SELECT 'Anonyme' AS Statut,
+AVG(CAST(level AS UNSIGNED))
+AS Niveau_Moyen, AVG(isShiny = 'VRAI') 
+* 100 AS Pct_Shiny, AVG(hasItem = 'VRAI') 
+* 100 AS Pct_Objet, AVG(hasPerfectIV = 'VRAI') 
+* 100 AS Pct_IV_Parfait, AVG(hasHiddenAbility = 'VRAI') 
+* 100 AS Pct_Talent_Cache, AVG(hasEggMove = 'VRAI') 
+* 100 AS Pct_EggMoves 
 FROM trades WHERE trainerId <= 80 
 UNION ALL 
-SELECT 'Identifié', AVG(CAST(level AS UNSIGNED)), AVG(isShiny = 'VRAI') * 100, AVG(hasItem = 'VRAI') * 100, AVG(hasPerfectIV = 'VRAI') * 100, AVG(hasHiddenAbility = 'VRAI') * 100, AVG(hasEggMove = 'VRAI') * 100 
+SELECT 'Identifié',
+AVG(CAST(level AS UNSIGNED)),
+AVG(isShiny = 'VRAI') 
+* 100, AVG(hasItem = 'VRAI') 
+* 100, AVG(hasPerfectIV = 'VRAI') 
+* 100, AVG(hasHiddenAbility = 'VRAI') 
+* 100, AVG(hasEggMove = 'VRAI') * 100 
 FROM trades WHERE trainerId > 80;
 ```
 
