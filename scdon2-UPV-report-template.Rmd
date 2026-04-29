@@ -716,7 +716,7 @@ Hypothèses statistisques
 ### Données et calculs
 \bigskip
 
-```{r}
+```{r, echo=FALSE}
 # Import des données
 trades <- read.csv("Trades.csv", sep = ";")
 
@@ -729,13 +729,13 @@ shiny_liked
 \bigskip
 Effectifs théoriques
 \bigskip
-```{r}
+```{r, echo=FALSE}
 chisq.test(shiny_liked)$expected
 ```
 \bigskip
 Test du Khi$^2$
 \bigskip
-```{r}
+```{r, echo=FALSE}
 test.khi2 <- chisq.test(shiny_liked)
 
 test.khi2$statistic
@@ -750,7 +750,7 @@ Pour compléter le test, nous calculons le coefficient de Cramer qui mesure la f
 
 \bigskip
 
-```{r}
+```{r, echo=FALSE}
 khi2 <- test.khi2$statistic
 N <- sum(shiny_liked)
 p <- nrow(shiny_liked)
@@ -772,7 +772,7 @@ Conclusion
 Le test du Khi$^2$ montre que la rareté des Pokémon influence la satisfaction des joueurs. Les Pokémon rares (shiny) sont associés à une perception différente des échanges. Cela indique que les joueurs accordent une importance particulière à la rareté, ce qui influence directement la qualité perçue des échanges. Toutefois, si certains effectifs sont faibles, ces résultats doivent être interprétés avec prudence.
 
 ## Distribution des échanges selon le taux de capture
-```{r}
+```{r, echo=FALSE}
 library(ggplot2)
 
 pokemon <- read.csv("pokemon.csv", sep = ",")
@@ -805,7 +805,7 @@ Les Pokémon faciles à capturer sont plus fréquemment échangés, ce qui sugg�
 Nous cherchons à déterminer si la puissance des Pokémon (base_total) varie selon les groupes de dresseurs.
 
  **Préparation des données**
-```{r}
+```{r, echo=FALSE}
 library(dplyr)
 
 trainers <- read.csv("Trainers.csv", sep = ";")
@@ -819,7 +819,7 @@ df_anova$trainerCountry <- as.factor(df_anova$trainerCountry)
 \bigskip
 Visualisation
 \bigskip
-```{r}
+```{r, echo=FALSE}
 
 top_countries <- df_anova %>%
   count(trainerCountry) %>%
@@ -852,7 +852,7 @@ On observe des différences de puissance entre les pays.
 ## Test ANOVA
   **Probabilités prédites**
 \bigskip
-```{r}
+```{r, echo=FALSE}
 res_anova <- aov(base_total ~ trainerCountry, data = df_anova)
 summary(res_anova)
 ```
@@ -1038,7 +1038,7 @@ Hypothèses
 
  **Code**
 \bigskip
-```{r}
+```{r, echo=FALSE}
 library(dplyr)
 
 pokemon$capture_rate_norm <- as.numeric(as.character(pokemon$capture_rate)) / 255
@@ -1055,7 +1055,7 @@ nb_echanges <- df_corr %>%
 \bigskip
 Visualisation
 \bigskip
-```{r}
+```{r, echo=FALSE}
 plot(nb_echanges$capture_rate_norm, nb_echanges$nb,
      main = "Facilité de capture vs nombre d'échanges",
      xlab = "Indice de facilité (1 = très facile)",
@@ -1069,7 +1069,7 @@ abline(lm(nb ~ capture_rate_norm, data = nb_echanges),
 \bigskip
 Test de corrélation
 \bigskip
-```{r}
+```{r, echo=FALSE}
 cor.test(nb_echanges$capture_rate_norm, nb_echanges$nb)
 ```
 \bigskip
@@ -1101,12 +1101,12 @@ on cherche à expliquer une probabilité
 \bigskip
   **Transformation de liked en variable binaire**
 \bigskip
-```{r}
+```{r, echo=FALSE}
 trades$liked_bin <- ifelse(trades$liked == "Liked", 1, 0)
 ```
 
   **Fusion des données**
-```{r}
+```{r, echo=FALSE}
 df_model <- merge(trades, pokemon,
                   by.x = "pokemonId",
                   by.y = "pokedex_number")
@@ -1121,7 +1121,7 @@ df_model$capture_rate <- as.numeric(as.character(df_model$capture_rate))
 \bigskip
 Modèle de régression
 \bigskip
-```{r}
+```{r, echo=FALSE}
 modele <- glm(liked_bin ~ isShiny + base_total + capture_rate + level,
               data = df_model,
               family = "binomial")
