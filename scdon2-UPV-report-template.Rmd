@@ -723,7 +723,7 @@ trades <- read.csv("Trades.csv", sep = ";")
 # Table de contingence
 shiny_liked <- table(trades$isShiny, trades$liked)
 
-# Affichage
+
 shiny_liked
 ```
 \bigskip
@@ -732,6 +732,8 @@ Effectifs théoriques
 ```{r, echo=FALSE}
 chisq.test(shiny_liked)$expected
 ```
+le message affiché "## Warning in chisq.test(shiny_liked): L’approximation du Chi-2 est peut-être incorrecte" vient du fait qu'il n'y est qu'un seul individu skiny, ce qui n'est pas très représentatif.
+
 \bigskip
 Test du Khi$^2$
 \bigskip
@@ -772,6 +774,9 @@ Conclusion
 Le test du Khi$^2$ montre que la rareté des Pokémon influence la satisfaction des joueurs. Les Pokémon rares (shiny) sont associés à une perception différente des échanges. Cela indique que les joueurs accordent une importance particulière à la rareté, ce qui influence directement la qualité perçue des échanges. Toutefois, si certains effectifs sont faibles, ces résultats doivent être interprétés avec prudence.
 
 ## Distribution des échanges selon le taux de capture
+
+l'avertissement "## Warning: le package 'ggplot2' a été compilé avec la version R 4.5.3" signifie simplement que ggplot2 a été créé avec une version de R plus récente que la notre, mais il reste fonctionnel et sans danger pour nos analyses.
+
 ```{r, echo=FALSE}
 library(ggplot2)
 
