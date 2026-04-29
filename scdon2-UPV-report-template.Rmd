@@ -739,7 +739,7 @@ Conclusion
 Le test du Khi² montre que la rareté des Pokémon influence la satisfaction des joueurs. Les Pokémon rares (shiny) sont associés à une perception différente des échanges. Cela indique que les joueurs accordent une importance particulière à la rareté, ce qui influence directement la qualité perçue des échanges. Toutefois, si certains effectifs sont faibles, ces résultats doivent être interprétés avec prudence.
 
 *II. Distribution des échanges selon le taux de capture*
-```{r}
+```{r, echo=FALSE}
 library(ggplot2)
 
 pokemon <- read.csv("pokemon.csv", sep = ",")
@@ -999,7 +999,7 @@ Hypothèses
     H1 : Il existe une corrélation significative.
 
  Code
-```{r}
+```{r, echo=FALSE}
 library(dplyr)
 
 pokemon$capture_rate_norm <- as.numeric(as.character(pokemon$capture_rate)) / 255
@@ -1014,7 +1014,7 @@ nb_echanges <- df_corr %>%
   filter(!is.na(capture_rate_norm))
 ```
  Visualisation
-```{r}
+```{r, echo=FALSE}
 plot(nb_echanges$capture_rate_norm, nb_echanges$nb,
      main = "Facilité de capture vs nombre d'échanges",
      xlab = "Indice de facilité (1 = très facile)",
@@ -1026,7 +1026,7 @@ abline(lm(nb ~ capture_rate_norm, data = nb_echanges),
        col = "red", lwd = 2)
 ```
  Test de corrélation
-```{r}
+```{r, echo=FALSE}
 cor.test(nb_echanges$capture_rate_norm, nb_echanges$nb)
 ```
  Interprétation
@@ -1059,7 +1059,7 @@ trades$liked_bin <- ifelse(trades$liked == "Liked", 1, 0)
 ```
 
 # Fusion des données
-```{r}
+```{r, echo=FALSE}
 df_model <- merge(trades, pokemon,
                   by.x = "pokemonId",
                   by.y = "pokedex_number")
@@ -1072,7 +1072,7 @@ df_model$base_total <- as.numeric(df_model$base_total)
 df_model$capture_rate <- as.numeric(as.character(df_model$capture_rate))
 ```
 Modèle de régression
-```{r}
+```{r, echo=FALSE}
 modele <- glm(liked_bin ~ isShiny + base_total + capture_rate + level,
               data = df_model,
               family = "binomial")
