@@ -686,30 +686,32 @@ L’objectif de cette analyse est de déterminer si les caractéristiques des Po
 
 La qualité d’un échange est mesurée à l’aide de la variable liked, qui traduit le ressenti du joueur (échange apprécié ou non).
 
-Nous analysons deux dimensions :
+Nous analysons deux dimensions principales :
 
-Les caractéristiques intrinsèques du Pokémon : rareté (shiny), puissance, facilité de capture.
+Les caractéristiques intrinsèques du Pokémon : rareté (shiny), puissance, facilité de capture
+Les caractéristiques liées au dresseur : comportement et investissement (niveau)
 
-Les caractéristiques liées au dresseur : comportement et investissement (niveau).
+Afin de répondre à cette problématique, nous mobilisons plusieurs outils statistiques : le test du Khi², l’analyse de variance (ANOVA) et un test de corrélation, ainsi qu’une régression logistique permettant d’avoir une vision globale.
 
-Afin de répondre à cette problématique, nous mobilisons plusieurs outils statistiques :
-le test du Khi$^2$, l’analyse de variance (ANOVA) et un test de corrélation.
+Dans un souci de cohérence, nous organisons l’analyse en distinguant d’abord les facteurs liés aux Pokémon, puis ceux liés aux dresseurs, avant de les comparer et de répondre à la problématique.
 
 \bigskip
 
+##I. Influence des caractéristiques du Pokémon sur la qualité des échanges
+
 ## Influence de la rareté sur la satisfaction (Test du Khi$^2$)
 
-### Objectif
+**ojectif**
 
-
-Lorsque nous comparons les effectifs de Pokémon échangés selon leur rareté (par exemple shiny ou non shiny), nous remarquons que certaines catégories sont très peu représentées par rapport à d’autres. Cela peut laisser penser que les échanges ne sont pas totalement aléatoires, mais influencés par le comportement des joueurs. Nous allons donc vérifier si la répartition des Pokémon échangés est indépendante de leur rareté en utilisant un test du Khi$^2$.
+Lorsque nous observons la répartition des Pokémon échangés selon leur rareté (par exemple shiny ou non shiny), nous remarquons que certaines catégories sont très peu représentées par rapport à d’autres. Cela peut laisser penser que les échanges ne sont pas totalement aléatoires, mais influencés par le comportement des joueurs.
 
 Lorsque nous observons la répartition des Pokémon échangés, certaines catégories, notamment les Pokémon rares, apparaissent moins fréquentes. Cela suggère que les échanges pourraient ne pas être totalement aléatoires, mais influencés par des choix stratégiques des joueurs. Nous cherchons donc à déterminer si le fait qu’un Pokémon soit shiny influence la satisfaction des joueurs (liked).
-Hypothèses statistisques
 
-  **H0 (Hypothèse nulle)** : La rareté du Pokémon n’influence pas la satisfaction (indépendance).
+Hypothèses statistiques
 
-  **H1 (Hypothèse alternative)** : La rareté influence la satisfaction (dépendance).
+#H0 (Hypothèse nulle) : La rareté du Pokémon n’influence pas la satisfaction (indépendance).
+
+#H1 (Hypothèse alternative) : La rareté influence la satisfaction (dépendance).
 
 \bigskip
 
@@ -804,6 +806,47 @@ Ce graphique met en évidence la répartition des échanges selon le taux de cap
 Les échanges sont en partie influencés par la disponibilité des Pokémon.
 Les Pokémon faciles à capturer sont plus fréquemment échangés, ce qui suggère un effet d’abondance dans le système de Wonder Trade.
 
+##Corrélation entre taux de capture et nombre d’échanges
+```{r, echo=FALSE}
+library(dplyr)
+
+pokemon$capture_rate <- as.numeric(gsub("[^0-9]", "", pokemon$capture_rate))
+pokemon$capture_rate_norm <- pokemon$capture_rate / 255
+
+df_corr <- merge(trades, pokemon, by.x = "pokemonId", by.y = "pokedex_number")
+
+nb_echanges <- df_corr %>%
+  group_by(pokemonId, capture_rate_norm) %>%
+  summarise(nb = n(), .groups = "drop") %>%
+  filter(!is.na(capture_rate_norm), !is.na(nb))
+
+test_corr <- cor.test(nb_echanges$capture_rate_norm, nb_echanges$nb)
+
+test_corr$estimate
+test_corr$p.value
+```
+Visualisation de la corrélation
+```{r, echo=FALSE}
+plot(nb_echanges$capture_rate_norm, nb_echanges$nb,
+     main = "Facilité de capture vs nombre d'échanges",
+     xlab = "Indice de facilité (1 = très facile)",
+     ylab = "Nombre d'échanges",
+     pch = 16)
+
+abline(lm(nb ~ capture_rate_norm, data = nb_echanges),
+       col = "red", lwd = 2)
+```
+Interprétation
+
+La p-value est de 0.0105, ce qui indique une relation significative.
+Le coefficient (0.23) montre une corrélation positive mais faible.
+
+Conclusion
+
+Les Pokémon faciles à capturer sont légèrement plus échangés.
+
+
+
 ## Influence de la puissance des Pokémon (ANOVA)
   **Objectif**
 
@@ -872,6 +915,8 @@ On rejette l’hypothèse nulle.
 La puissance des Pokémon échangés varie significativement selon les groupes de dresseurs.
 
 Cela indique que les échanges ne sont pas homogènes et reflètent des comportements différenciés selon les joueurs.
+
+  ##II. Influence des caractéristiques du dresseur
 
 ## ANALYSE STATISTIQUE : Khi$^2$ Genre x Type
 
@@ -1029,71 +1074,6 @@ abline(lm(nb ~ capture_rate_norm, data = nb_echanges), col = "red", lwd = 2)
 
 Le graphique présente le nombre d'échanges en fonction de l'indice de facilité de capture (normalisé de 0 à 1).On observe une dispersion importante des points, confirmant la faiblesse du coefficient de corrélation (cor = 0,23). Néanmoins, la droite de régression (en rouge) montre une pente ascendante vers la droite.Plus l'indice tend vers 1 (Pokémon techniquement très faciles à capturer comme les espèces communes), plus la fréquence des échanges augmente. À l'inverse, les Pokémon dont l'indice est proche de 0 (espèces rares ou légendaires) sont moins présents en volume. Cette observation suggère que le flux du Wonder Trade est alimenté par l'abondance des captures faciles plutôt que par la rareté.
 
-## Corrélation entre taux de capture et nombre d’échanges
- 
-
-  **Objectif**
-
-Analyser la relation entre la facilité de capture et la fréquence des échanges.
-Hypothèses
-
-**H0** : Il n'existe pas de corrélation entre la facilité de capture et le nombre d'échanges.
-
-**H1** : Il existe une corrélation significative.
-
- **Code**
-\bigskip
-```{r, echo=FALSE}
-library(dplyr)
-
-pokemon$capture_rate_norm <- as.numeric(as.character(pokemon$capture_rate)) / 255
-
-df_corr <- merge(trades, pokemon,
-                 by.x = "pokemonId",
-                 by.y = "pokedex_number")
-
-nb_echanges <- df_corr %>%
-  group_by(pokemonId, capture_rate_norm) %>%
-  summarise(nb = n(), .groups = "drop") %>%
-  filter(!is.na(capture_rate_norm))
-```
-\bigskip
-Visualisation
-\bigskip
-```{r, echo=FALSE}
-plot(nb_echanges$capture_rate_norm, nb_echanges$nb,
-     main = "Facilité de capture vs nombre d'échanges",
-     xlab = "Indice de facilité (1 = très facile)",
-     ylab = "Nombre d'échanges",
-     pch = 16,
-     col = rgb(0.2, 0.4, 0.6, 0.5))
-
-abline(lm(nb ~ capture_rate_norm, data = nb_echanges),
-       col = "red", lwd = 2)
-```
-\bigskip
-Test de corrélation
-\bigskip
-```{r, echo=FALSE}
-cor.test(nb_echanges$capture_rate_norm, nb_echanges$nb)
-```
-\bigskip
-  **Interprétation**
-p-value = 0.0105 → relation significative
-coefficient = 0.23 → corrélation positive mais faible
-
-Les Pokémon faciles à capturer sont légèrement plus échangés.
-
-## Modélisation globale de la qualité des échanges (régression)
- **Objectif**
-
-Jusqu’à présent, les analyses ont étudié les variables une par une (rareté, puissance, capture rate…).
-Ici, l’objectif est d’aller plus loin :
-
-Identifier quelles caractéristiques influencent réellement la qualité des échanges lorsque tout est pris en compte simultanément.
-
-Autrement dit :
- qu’est-ce qui explique vraiment la satisfaction des joueurs ?
 
   **Méthodologie**
 
@@ -1239,13 +1219,9 @@ Comme souligné dans les rapports de référence, toute analyse de données comp
 ## La droite de régression linéaire : un premier exemple
 
 
-#  Discussion
 
 
-#  Conclusion et perspectives {.label:ccl}
 
-
-#  Bibliographie {-}
 
 
 #  Annexes {-}
