@@ -491,7 +491,7 @@ On constate que les Pokémon conservés par les dresseurs affichent une moyenne 
 
 \bigskip
 
-REQUETE 4: Types les moins appréciés
+REQUETE 3: Types les moins appréciés
 
 \bigskip
 
@@ -513,7 +513,7 @@ Enfin, comme les dresseurs utilisent souvent le Wonder Trade comme un outil d'op
 
 \bigskip 
 
-REQUETE 5: Shiny
+REQUETE 4: Shiny
 
 \bigskip
 
@@ -533,7 +533,7 @@ Cela confirme un comportement de rétention des ressources rares.
 
 \bigskip
 
-REQUETE 6 : Niveau moyen
+REQUETE 5 : Niveau moyen
 
 \bigskip
 
@@ -551,7 +551,7 @@ Le niveau moyen des Pokémon échangés permet d’évaluer la qualité globale 
 
 \bigskip
 
-REQUETE 7: Egg Move et HP
+REQUETE 6: Egg Move et HP
 
 \bigskip
 
@@ -573,7 +573,7 @@ Dans l’ensemble, les données mettent en évidence que l'avantage d'un Egg Mov
 
 \bigskip
 
-Requête 9 : Relation entre la facilité de capture et le nombre d’échanges
+Requête 7 : Relation entre la facilité de capture et le nombre d’échanges
 
 \bigskip
 
@@ -599,7 +599,7 @@ Dans l’ensemble, les données suggèrent que les joueurs échangent principale
 
 \bigskip
 
-REQUETE 3: Genre du dresseur et type de Pokémon
+REQUETE 8: Genre du dresseur et type de Pokémon
 
 \bigskip
 
@@ -628,7 +628,7 @@ Dans l’ensemble, les données mettent en évidence une forte diversité des ty
 
 \bigskip
 
-Requête 8 : Anonymat vs qualité
+Requête 9 : Anonymat vs qualité
 
 \bigskip
 
