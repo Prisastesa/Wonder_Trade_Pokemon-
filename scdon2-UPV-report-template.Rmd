@@ -696,7 +696,7 @@ Hypothèses statistisques
 
 Données et calculs
 # Import des données
-```{r}
+```{r, echo=FALSE}
 trades <- read.csv("Trades.csv", sep = ";")
 
 # Table de contingence
@@ -706,11 +706,11 @@ shiny_liked <- table(trades$isShiny, trades$liked)
 shiny_liked
 ```
 Effectifs théoriques
-```{r}
+```{r, echo=FALSE}
 chisq.test(shiny_liked)$expected
 ```
 Test du Khi²
-```{r}
+```{r, echo=FALSE}
 test.khi2 <- chisq.test(shiny_liked)
 
 test.khi2$statistic
@@ -719,7 +719,7 @@ test.khi2$p.value
 Mesure de l’intensité de la relation (V de Cramer)
 
 Pour compléter le test, nous calculons le coefficient de Cramer qui mesure la force de l'association :
-```{r}
+```{r, echo=FALSE}
 khi2 <- test.khi2$statistic
 N <- sum(shiny_liked)
 p <- nrow(shiny_liked)
@@ -772,7 +772,7 @@ Les Pokémon faciles à capturer sont plus fréquemment échangés, ce qui sugg�
 Nous cherchons à déterminer si la puissance des Pokémon (base_total) varie selon les groupes de dresseurs.
 
  Préparation des données
-```{r}
+```{r, echo=FALSE}
 library(dplyr)
 
 trainers <- read.csv("Trainers.csv", sep = ";")
@@ -784,7 +784,7 @@ df_anova <- trades %>%
 df_anova$trainerCountry <- as.factor(df_anova$trainerCountry)
 ```
 Visualisation
-```{r}
+```{r, echo=FALSE}
 
 top_countries <- df_anova %>%
   count(trainerCountry) %>%
@@ -817,7 +817,7 @@ la dispersion reflète la variabilité
  Test ANOVA
 # Probabilités prédites
 
-```{r}
+```{r, echo=FALSE}
 res_anova <- aov(base_total ~ trainerCountry, data = df_anova)
 summary(res_anova)
 ```
