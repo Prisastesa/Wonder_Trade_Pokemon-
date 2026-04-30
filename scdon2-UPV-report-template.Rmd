@@ -723,6 +723,9 @@ Hypothèses statistiques
 trades <- read.csv("Trades.csv", sep = ";")
 
 # Table de contingence
+trades$liked[trades$liked == "" | is.na(trades$liked)] <- "no_opinion"
+
+# Table de contingence
 shiny_liked <- table(trades$isShiny, trades$liked)
 
 
