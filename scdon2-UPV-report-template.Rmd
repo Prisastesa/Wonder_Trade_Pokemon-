@@ -1210,11 +1210,11 @@ Comme souligné dans les rapports de référence, toute analyse de données comp
 # Bibliographie {-}
   Jean-Michel, R. (2023). Manuel de Statistiques avec R.
 
-    Bringay, S., & Ben-Sassi, I. Supports de cours : Bases de Données et Sciences des Données 2, Université Paul Valéry Montpellier 3.
+  Bringay, S., & Ben-Sassi, I. Supports de cours : Bases de Données et Sciences des Données 2, Université Paul Valéry Montpellier 3.
 
-    DellaData. L'ANOVA à un facteur : théorie et pratique. Consulté sur https://delladata.fr.
+  DellaData. L'ANOVA à un facteur : théorie et pratique. Consulté sur https://delladata.fr.
 
-    The Pokémon Company. Données issues du système Global Trade Station (GTS).
+  The Pokémon Company. Données issues du système Global Trade Station (GTS).
 
 # Annexes {-}
 
