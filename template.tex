@@ -37,8 +37,8 @@ $endif$
 
 \renewcommand{\chaptername}{Chapitre}
 
-\newcommand{\pandocbounded}[1]{#1}
 
+\newcommand{\pandocbounded}[1]{#1}
 
 \begin{document}
 
@@ -90,6 +90,18 @@ Signature : Sbircea Stephanie \includegraphics[width=2.3cm]{signature_stephanie.
 % Abstract
 
 \prefacesection{Résumé}
+
+Dans les jeux Pokémon, le système Wonder Trade permet aux joueurs d’échanger des Pokémon de manière aléatoire à l’échelle mondiale. Ce mécanisme constitue un environnement intéressant pour analyser les comportements d’échange et la circulation des ressources dans un contexte numérique.
+
+Plus spécifiquement, les caractéristiques des Pokémon  telles que leur puissance, leur rareté ou leur facilité de capture — ainsi que celles des dresseurs peuvent influencer la qualité perçue des échanges. En effet, certains éléments comme les Pokémon shiny ou de haut niveau sont susceptibles d’avoir une valeur plus élevée pour les joueurs.
+
+Cependant, peu d’analyses quantitatives permettent de déterminer si ces échanges reposent réellement sur un mécanisme aléatoire ou s’ils sont influencés par des stratégies d’optimisation de la part des joueurs.
+
+Dans ce projet, nous analysons une base de données issue du Wonder Trade afin d’identifier les facteurs influençant la qualité des échanges, mesurée par la variable liked. Nous mobilisons pour cela plusieurs méthodes statistiques, notamment des tests du Khi², des analyses de corrélation, une ANOVA et une régression logistique.
+
+Nos résultats montrent que les Pokémon échangés sont majoritairement de faible niveau et faciles à capturer, suggérant une tendance des joueurs à se séparer de spécimens peu stratégiques. La corrélation positive entre le taux de capture et le nombre d’échanges (r = 0,23 ; p < 0,05) confirme que les Pokémon les plus communs circulent davantage. Par ailleurs, l’analyse de variance révèle des différences significatives de puissance selon les groupes de dresseurs (p = 0,0176), indiquant des comportements d’échange non homogènes. Enfin, la régression logistique met en évidence le rôle prépondérant de la rareté, les Pokémon shiny constituant un facteur déterminant de satisfaction.
+
+Ces résultats montrent que les échanges Wonder Trade ne sont pas purement aléatoires, mais structurés par des logiques d’optimisation et de gestion des ressources. Les joueurs tendent à conserver les Pokémon rares ou performants, tandis que les Pokémon communs ou moins utiles alimentent majoritairement le système d’échange. Cette dynamique met en évidence des comportements proches de mécanismes économiques, où la valeur perçue guide les décisions d’échange.
 
 $Abstract$
 
