@@ -1164,8 +1164,10 @@ Ainsi, les échanges ne sont pas aléatoires, mais structurés par des logiques 
 ## Difficultés rencontrées
 
 La réalisation de ce projet nous a confrontés à plusieurs défis techniques et méthodologiques :Déséquilibre des classes (Data Imbalance) : Pour le test du Khi$^2$, nous avons remarqué que le nombre de Pokémon Shiny est extrêmement faible(1 seul) par rapport aux Pokémon classiques. Cela génère des avertissements dans R ("Chi-squared approximation may be incorrect") et réduit la puissance statistique de nos conclusions sur la rareté.
-  Données manquantes (NA) : La variable trainerGender comportait un nombre important de valeurs non renseignées. Nous avons dû filtrer ces données pour l'analyse Genre x Type, ce qui réduit la taille de l'échantillon.
-   Biais de convergence : Lors de la régression logistique, la variable isShiny étant un prédicteur trop puissant (presque 100% de "like"), l'algorithme a rencontré des difficultés de convergence. Cela montre que la rareté écrase les autres facteurs de satisfaction, rendant le modèle mathématique instable.
+  
+Biais de convergence : Lors de la régression logistique, la variable isShiny étant un prédicteur trop puissant (presque 100% de "like"), l'algorithme a rencontré des difficultés de convergence. Cela montre que la rareté écrase les autres facteurs de satisfaction, rendant le modèle mathématique instable.
+
+Le site qu'on voulait à l'origine pour récupérer nos données été fermé donc on a du chercher des données sur github où il y avait des données manquante(NA).La variable trainerGender comportait un nombre important de valeurs non renseignées. Nous avons dû filtrer ces données pour l'analyse Genre x Type, ce qui réduit la taille de l'échantillon.
 
 ##Perspectives
 
