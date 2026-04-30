@@ -1217,24 +1217,6 @@ Comme souligné dans les rapports de référence, toute analyse de données comp
 ## **Codes** {-}
 
 
-## **Tables** {-}
-
-
-\bigskip
-\bigskip
-
-<http://biostatisticien.eu/springeR/livreR.pdf>
-
-# Analyse Exploratoire des Données
-
-
-## Utiliser R {.fragile}
-
-
-#  Inférence statistique et modélisation
-
-
-## La droite de régression linéaire : un premier exemple
 
 
 
@@ -1243,8 +1225,3 @@ Comme souligné dans les rapports de référence, toute analyse de données comp
 
 
 
-
-## **Codes** {-}
-
-
-## **Tables** {-}
