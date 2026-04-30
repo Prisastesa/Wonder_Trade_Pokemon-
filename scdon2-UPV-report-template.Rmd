@@ -681,7 +681,7 @@ Dans l’ensemble, ces résultats suggèrent que les échanges Wonder Trade sont
 \bigskip
 
 ## Quelques détails techniques
-# Modélisation statistique
+# analyse  statistique
 L’objectif de cette analyse est de déterminer si les caractéristiques des Pokémon et des dresseurs influencent la qualité des échanges dans le système de Wonder Trade.
 
 La qualité d’un échange est mesurée à l’aide de la variable liked, qui traduit le ressenti du joueur (échange apprécié ou non).
