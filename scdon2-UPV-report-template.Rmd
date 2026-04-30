@@ -56,7 +56,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 # Introduction 
-
+##Problématique
 
 Dans ce projet, nous nous intéressons au système d’échange Wonder Trade du jeu Pokémon, dans lequel les joueurs échangent des Pokémon de manière aléatoire avec d’autres utilisateurs à travers le monde.
 
@@ -85,10 +85,7 @@ Cette problématique s’inscrit à la fois dans le cadre de l’analyse de donn
 \medskip
 
 
-\noindent
-\begin{minipage}{\textwidth}
-\hypertarget{uxf4les}{%
-\section*{Rôles}}\label{uxf4les} % Utilisation d'une vraie section non numérotée
+## Rôles et composition de l'équipe
 
 \textbf{Fenina Sara (22411291)}\\
 Recherche des bases de données, analyse descriptive, modélisation des tables, interprétation des résultats, structuration globale.
@@ -680,7 +677,7 @@ Dans l’ensemble, ces résultats suggèrent que les échanges Wonder Trade sont
 \bigskip
 \bigskip
 
-## Quelques détails techniques
+
 # analyse  statistique
 L’objectif de cette analyse est de déterminer si les caractéristiques des Pokémon et des dresseurs influencent la qualité des échanges dans le système de Wonder Trade.
 
