@@ -1459,21 +1459,25 @@ Ainsi, les échanges ne sont pas aléatoires, mais structurés par des logiques 
 # Limites et percpectives
 ## Difficultés rencontrées
 
-La réalisation de ce projet nous a confrontés à plusieurs défis techniques et méthodologiques :Déséquilibre des classes (Data Imbalance) : Pour le test du Khi$^2$, nous avons remarqué que le nombre de Pokémon Shiny est extrêmement faible(1 seul) par rapport aux Pokémon classiques. Cela génère des avertissements dans R ("Chi-squared approximation may be incorrect") et réduit la puissance statistique de nos conclusions sur la rareté.
-  
-Biais de convergence : Lors de la régression logistique, la variable isShiny étant un prédicteur trop puissant (presque 100% de "like"), l'algorithme a rencontré des difficultés de convergence. Cela montre que la rareté écrase les autres facteurs de satisfaction, rendant le modèle mathématique instable.
+La réalisation de ce projet a mis en évidence plusieurs limites, à la fois techniques, méthodologiques et liées aux données.
 
-Le site qu'on voulait à l'origine pour récupérer nos données été fermé donc on a du chercher des données sur github où il y avait des données manquante(NA).La variable trainerGender comportait un nombre important de valeurs non renseignées. Nous avons dû filtrer ces données pour l'analyse Genre x Type, ce qui réduit la taille de l'échantillon.
+Tout d’abord, un problème important concerne le déséquilibre des données. En particulier, les Pokémon shiny sont extrêmement rares dans notre base (un seul individu), ce qui limite fortement la portée des analyses statistiques. Cette rareté entraîne des avertissements lors du test du Khi2 et réduit la fiabilité des résultats concernant l’impact de la rareté sur la satisfaction.
+
+Le site qu'on voulait à l'origine pour récupérer nos données été fermé donc on a du chercher des données sur github où il y avait des données manquante(NA). La présence de ces données manquantes constitue une autre limite. Certaines variables, comme le genre des dresseurs ou l’avis sur l’échange (liked), comportent des valeurs absentes. Même si nous avons choisi d’introduire une catégorie "sans avis" afin de conserver ces observations, cela peut introduire un biais d’interprétation, car l’absence de réponse ne reflète pas nécessairement une opinion neutre.
+
+Par ailleurs, certaines hypothèses simplificatrices ont été nécessaires lors du traitement des données. Par exemple, nous avons supposé que des dresseurs ayant les mêmes caractéristiques (genre, pays, région) correspondaient à une seule et même personne. Cette approximation peut entraîner une perte de précision dans l’analyse des comportements individuels.
+
+De plus, la variable de satisfaction (liked) reste une mesure subjective et imparfaite de la qualité des échanges. Elle ne prend pas en compte toutes les dimensions possibles, comme la stratégie du joueur, la valeur émotionnelle ou encore l’utilité future du Pokémon reçu.
+
+Enfin, les données utilisées datent de **2015**, ce qui constitue une limite temporelle importante. Les comportements des joueurs peuvent avoir évolué avec les nouvelles versions du jeu et les changements dans les mécaniques d’échange.
+
 
 ## Perspectives
 
-Si nous devions prolonger cette étude, plusieurs pistes pourraient être explorées :
-Étudier si le flux d'échanges varie selon les heures de la journée ou les jours de la semaine (ex: plus de Pokémon rares le week-end ?).
-Intégrer les "IV" (Individual Values) ou les natures des Pokémon pour voir si les joueurs compétitifs influencent significativement la qualité du Wonder Trade.
-Utiliser un algorithme de classification (Random Forest) pour prédire si un échange sera "liké" ou non, en fonction de l'origine géographique et des statistiques du Pokémon.
-
-
-
+Plusieurs pistes pourraient être envisagées afin d’améliorer et d’approfondir cette étude.
+Tout d’abord, il serait pertinent de disposer d’un jeu de données plus récent et plus volumineux, incluant davantage de Pokémon rares (notamment shiny), afin d’obtenir des résultats statistiques plus robustes et représentatifs.Ensuite, une amélioration importante consisterait à construire un indice de qualité des échanges plus complet, en combinant plusieurs variables (niveau, statistiques, rareté, capacités spéciales). Cela permettrait de dépasser la simple variable liked et d’obtenir une mesure plus objective.Il serait également intéressant d’intégrer des variables supplémentaires, telles que :la nature du Pokémon, ou les objets tenus,afin d’affiner l’analyse du comportement des joueurs, notamment dans une perspective compétitive.Par ailleurs, des méthodes plus avancées pourraient être mobilisées, comme des modèles de machine learning (par exemple Random Forest ou régression logistique améliorée) pour prédire la probabilité qu’un échange soit apprécié.Enfin, une extension possible serait d’analyser la dimension **temporelle et géographique** des échanges, afin d’identifier d’éventuelles tendances selon les périodes ou les régions du monde.
+\bigskip
+En conclusion, malgré certaines limites liées aux données et aux hypothèses retenues, ce projet constitue une première approche pertinente de l’analyse des comportements dans le système Wonder Trade. Les perspectives évoquées ouvrent la voie à des analyses plus fines et plus complètes.
 
 
 
