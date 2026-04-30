@@ -873,102 +873,164 @@ Ainsi, même si la disponibilité influence les échanges, elle ne suffit pas à
 \bigskip
 
 ## Test ANOVA
-### ANONYMAT × QUALITÉ**
+### ANONYMAT × NIVEAU(Qualité)**
 
 \bigskip
 
-Dans cette analyse, nous cherchons à étudier l’effet de l’anonymat du dresseur sur la qualité des Pokémon échangés dans le système Wonder Trade.
+Dans un premier temps, nous avons cherché à analyser le comportement des joueurs en fonction de leur statut (anonyme ou identifié) à l’aide d’une requête SQL.
 
-La base de données ne contenant pas directement une variable indiquant l’anonymat, nous avons construit une variable anonymat à partir de l’identifiant du dresseur :
--les dresseurs avec un trainerId ≤ 80 sont considérés comme anonymes
--les dresseurs avec un trainerId > 80 sont considérés comme identifiés
+Cette requête permet de regrouper les Pokémon échangés par classes de niveau (tranches de 5 niveaux) et de comparer leur distribution selon le statut du dresseur.
 
-La qualité du Pokémon est mesurée ici à l’aide de la variable base_total, qui représente la puissance globale du Pokémon (somme des statistiques).
-L’objectif est de déterminer si ces deux groupes de joueurs adoptent des comportements différents en termes de qualité des Pokémon échangés.
-Autrement dit, nous cherchons à savoir si le statut (anonyme vs identifié) influence la valeur des Pokémon envoyés dans les échanges.
+L’objectif est d’obtenir une première vision descriptive des échanges afin d’identifier d’éventuelles différences de comportement entre les deux groupes.
+
+```{sql connection = con}
+SELECT 
+    CASE 
+        WHEN trainerId <= 80 THEN 'Anonyme'
+        ELSE 'Identifié'
+    END AS Statut,
+    CONCAT(
+        FLOOR((CAST(level AS UNSIGNED)-1)/5)*5 + 1,
+        '-',
+        FLOOR((CAST(level AS UNSIGNED)-1)/5)*5 + 5
+    ) AS Classe_Niveau,
+    COUNT(*) AS Effectif
+FROM trades
+GROUP BY Statut, Classe_Niveau
+ORDER BY Statut, Classe_Niveau;
+```
+
+\bigskip
+
+Cette analyse descriptive permet d’observer la répartition des niveaux échangés et de vérifier visuellement si certains groupes semblent privilégier des niveaux spécifiques.
+
+Cependant, cette approche reste descriptive et ne permet pas de conclure statistiquement à l’existence d’une différence entre les groupes.
+
+Nous complétons donc cette analyse par un test statistique (ANOVA) afin de comparer rigoureusement les niveaux moyens entre dresseurs anonymes et identifiés.
+Dans cette analyse, nous cherchons à étudier l’effet de l’anonymat du dresseur sur le niveau des Pokémon échangés dans le système Wonder Trade.
+
+L’anonymat n’étant pas directement présent dans la base, nous le reconstruisons à partir du trainerId :
+
+trainerId ≤ 80 : dresseur anonyme
+trainerId > 80 : dresseur identifié
+
+Le niveau (level) est utilisé ici comme indicateur de qualité : un niveau élevé peut refléter un Pokémon plus entraîné ou plus intéressant à échanger.
+
+L’objectif est donc de déterminer si les joueurs anonymes échangent des Pokémon de niveau différent par rapport aux joueurs identifiés.
 
 
 Hypothèses
 
 Nous utilisons ici une analyse de variance (ANOVA), adaptée à la comparaison de moyennes entre plusieurs groupes.
 
-**Hypothèse nulle(H0)** : la puissance moyenne des Pokémon est identique entre les groupes,
+**Hypothèse nulle(H0)** : le niveau moyen est identique entre les groupe,
 c'est-à-dire que l’anonymat n’a aucun effet sur la qualité des échanges
 
-**Hypothèse alternative(H1)**: au moins un groupe présente une moyenne différente,
+**Hypothèse alternative(H1)**: au moins une moyenne diffère,
 c'est-dire-que l’anonymat influence la qualité des Pokémon échangés
 
 
 ```{r, echo=FALSE}
 library(dplyr)
+library(ggplot2)
 
 # Import des données
 trades <- read.csv("Trades.csv", sep = ";")
-pokemon <- read.csv("pokemon.csv", sep = ",")
 
-# Fusion
-df_anova2 <- merge(trades, pokemon,
-                   by.x = "pokemonId",
-                   by.y = "pokedex_number")
+# Nettoyage du niveau
+trades$level <- as.numeric(as.character(trades$level))
 
-# Création de la variable anonymat (comme en SQL)
-df_anova2$anonymat <- ifelse(df_anova2$trainerId <= 80,
-                             "Anonyme", "Identifie")
+# Création de la variable anonymat
+trades$anonymat <- ifelse(trades$trainerId <= 80,
+                          "Anonyme", "Identifie")
 
-df_anova2$anonymat <- as.factor(df_anova2$anonymat)
+trades$anonymat <- as.factor(trades$anonymat)
 
-# Nettoyage
-df_anova2$base_total <- as.numeric(df_anova2$base_total)
+# Suppression des NA
+df_anova_lvl <- trades %>%
+  filter(!is.na(level))
 
-# ANOVA
-res_anova2 <- aov(base_total ~ anonymat, data = df_anova2)
+# Test ANOVA
+res_anova_lvl <- aov(level ~ anonymat, data = df_anova_lvl)
 
-summary(res_anova2)
+summary(res_anova_lvl)
 ```
 
 **Interprétation du test**
 
-La p-value (0.962) est largement supérieure à 0.05. Donc on ne rejette pas l'hypothèse nulle.
-Cela signifique qu'il n'y a aucune différence significative de puissance(base_total) entre les Pokémon échangés par des dresseurs anonymes et identifiés.
+La p-value obtenue est de 0.571, ce qui est largement supérieur au seuil de 0.05.
 
-Autrement dit : 
-L'anonymat n'influence pas la qualité des Pokémon échangés
-Les deux groupes ont un comportement statistiquement identique
+On ne rejette donc pas l’hypothèse nulle.
 
+Cela signifie qu’il n’existe aucune différence statistiquement significative entre le niveau moyen des Pokémon échangés par des dresseurs anonymes et ceux échangés par des dresseurs identifié
 
 ```{r, echo=FALSE}
-library(ggplot2)
+# Création des classes de niveau (tranches de 5)
+df_anova_lvl$classe_niveau <- paste0(
+  floor((df_anova_lvl$level - 1)/5)*5 + 1,
+  "-",
+  floor((df_anova_lvl$level - 1)/5)*5 + 5
+)
 
-ggplot(df_anova2, aes(x = anonymat, y = base_total, fill = anonymat)) +
+# Graphique par classe
+ggplot(df_anova_lvl, aes(x = classe_niveau, fill = anonymat)) +
+  geom_bar(position = "dodge") +
+  theme_minimal() +
+  labs(title = "Distribution des niveaux selon l’anonymat",
+       x = "Classe de niveau",
+       y = "Nombre d'échanges") +
+  scale_fill_manual(values = c(
+    "Anonyme" = "orange",
+    "Identifie" = "lightblue"
+  )) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Boxplot
+ggplot(df_anova_lvl, aes(x = anonymat, y = level, fill = anonymat)) +
   geom_boxplot() +
   theme_minimal() +
-  labs(title = "Puissance des Pokémon selon l’anonymat",
+  labs(title = "Niveau des Pokémon selon l’anonymat",
        x = "Statut du dresseur",
-       y = "Puissance (base total)") +
-  scale_fill_manual(values = c("Anonyme" = "orange",
-                               "Identifie" = "lightblue"))
+       y = "Niveau") +
+  scale_fill_manual(values = c(
+    "Anonyme" = "orange",
+    "Identifie" = "lightblue"
+  ))
 ```
 
 
 **Interprétation graphique**
 
-Le graphique permet de comparer la distribution des puissances selon l’anonymat :
+Le premier graphique (histogramme par classes de niveau) permet d’observer la répartition des échanges selon des tranches de niveaux pour les dresseurs anonymes et identifiés.
 
-chaque boîte représente un groupe (anonyme vs identifié)
-la ligne centrale correspond à la médiane
-la dispersion montre la variabilité
+On constate que :
 
-Le graphique confirme l'interprétation du test : 
+La majorité des échanges se concentre dans les faibles niveaux (1–5) pour les deux groupes
+Les distributions sont très similaires entre anonymes et identifiés
+Il n’y a pas de classe de niveau dominante propre à un groupe
+Quelques variations existent (ex : légèrement plus d’identifiés dans certaines classes), mais elles restent faibles et irrégulières
 
-Les distributions des puissances sont très similaires entre les deux groupes.
-Les médianes sont quasiment identiques et les dispersions comparables.
+Cela suggère que les deux types de joueurs échangent globalement les mêmes niveaux
 
-Aucune différence visuelle marquée n’apparaît, ce qui renforce les résultats du test statistique.
+\bigskip
+
+Le second graphique (boxplot) permet d’analyser la distribution globale des niveaux :
+
+Les médianes sont très proches entre anonymes et identifiés
+Les boîtes (dispersion) sont quasiment identiques
+On observe une forte concentration sur les petits niveaux dans les deux cas
+Quelques valeurs extrêmes existent (outliers), mais elles sont présentes dans les deux groupes
+Visuellement, il n’y a aucune différence marquée entre les distributions
+
+\bigskip
+
+Les deux graphiques convergent vers la même conclusion :
+Les dresseurs anonymes et identifiés échangent des Pokémon de niveaux très similaires
+Il n’y a ni différence structurelle, ni tendance claire distinguant les deux groupes
 
 **Conclusion du test**
 
-Contrairement à ce que l’on pourrait attendre, l’anonymat ne semble pas influencer le comportement des joueurs en termes de qualité des échanges.
-Cela suggère que les décisions d’échange reposent davantage sur les caractéristiques des Pokémon que sur le statut du dresseur.
+Les visualisations confirment les résultats du test ANOVA : les distributions de niveaux sont très similaires entre dresseurs anonymes et identifiés. L’anonymat ne semble donc pas influencer le niveau des Pokémon échangés dans le système Wonder Trade.
 
 \bigskip
 \bigskip
