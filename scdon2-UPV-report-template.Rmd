@@ -1465,7 +1465,7 @@ Biais de convergence : Lors de la régression logistique, la variable isShiny é
 
 Le site qu'on voulait à l'origine pour récupérer nos données été fermé donc on a du chercher des données sur github où il y avait des données manquante(NA).La variable trainerGender comportait un nombre important de valeurs non renseignées. Nous avons dû filtrer ces données pour l'analyse Genre x Type, ce qui réduit la taille de l'échantillon.
 
-##Perspectives
+## Perspectives
 
 Si nous devions prolonger cette étude, plusieurs pistes pourraient être explorées :
 Étudier si le flux d'échanges varie selon les heures de la journée ou les jours de la semaine (ex: plus de Pokémon rares le week-end ?).
