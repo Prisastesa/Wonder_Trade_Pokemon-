@@ -1204,7 +1204,6 @@ Comme souligné dans les rapports de référence, toute analyse de données comp
 
     Variables manquantes : L'absence de données sur les "objets tenus" lors de l'échange limite notre interprétation, car un objet rare peut transformer un échange "commun" en échange "apprécié".
 
-#  Conclusion et perspectives {.label:ccl}
 
 
 # Bibliographie {-}
