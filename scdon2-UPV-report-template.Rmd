@@ -678,6 +678,302 @@ Dans l’ensemble, ces résultats suggèrent que les échanges Wonder Trade sont
 \bigskip
 
 
+\bigskip
+
+# Analyse statistique
+## Test Khi2
+### GENRE x TYPE
+
+Dans cette analyse, nous cherchons à étudier la relation entre le genre du dresseur et le type de Pokémon échangé dans le système de Wonder Trade.
+
+Le type de Pokémon (feu, eau, plante, etc.) constitue une caractéristique importante du jeu, souvent associée à des préférences personnelles ou à des stratégies de combat.
+De son côté, le genre du dresseur peut potentiellement refléter des comportements ou des choix différents dans la manière de jouer.
+
+L’objectif est donc de déterminer si les préférences d’échange varient selon le genre, ou si les joueurs adoptent un comportement homogène indépendamment de cette caractéristique.
+
+Autrement dit, nous cherchons à savoir si le genre influence le choix des types de Pokémon échangés, ou si ces choix restent globalement similaires entre les différents profils de joueurs.
+
+Hypothèses : 
+Nous utilisons ici un test du Khi² d’indépendance, qui permet d’évaluer l’existence d’une relation entre deux variables qualitatives.
+**Hypothèse nulle(H0)** : le genre du dresseur et le type de Pokémon sont indépendants
+c’est-à-dire que le type de Pokémon échangé ne dépend pas du genre du joueur
+**Hypothèse alternative(H1)** : il existe une dépendance entre les deux variables
+c’est-à-dire que le genre influence les préférences de types de Pokémon échangés
+
+```{r, echo = FALSE}
+# Import des données
+trades <- read.csv("Trades.csv", sep = ";")
+pokemon <- read.csv("pokemon.csv", sep = ",")
+trainers <- read.csv("Trainers.csv", sep = ";")
+
+# Fusion des tables
+# Ajout des informations Pokémon aux échanges
+df_khi <- merge(trades, pokemon, by.x = "pokemonId", by.y = "pokedex_number")
+# Ajout des informations des dresseurs
+df_khi <- merge(df_khi, trainers, by = "trainerId")
+
+# Tableau croisé : genre du dresseur × type de Pokémon
+table_genre_type <- table(df_khi$trainerGender, df_khi$type1)
+
+# Test d’indépendance entre les deux variables
+test_khi2 <- chisq.test(table_genre_type)
+
+# Résultats principaux
+test_khi2$statistic   # statistique du test
+test_khi2$p.value     # p-value
+
+# effectifs théoriques pour vérifier la validité
+test_khi2$expected
+```
+
+**Interprétation du test**:
+La p-value obtenue est de 0.9845, ce qui est largement supérieur au seuil de 0,05.
+
+On ne rejette pas l’hypothèse nulle donc on conserve l'hypothèse nulle. 
+
+Cela signifie qu’il n’existe aucune relation statistiquement significative entre le genre du dresseur et le type de Pokémon échangé.
+
+Autrement dit, le choix du type de Pokémon échangé ne dépend pas du genre : les comportements observés sont globalement homogènes entre les joueurs.
+
+Cependant, un avertissement a été généré lors du test (Chi-squared approximation may be incorrect), indiquant que certains effectifs sont faibles.
+Les résultats doivent donc être interprétés avec prudence, même si la conclusion reste très claire compte tenu de la p-value très élevée.
+
+```{r, echo = FALSE}
+ggplot(df_khi, aes(x = type1, fill = trainerGender)) +
+  geom_bar(position = "dodge") +
+  scale_fill_manual(values = c(
+    "male" = "lightblue",
+    "female" = "pink"
+  )) +
+  theme_minimal() +
+  labs(title = "Répartition des types de Pokémon selon le genre du dresseur",
+       x = "Type de Pokémon",
+       y = "Nombre d'échanges",
+       fill = "Genre") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+**Interprétation Graphique**:
+
+Le graphique représente la distribution des types de Pokémon échangés selon le genre des dresseurs.
+
+On observe une répartition très similaire des types entre les différentes catégories de genre.
+Aucun type de Pokémon ne semble particulièrement associé à un genre spécifique.
+
+La présence d’une catégorie supplémentaire (gris foncé) correspondant aux valeurs manquantes montre qu’une partie des données ne contient pas d’information sur le genre.
+Cependant, cette catégorie ne modifie pas la tendance globale observée.
+
+Globalement, la forte dispersion et l’absence de différences marquées entre les barres confirment visuellement les résultats du test du Khi².
+
+Cela suggère que le genre n’est pas un facteur déterminant dans les préférences d’échange, contrairement à d’autres variables comme la rareté ou la puissance des Pokémon.
+
+\bigskip
+
+**Conclusion du test**
+Le test du Khi² met en évidence une absence totale de relation entre le genre du dresseur et le type de Pokémon échangé.
+Les résultats montrent que les préférences de types sont homogènes entre les joueurs, indépendamment de leur genre.
+Ainsi, contrairement à certaines idées reçues, le genre ne constitue pas un facteur explicatif des choix d’échange dans le système de Wonder Trade.
+Les comportements observés apparaissent donc universels et non différenciés selon cette caractéristique.
+
+
+\bigskip
+
+## Test de Corrélation
+### Capture rate x échange**
+
+\bigskip
+
+Dans cette analyse, nous cherchons à étudier la relation entre la facilité de capture d’un Pokémon et sa fréquence d’échange dans le système Wonder Trade.
+
+Le taux de capture (capture_rate) constitue un indicateur de rareté :
+
+un taux élevé correspond à un Pokémon facile à capturer (donc commun),
+un taux faible correspond à un Pokémon rare ou difficile à obtenir.
+
+L’objectif est donc de déterminer si la fréquence des échanges est influencée par cette caractéristique, autrement dit si les joueurs ont tendance à échanger davantage des Pokémon communs plutôt que rares.
+
+Hypothèses :
+Nous utilisons ici un test de corrélation linéaire (Pearson) afin de mesurer l’intensité et le sens de la relation entre deux variables quantitatives.
+
+**Hypothèse nulle(H0)** : il n’existe aucune corrélation entre le taux de capture et le nombre d’échanges
+c'est-à-dire que la fréquence des échanges est indépendante de la rareté du Pokémon
+**Hypothèse alternative(H1)** : il existe une corrélation entre le taux de capture et le nombre d’échanges
+c'est-à-dire que la rareté influence les décisions d’échange des joueurs
+
+
+```{r, echo = FALSE}
+# Import des données
+library(dplyr)
+
+trades <- read.csv("Trades.csv", sep = ";")
+pokemon <- read.csv("pokemon.csv", sep = ",")
+
+# Nettoyage du capture_rate (suppression des caractères non numériques)
+pokemon$capture_rate <- as.numeric(gsub("[^0-9]", "", pokemon$capture_rate))
+
+# Normalisation entre 0 et 1
+pokemon$capture_rate_norm <- pokemon$capture_rate / 255
+
+# Fusion des données
+df_corr <- merge(trades, pokemon, by.x = "pokemonId", by.y = "pokedex_number")
+
+# Calcul du nombre d’échanges par Pokémon
+nb_echanges <- df_corr %>%
+  group_by(pokemonId, capture_rate_norm) %>%
+  summarise(nb = n(), .groups = "drop") %>%
+  filter(!is.na(capture_rate_norm), !is.na(nb))
+
+# Test de corrélation
+test_corr <- cor.test(nb_echanges$capture_rate_norm, nb_echanges$nb)
+
+test_corr$estimate
+test_corr$p.value
+
+```
+
+**Interprétation du test**
+
+La p-value est de 0.01053.
+Comme elle est inférieure au seuil classique de 0,05, on rejette l'hypothèse nulle. Cela signifie qu'il existe une relation statistiquement significative entre le taux de capture et le nombre d'échanges dans tes données. Ce n'est pas dû au pur hasard.
+
+Le coefficient de corrélation (cor) est de 0.233.
+
+C'est une corrélation positive : quand le capture_rate augmente (donc quand le Pokémon est plus facile à capturer), le nombre d'échanges a tendance à augmenter aussi.
+
+Cependant, 0.23 est considéré comme une corrélation faible. La relation existe, mais elle n'est pas très forte. Beaucoup d'autres facteurs influencent probablement le nombre d'échanges.
+
+
+```{r, echo = FALSE}
+# 3. Graphique avec échelle 0-1
+plot(nb_echanges$capture_rate_norm, nb_echanges$nb,
+     main = "Facilité de capture (0 à 1) vs Nombre d'échanges",
+     xlab = "Indice de facilité (1 = très facile)",
+     ylab = "Nombre d'échanges",
+     pch = 16, 
+     col = rgb(0.2, 0.4, 0.6, 0.5)) # Ajout de transparence pour voir la densité
+
+# Ajout de la droite de régression
+abline(lm(nb ~ capture_rate_norm, data = nb_echanges), col = "red", lwd = 2)
+```
+
+
+**Interprétation graphique**
+
+Le graphique présente le nombre d'échanges en fonction de l'indice de facilité de capture (normalisé de 0 à 1).On observe une dispersion importante des points, confirmant la faiblesse du coefficient de corrélation (cor = 0,23). Néanmoins, la droite de régression (en rouge) montre une pente ascendante vers la droite.Plus l'indice tend vers 1 (Pokémon techniquement très faciles à capturer comme les espèces communes), plus la fréquence des échanges augmente. À l'inverse, les Pokémon dont l'indice est proche de 0 (espèces rares ou légendaires) sont moins présents en volume. Cette observation suggère que le flux du Wonder Trade est alimenté par l'abondance des captures faciles plutôt que par la rareté.
+
+\bigskip
+
+**Conclusion du test**
+
+Le test de corrélation met en évidence une relation significative entre la facilité de capture et le nombre d’échanges.
+Les Pokémon faciles à capturer sont légèrement plus échangés, ce qui traduit un effet d’abondance dans le système.
+Cependant, l’intensité de cette relation reste faible, ce qui indique que la rareté n’est qu’un facteur parmi d’autres dans les décisions d’échange.
+Ainsi, même si la disponibilité influence les échanges, elle ne suffit pas à expliquer entièrement le comportement des joueurs.
+
+\bigskip
+
+## Test ANOVA
+### ANONYMAT × QUALITÉ**
+
+\bigskip
+
+Dans cette analyse, nous cherchons à étudier l’effet de l’anonymat du dresseur sur la qualité des Pokémon échangés dans le système Wonder Trade.
+
+La base de données ne contenant pas directement une variable indiquant l’anonymat, nous avons construit une variable anonymat à partir de l’identifiant du dresseur :
+-les dresseurs avec un trainerId ≤ 80 sont considérés comme anonymes
+-les dresseurs avec un trainerId > 80 sont considérés comme identifiés
+
+La qualité du Pokémon est mesurée ici à l’aide de la variable base_total, qui représente la puissance globale du Pokémon (somme des statistiques).
+L’objectif est de déterminer si ces deux groupes de joueurs adoptent des comportements différents en termes de qualité des Pokémon échangés.
+Autrement dit, nous cherchons à savoir si le statut (anonyme vs identifié) influence la valeur des Pokémon envoyés dans les échanges.
+
+
+Hypothèses
+
+Nous utilisons ici une analyse de variance (ANOVA), adaptée à la comparaison de moyennes entre plusieurs groupes.
+
+**Hypothèse nulle(H0)** : la puissance moyenne des Pokémon est identique entre les groupes,
+c'est-à-dire que l’anonymat n’a aucun effet sur la qualité des échanges
+
+**Hypothèse alternative(H1)**: au moins un groupe présente une moyenne différente,
+c'est-dire-que l’anonymat influence la qualité des Pokémon échangés
+
+
+```{r, echo=FALSE}
+library(dplyr)
+
+# Import des données
+trades <- read.csv("Trades.csv", sep = ";")
+pokemon <- read.csv("pokemon.csv", sep = ",")
+
+# Fusion
+df_anova2 <- merge(trades, pokemon,
+                   by.x = "pokemonId",
+                   by.y = "pokedex_number")
+
+# Création de la variable anonymat (comme en SQL)
+df_anova2$anonymat <- ifelse(df_anova2$trainerId <= 80,
+                             "Anonyme", "Identifie")
+
+df_anova2$anonymat <- as.factor(df_anova2$anonymat)
+
+# Nettoyage
+df_anova2$base_total <- as.numeric(df_anova2$base_total)
+
+# ANOVA
+res_anova2 <- aov(base_total ~ anonymat, data = df_anova2)
+
+summary(res_anova2)
+```
+
+**Interprétation du test**
+
+La p-value (0.962) est largement supérieure à 0.05. Donc on ne rejette pas l'hypothèse nulle.
+Cela signifique qu'il n'y a aucune différence significative de puissance(base_total) entre les Pokémon échangés par des dresseurs anonymes et identifiés.
+
+Autrement dit : 
+L'anonymat n'influence pas la qualité des Pokémon échangés
+Les deux groupes ont un comportement statistiquement identique
+
+
+```{r, echo=FALSE}
+library(ggplot2)
+
+ggplot(df_anova2, aes(x = anonymat, y = base_total, fill = anonymat)) +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "Puissance des Pokémon selon l’anonymat",
+       x = "Statut du dresseur",
+       y = "Puissance (base total)") +
+  scale_fill_manual(values = c("Anonyme" = "orange",
+                               "Identifie" = "lightblue"))
+```
+
+
+**Interprétation graphique**
+
+Le graphique permet de comparer la distribution des puissances selon l’anonymat :
+
+chaque boîte représente un groupe (anonyme vs identifié)
+la ligne centrale correspond à la médiane
+la dispersion montre la variabilité
+
+Le graphique confirme l'interprétation du test : 
+
+Les distributions des puissances sont très similaires entre les deux groupes.
+Les médianes sont quasiment identiques et les dispersions comparables.
+
+Aucune différence visuelle marquée n’apparaît, ce qui renforce les résultats du test statistique.
+
+**Conclusion du test**
+
+Contrairement à ce que l’on pourrait attendre, l’anonymat ne semble pas influencer le comportement des joueurs en termes de qualité des échanges.
+Cela suggère que les décisions d’échange reposent davantage sur les caractéristiques des Pokémon que sur le statut du dresseur.
+
+\bigskip
+\bigskip
+
+
 # analyse  statistique
 L’objectif de cette analyse est de déterminer si les caractéristiques des Pokémon et des dresseurs influencent la qualité des échanges dans le système de Wonder Trade.
 
