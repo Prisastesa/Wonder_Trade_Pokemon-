@@ -1160,7 +1160,7 @@ Ainsi, les échanges ne sont pas aléatoires, mais structurés par des logiques 
 
 <http://biostatisticien.eu/springeR/livreR.pdf>
 
-# LIMITES ET PERSPECTIVES
+# Limites et percpectives
 ## Difficultés rencontrées
 
 La réalisation de ce projet nous a confrontés à plusieurs défis techniques et méthodologiques :Déséquilibre des classes (Data Imbalance) : Pour le test du Khi$^2$, nous avons remarqué que le nombre de Pokémon Shiny est extrêmement faible(1 seul) par rapport aux Pokémon classiques. Cela génère des avertissements dans R ("Chi-squared approximation may be incorrect") et réduit la puissance statistique de nos conclusions sur la rareté.
