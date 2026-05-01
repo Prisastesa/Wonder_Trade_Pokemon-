@@ -1366,17 +1366,15 @@ Codes utilisés
 Dans cette section, nous présentons les principales requêtes SQL et scripts R utilisés pour réaliser les analyses du projet. Les codes sont organisés selon les différentes étapes de l’étude.
 
 
-## Création et modification de la base de données
+### Création et modification de la base de données
 Ajout d’une clé primaire
-```{sql connection = con}
 ALTER TABLE trades 
 ADD IdTrade INT AUTO_INCREMENT PRIMARY KEY;
-```
 
-##  Requêtes SQL
+###  Requêtes SQL
 ### Requête 0 : Nombre de Pokémon échangés
 
-```{sql connection = con}
+
 SELECT 
     COUNT(DISTINCT t.pokemonId) AS "nb_pokemon_echanges",
     COUNT(t.pokemonId) AS nb_echanges,
@@ -1385,19 +1383,19 @@ FROM Pokemon p
 LEFT JOIN Trades t 
 ON p.pokedex_number = t.pokemonId;
 
-```
+
 
 ### Requête 1 : Pokémon de niveau 1
 
-```{sql connection = con}
+
 SELECT COUNT(*) AS nb_pokemon_niveau1
 FROM trades
 WHERE level = 1;
 
-```
+
 ### Requête 2 : Comparaison des HP
 
-```{sql connection = con}
+
 SELECT 
 (SELECT AVG(hp) FROM pokemon) AS moyenne_hp_total,
 
@@ -1415,11 +1413,11 @@ SELECT
  WHERE pokedex_number NOT IN 
  (SELECT pokemonId FROM trades)) AS hp_non_echanges;
 
-```
+
 
 ### Requête 3 : Types les moins appréciés
 
-```{sql connection = con}
+
 SELECT Pokemon.type1, Pokemon.type2, COUNT(*) AS nb_dislikes 
 FROM Trades 
 INNER JOIN Pokemon 
@@ -1429,39 +1427,39 @@ GROUP BY Pokemon.type1, Pokemon.type2
 ORDER BY nb_dislikes DESC 
 LIMIT 1;
 
-```
+
 
 ### Requête 4 : Nombre de Pokémon shiny
 
-```{sql connection = con}
+
 SELECT COUNT(*) AS nb_shiny 
 FROM trades 
 WHERE isShiny = 'VRAI';
 
-```
+
 
 ### Requête 5 : Egg Move et HP
 
-```{sql connection = con}
+
 SELECT t.hasEggMove, AVG(p.hp) 
 FROM pokemon p, trades t 
 WHERE p.pokedex_number = t.pokemonId 
 GROUP BY t.hasEggMove;
-```
+
 
 ### Requête 6 : Capture rate et échanges
 
-```{sql connection = con}
+
 SELECT Pokemon.capture_rate, COUNT(*) AS nb_echanges 
 FROM Pokemon 
 JOIN Trades 
 ON Pokemon.pokedex_number = Trades.pokemonId 
 GROUP BY Pokemon.capture_rate 
 ORDER BY nb_echanges DESC;
-```
+
 ### Requête 7 : Genre et qualité des échanges
 
-```{sql connection = con}
+
 SELECT 
     tr.trainerGender,
     AVG(
@@ -1479,10 +1477,10 @@ INNER JOIN pokemon p
 ON t.pokemonId = p.pokedex_number
 GROUP BY tr.trainerGender;
 
-```
+
 ### Requête 8 : Anonymat et qualité
 
-```{sql connection = con}
+
 SELECT 'Anonyme' AS Statut,
 AVG(CAST(level AS UNSIGNED)) AS niveau_moyen,
 AVG(isShiny) * 100 AS pourcentage_shiny,
@@ -1505,10 +1503,10 @@ AVG(hasEggMove) * 100
 FROM trades 
 WHERE trainerId > 80;
 
-```
+
 ##  Scripts R
 ### test de corrélation (capture rate)
-```{r, echo=TRUE}
+
 library(dplyr)
 
 trades <- read.csv("Trades.csv", sep = ";")
@@ -1526,33 +1524,21 @@ nb_echanges <- df_corr %>%
   summarise(nb = n(), .groups = "drop")
 
 cor.test(nb_echanges$capture_rate_norm, nb_echanges$nb)
-```
 
 
-### Test ANOVA (anonymat et niveau)
-```{r, echo=TRUE}
 
-trades$level <- as.numeric(as.character(trades$level))
-
-trades$anonymat <- ifelse(trades$trainerId <= 80,
-                         "Anonyme", "Identifie")
-
-res_anova <- aov(level ~ anonymat, data = trades)
-
-summary(res_anova)
-```
 
 ### Test du Khi² (shiny vs satisfaction)
-```{r, echo=TRUE}
+
 
 trades$liked[trades$liked == "" | is.na(trades$liked)] <- "no_opinion"
 
 table_shiny <- table(trades$isShiny, trades$liked)
 
 chisq.test(table_shiny)
-```
+
 ### Régression logistique
-```{r, echo=TRUE}
+
 trades$liked_bin <- ifelse(trades$liked == "Liked", 1, 0)
 
 df_model <- merge(trades, pokemon,
@@ -1564,13 +1550,13 @@ modele <- glm(liked_bin ~ isShiny + base_total + capture_rate + level,
               family = "binomial")
 
 summary(modele)
-```
+
 
 
 
 
 ###  Graphique corrélation
-```{r, echo=TRUE}
+
 plot(nb_echanges$capture_rate_norm, nb_echanges$nb,
      main = "Capture rate vs échanges",
      xlab = "Capture rate normalisé",
@@ -1579,9 +1565,9 @@ plot(nb_echanges$capture_rate_norm, nb_echanges$nb,
 
 abline(lm(nb ~ capture_rate_norm, data = nb_echanges),
        col = "red", lwd = 2)
-```
+
 ### ANOVA anonymat / niveau
-```{r, echo=TRUE}
+
 trades$level <- as.numeric(as.character(trades$level))
 
 trades$anonymat <- ifelse(trades$trainerId <= 80,
@@ -1589,29 +1575,9 @@ trades$anonymat <- ifelse(trades$trainerId <= 80,
 
 res_anova <- aov(level ~ anonymat, data = trades)
 summary(res_anova)
-```
-### Khi² shiny / satisfaction
-```{r, echo=TRUE}
-trades$liked[trades$liked == "" | is.na(trades$liked)] <- "no_opinion"
 
-table_shiny <- table(trades$isShiny, trades$liked)
 
-chisq.test(table_shiny)
-```
-### Régression logistique
-```{r, echo=TRUE}
-trades$liked_bin <- ifelse(trades$liked == "Liked", 1, 0)
 
-df_model <- merge(trades, pokemon,
-                  by.x = "pokemonId",
-                  by.y = "pokedex_number")
-
-modele <- glm(liked_bin ~ isShiny + base_total + capture_rate + level,
-              data = df_model,
-              family = "binomial")
-
-summary(modele)
-```
 ## Traitements Excel / LibreOffice
 ### Création des Trainer ID
 
