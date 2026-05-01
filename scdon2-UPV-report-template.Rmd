@@ -1367,13 +1367,15 @@ Dans cette section, nous présentons les principales requêtes SQL et scripts R 
 
 
 ### Création et modification de la base de données
+Cette étape permet d’identifier de manière unique chaque enregistrement de la table des échanges.
+
 Ajout d’une clé primaire
 ALTER TABLE trades 
 ADD IdTrade INT AUTO_INCREMENT PRIMARY KEY;
 
 ###  Requêtes SQL
 ### Requête 0 : Nombre de Pokémon échangés
-
+Cette requête permet d’évaluer le nombre de Pokémon échangés ainsi que la couverture du Pokédex.
 
 SELECT 
     COUNT(DISTINCT t.pokemonId) AS "nb_pokemon_echanges",
