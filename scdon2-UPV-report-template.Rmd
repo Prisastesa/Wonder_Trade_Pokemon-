@@ -1359,7 +1359,7 @@ Comme souligné dans les rapports de référence, toute analyse de données comp
 
 
 # **Codes** {-}
-Dans cette section, nous présentons les principales requêtes SQL et scripts R utilisés pour réaliser les analyses du projet. Les codes sont organisés selon les différentes étapes de l’étude.
+Dans cette section, nous présentons les  codes utilisés pour réaliser les analyses du projet. 
 
 ## Ajout d’une clé primaire
 
@@ -1368,7 +1368,8 @@ ADD IdTrade INT AUTO_INCREMENT PRIMARY KEY;
 
 Cette requête permet d’ajouter un identifiant unique à chaque ligne de la table trades, facilitant les jointures et l’intégrité des données.
 
-## Requêtes SQL
+## Requêtes SQL: chapitre 3
+
 ### Nombre de Pokémon échangés
 
 SELECT
@@ -1496,7 +1497,7 @@ WHERE trainerId > 80;
 
 Cette requête compare les comportements d’échange entre utilisateurs anonymes et identifiés.
 
-## Scripts R
+## Scripts R chapitre 4
 ### Test de corrélation (capture rate)
 
 library(dplyr)
