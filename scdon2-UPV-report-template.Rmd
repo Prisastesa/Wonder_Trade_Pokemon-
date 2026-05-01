@@ -56,7 +56,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 # Introduction 
-##Problématique
+## Problématique
 
 Dans ce projet, nous nous intéressons au système d’échange Wonder Trade du jeu Pokémon, dans lequel les joueurs échangent des Pokémon de manière aléatoire avec d’autres utilisateurs à travers le monde.
 
@@ -418,28 +418,28 @@ con <- DBI::dbConnect(
 )
 ```
 \bigskip
-## Caractéristiques des Pokémon
 
-
-REQUETE 0: Pokémon échangés vs non échangés
+REQUETE 0: Pokémon échangés
 
 \bigskip
 
-Pour commencer, nous avons interrogé le logiciel pour connaître le nombre de pokémon
-échangé vs le nombre de pokémon jamais échangé. Ces deux premières requêtes vont être à l’origine des autres requêtes qui vous surtout se concentrer sur les pokémons échangés. 
+Pour commencer, nous avons interrogé le logiciel pour connaître le nombre de pokémon échangé parmi les échanges, et par rapport au nombre total de Pokémon. Cette première requête nous donne une vision d'ensemble et va être à l’origine des autres requêtes qui vous surtout se concentrer sur les pokémons échangés. 
 
 
 
 ```{sql connection = con}
 SELECT 
-    COUNT(DISTINCT t.pokemonId) AS nb_pokemon_echanges,
-    (SELECT COUNT(*) FROM Pokemon) - COUNT(DISTINCT t.pokemonId)
-    AS nb_pokemon_non_echanges
+    COUNT(DISTINCT t.pokemonId) AS "nb_pokémon_échangés",
+    COUNT(t.pokemonId) AS nb_échanges,
+   (SELECT COUNT(*) FROM Pokemon) AS "nb_total_pokémon"
 FROM Pokemon p
 LEFT JOIN Trades t ON p.pokedex_number = t.pokemonId;
 ```
 
-On observe que tous les Pokémon ne sont pas échangés, ce qui montre que certains sont conservés par les joueurs. Cela suggère que les décisions d’échange ne sont pas aléatoires mais dépendent de certaines caractéristiques.
+Nous voyons que 119 pokémons différents sont échangés dans les 200 échanges, donc certains sont échangés plusieurs fois, ce qui peut nous laisser penser que ces échanges ne sont pas une question de hasard. La suite nous aidera à approffondir cette idée.
+
+## Caractéristiques des Pokémon
+
 
 \bigskip 
 
@@ -450,12 +450,12 @@ REQUETE 1:  Pokémon de niveau 1(breeding)
 Nous cherchons à savoir combien de Pokémon échangés sont de niveau 1, ce qui correspond souvent à des Pokémon issus d’élevage.
 
 ```{sql connection = con}
-SELECT COUNT(*) AS nb_pokemon_niveau1
+SELECT COUNT(*) AS "nb_pokemon_niveau1"
 FROM trades
 WHERE level = 1;
 ```
 
-Un grand nombre de Pokémon sont de niveau 1. Cela montre que les joueurs pratiquent le breeding et échangent les Pokémon non optimaux.
+Plus d'1/3 des Pokémon sont de niveau 1, donc le niveau le plus faible. Cela montre bien que les joueurs préfèrent échanger des Pokémon moins essentiels en terme de niveau.
 
 \bigskip
 
@@ -470,21 +470,27 @@ L’objectif est de déterminer si les dresseurs ont tendance à échanger des P
 ```{sql connection = con}
 
 SELECT 
-(SELECT AVG(hp) FROM pokemon) AS hptoutpokemon,
+(SELECT AVG(hp) FROM pokemon) AS "moyenne.tous.hp",
 
 (SELECT AVG(p.hp) FROM pokemon p, trades t 
-WHERE p.pokedex_number = t.pokemonId) AS hpechanges,
+WHERE p.pokedex_number = t.pokemonId) AS "hp.échangés",
 
 (SELECT AVG(p.hp) FROM pokemon p 
 WHERE p.pokedex_number IN (SELECT pokemonId FROM trades))
-AS hpechangesdistincts,
+AS "hp.échangés.distincts",
 
 (SELECT AVG(hp) FROM pokemon
 WHERE pokedex_number NOT IN (SELECT pokemonId FROM trades)) 
-AS hppasechanges;
+AS "hp.non.échangeé";
 ```
 
-On constate que les Pokémon conservés par les dresseurs affichent une moyenne de 71,40 HP, une valeur supérieure à la moyenne générale du Pokédex (68,96 HP).À l'inverse, les Pokémon échangés présentent des caractéristiques de santé nettement plus faibles, avec une moyenne de 54,99 HP pour les espèces distinctes. Ce chiffre tombe même à 49,59 HP lorsque l'on analyse l'ensemble des flux, indiquant que les spécimens les plus fragiles sont échangés de manière répétitive. Dans l'ensemble, ces résultats mettent en évidence une tendance des dresseurs à se séparer des Pokémon les moins robustes au profit de spécimens plus endurants qu'ils préfèrent garder. À ce stade, la disparité entre les Pokémon échangés et non échangés semble visuellement significative. Cette observation suggère que le niveau de HP est un facteur d'influence majeur dans la décision d'échange, une hypothèse qui sera approfondie par une analyse statistique plus détaillée dans la suite de ce rapport.
+Nous constatons que les Pokémon conservés par les dresseurs affichent une moyenne de 71,40 HP, une valeur supérieure à la moyenne générale du Pokédex (68,96 HP).
+
+À l'inverse, les Pokémon échangés présentent une moyenne de points de vie nettement plus faible, avec une moyenne de 54,99 HP pour les espèces distinctes, qui tombe même à 49,59 HP lorsque l'on analyse l'ensemble des flux, indiquant que les spécimens les plus fragiles sont échangés de manière répétitive. 
+
+Dans l'ensemble, ces résultats mettent en évidence une tendance des dresseurs à se séparer des Pokémon les moins robustes au profit de spécimens plus endurants qu'ils préfèrent garder. 
+
+À ce stade, la disparité entre les Pokémon échangés et non échangés semble visuellement significative. Cette observation suggère que le niveau de HP est un facteur d'influence majeur dans la décision d'échange, une hypothèse qui sera approfondie par une analyse statistique plus détaillée dans la suite de ce rapport.
 
 \bigskip
 
@@ -492,7 +498,7 @@ REQUETE 3: Types les moins appréciés
 
 \bigskip
 
-Puis on a analyser les types des Pokémons dans les détails pour étudier lesquels sont les moins appréciés.
+Nous avons analysé les types des Pokémons dans les détails pour étudier lesquels sont les moins appréciés.
 
 
 ```{sql connection = con}
@@ -525,28 +531,12 @@ WHERE isShiny = 'VRAI';
 ```
 
 
-Les résultats montrent qu’ils sont très peu échangés (1 seul), ce qui est logique car : ils sont rares et ils ont une forte valeur pour les joueurs.
+Les résultats montrent qu’ils sont très peu échangés (1 seul), ce qui est logique car ils sont rares et ont une forte valeur pour les joueurs.
+
 Cela confirme un comportement de rétention des ressources rares.
 
 \bigskip
 
-REQUETE 5 : Niveau moyen
-
-\bigskip
-
-Nous avons calculé le niveau moyen des Pokémon échangés. L’objectif est de mesurer le niveau global des échanges. Plus le niveau est élevé plus l"échange est stratégique et plus il est faible plus l'échange est commun.
-
-```{sql connection = con}
-SELECT AVG(trades.level) AS niveau_moyen 
-FROM trades, pokemon 
-WHERE trades.pokemonId = pokemon.pokedex_number;
-```
-
-Le niveau moyen des Pokémon échangés permet d’évaluer la qualité globale des échanges. On a un niveau relativement faible qui suggère que les joueurs échangent principalement des Pokémon peu stratégiques, c'est-à-dire que les échanges concernent majoritairement des Pokémon capturés en début d'aventure ou n'ayant reçu que peu d'entraînement, tandis que les Pokémon de haut niveau sont davantage conservés.
-
-\textcolor{red}{expliquer pourquoi c'est un niveau faible ? les non connaisseurs (dont moi steph) ne savent pas il faudrait dire c'est quoi un niveau fort alors ?}
-
-\bigskip
 
 REQUETE 6: Egg Move et HP
 
@@ -562,11 +552,12 @@ GROUP BY t.hasEggMove;
 ```
 
 
-L’analyse croisée entre la présence d’une capacité spéciale (Egg Move) et les points de vie moyens révèle des résultats quasi identiques. On observe que les Pokémon possédant un Egg Move affichent 48,61 HP en moyenne, contre 49,78 HP pour ceux n'en possédant pas. Cet écart infime suggère que la possession d'une capacité rare n'est pas corrélée à une robustesse physique supérieure chez les Pokémon échangés.
+L’analyse croisée entre la présence d’une capacité spéciale (Egg Move) et les points de vie moyens des Pokémon échangés révèle des résultats quasi identiques. Nous observons que les Pokémon possédant un Egg Move affichent 48,61 HP en moyenne, contre 49,78 HP pour ceux n'en possédant pas. 
 
-Dans l’ensemble, les données mettent en évidence que l'avantage d'un Egg Move est purement technique ou tactique, sans influence mesurable sur la statistique de HP. À ce stade, aucune tendance dominante ne se dégage visuellement, ce qui indique que ces deux caractéristiques évoluent de manière indépendante. 
+Cet écart semble infime et suggèrerait que la possession d'une capacité rare n'est pas corrélée à une robustesse physique supérieure chez les Pokémon échangés.
 
-\textcolor{red}{donner le hp le plus fort et le moins fort pour montrer que c'est vraiment un petit écart, si le moins fort est 48 et le plus fort est 50 c'est considéré comme une grande différence de moyennes, expliciter !! (oui je me sens prof et alors?)}
+L'avantage d'un Egg Move serait purement technique ou tactique, sans influence mesurable sur la statistique de HP. À ce stade, aucune tendance dominante ne semble se dégager visuellement, ce qui indique que ces deux caractéristiques évolueraient de manière indépendante. Un test statistique aiderait à y voir plus clair.
+
 
 \bigskip
 
@@ -585,43 +576,52 @@ GROUP BY Pokemon.capture_rate
 ORDER BY nb_echanges DESC;
 ```
 
-Les résultats montrent que les Pokémon ayant un taux de capture de 255 (le plus élevé possible) dominent largement le classement avec 62 échanges, suivis de près par ceux ayant un taux de 45. Cette distribution indique que les Pokémon les plus "accessibles" dans la nature constituent l'essentiel des flux entre les dresseurs.
 
-Dans l’ensemble, les données suggèrent que les joueurs échangent principalement des espèces communes, faciles à capturer en grand nombre. À l'inverse, les Pokémon plus rares (taux de capture faibles) apparaissent de façon marginale dans les transactions. À ce stade, une tendance claire se dégage : plus un Pokémon est simple à obtenir par soi-même, plus il semble circuler sous forme d'échange "monnaie courante". Cette observation visuelle de la prédominance des Pokémon communs devra être confirmée par une analyse de corrélation plus rigoureuse dans la suite de ce rapport.
+Les résultats montrent que les Pokémon ayant un taux de capture de 255 (le plus élevé possible) dominent largement le classement avec 62 échanges. De manière plus surprenante, les Pokémon ayant un taux de capture de 45 arrivent en deuxième position, alors même qu’ils sont nettement moins faciles à capturer.
 
-\textcolor{red}{parler quand même du 45 qui se retrouve en deuxième place, un résultat étonnant est quand même bien à développer, ça montre que tout n'est pas prévisible, comme dans la vraie vie quoi, enfin même s'il n'y a pas grand chose a dire on peut quand même en parler prcq là on dirait qu'on fait l'autruche à l'ignorer}
+Cette distribution confirme que les Pokémon les plus accessibles constituent une part importante des échanges entre dresseurs. Toutefois, la présence marquée de certaines espèces moins faciles à capturer suggère que la fréquence des échanges ne dépend pas uniquement de la facilité d’obtention. D’autres facteurs comme l’intérêt stratégique peuvent également intervenir.
+
+Dans l’ensemble, les données indiquent que les joueurs échangent majoritairement des espèces communes, capturables en grande quantité. À l’inverse, les Pokémon plus rares apparaissent de manière marginale dans les échanges. Une tendance générale se dégage donc : plus un Pokémon est facile à obtenir, plus il circule dans les échanges.
+
+Cette observation devra néanmoins être confirmée par une analyse de corrélation plus rigoureuse dans la suite du rapport, afin de mesurer précisément l’intensité de cette relation.
 
 
 ## Liens entre échanges et trainers
 
 \bigskip
 
-REQUETE 8: Genre du dresseur et type de Pokémon
+REQUETE 8: Genre du dresseur et capacités du Pokémon
 
 \bigskip
 
-Nous avons étudié le lien entre le genre des dresseurs et les types de Pokémon échangés.
+Nous avons étudié le lien entre le genre des dresseurs et les qualités du Pokémon échangé.
 
 L’objectif est de vérifier s’il existe une corrélation entre le genre et ses préférences d’échange.
 
-Cette requête permet de  révéler des préférences de types (ex : feu, eau, normal…)
-ou l’absence totale de différence (comportement homogène).
-Cela permet d’introduire une dimension sociologique dans l’analyse.
 
 ```{sql connection = con}
-SELECT trainers.trainerGender, pokemon.type1, pokemon.type2
-FROM trades
-INNER JOIN trainers ON trades.trainerId = Trainers.trainerId
-INNER JOIN pokemon ON trades.pokemonId = pokemon.pokedex_number;
+SELECT 
+    tr.trainerGender,
+    AVG(
+        t.hasItem +
+        t.hasHiddenAbility +
+        t.hasEggMove +
+        t.hasPokerus +
+        t.hasPerfectIV +
+        t.isShiny
+    ) AS score_moyen
+FROM trades t
+INNER JOIN trainers tr ON t.trainerId = tr.trainerId
+INNER JOIN pokemon p ON t.pokemonId = p.pokedex_number
+GROUP BY tr.trainerGender;
 ```
 
 
-Les dresseurs masculins apparaissent plus fréquemment dans cet extrait et échangent des Pokémon de types variés (Bug, Grass, Fire, Psychic, Electric).
-Les dresseuses féminines sont également associées à plusieurs types différents, notamment Dark, Grass et Water.
+Les résultats montrent des scores moyens très proches entre les dresseurs féminins (0,4118) et masculins (0,4207), sur une échelle maximale de 6. Cette différence est négligeable et suggère que le genre n’a pas d’impact notable sur la “qualité” des Pokémon échangés.
 
-Dans l’ensemble, les données mettent en évidence une forte diversité des types de Pokémon échangés pour les deux genres, sans qu’une tendance dominante ne se dégage clairement.
+En revanche, la catégorie correspondant aux genres non renseignés présente un score nul, ce qui indique que les personnes qui ne voulaient pas s'exposer échangent des pokémons moins qualitatifs.
 
-À ce stade, aucune différence marquée n’est observable visuellement entre les groupes. Cela suggère que d’éventuelles variations devront être vérifiées par une analyse statistique plus rigoureuse, notamment à l’aide d’un test du Khi$^2$ présenté dans la suite du rapport.
+Globalement, ces résultats indiquent une forte homogénéité des comportements d’échange entre hommes et femmes, le genre ne semblant pas être un facteur discriminant dans la qualité des échanges.
 
 \bigskip
 
@@ -639,25 +639,27 @@ En revanche la qualité est multidimensionnelle, donc une analyse SQL seule ne s
 ```{sql connection = con}
 SELECT 'Anonyme' AS Statut,
 AVG(CAST(level AS UNSIGNED))
-AS "Niveau.Moy", AVG(isShiny = 'VRAI') 
-* 100 AS "%Shiny", AVG(hasItem = 'VRAI') 
-* 100 AS "%Objet", AVG(hasPerfectIV = 'VRAI') 
-* 100 AS "%IV.Parfait", AVG(hasHiddenAbility = 'VRAI') 
-* 100 AS "%Talent.Caché", AVG(hasEggMove = 'VRAI') 
+AS "Niveau.Moy", AVG(isShiny) 
+* 100 AS "%Shiny", AVG(hasItem) 
+* 100 AS "%Objet", AVG(hasPerfectIV) 
+* 100 AS "%IV.Parfait", AVG(hasHiddenAbility) 
+* 100 AS "%Talent.Caché", AVG(hasEggMove) 
 * 100 AS "%EggMoves" 
 FROM trades WHERE trainerId <= 80 
 UNION ALL 
 SELECT 'Identifié',
 AVG(CAST(level AS UNSIGNED)),
-AVG(isShiny = 'VRAI') 
-* 100, AVG(hasItem = 'VRAI') 
-* 100, AVG(hasPerfectIV = 'VRAI') 
-* 100, AVG(hasHiddenAbility = 'VRAI') 
-* 100, AVG(hasEggMove = 'VRAI') * 100 
+AVG(isShiny) 
+* 100, AVG(hasItem) 
+* 100, AVG(hasPerfectIV) 
+* 100, AVG(hasHiddenAbility) 
+* 100, AVG(hasEggMove) * 100 
 FROM trades WHERE trainerId > 80;
 ```
 
+Il est compliquer d'analyser ces données, les qualités des Pokémon qui changent réelement entre anonyme et identifiés sont le IV parfait qui est bien plus élevé chez les identifiés.
 
+Pourtant la qualité "eggMove" et les talents cachés sont plus élevés chez les individus anonymes. Nous ne pouvons pas tirer de conclusion de cette requête, mais il est tout de même interessant de la garder, pour montrer que tout n'est pas prévisible.
 
 \bigskip
 \bigskip
@@ -668,7 +670,7 @@ L’ensemble des analyses réalisées sur les échanges Wonder Trade met en évi
 
 Plusieurs facteurs semblent influencer les décisions des joueurs, notamment les caractéristiques des Pokémon et leur niveau de performance. Les résultats montrent que les Pokémon échangés sont fréquemment de niveau faible ou intermédiaire, ce qui suggère une tendance des joueurs à se séparer des Pokémon les moins optimisés.
 
-Par ailleurs, les analyses liées à la rareté (comme les Pokémon shiny ou la facilité de capture) indiquent que les Pokémon les plus rares ou difficiles à obtenir sont moins souvent échangés, confirmant un comportement de conservation des ressources précieuses par les joueurs.
+Par ailleurs, les analyses liées à la rareté indiquent que les Pokémon les plus rares ou difficiles à obtenir sont moins souvent échangés, confirmant un comportement de conservation des ressources précieuses par les joueurs.
 
 Enfin, l’étude des profils de dresseurs montre que certains comportements peuvent varier selon les caractéristiques des utilisateurs, mais ces différences restent globalement modérées.
 
@@ -681,100 +683,34 @@ Dans l’ensemble, ces résultats suggèrent que les échanges Wonder Trade sont
 \bigskip
 
 # Analyse statistique
-## Test Khi2
-### GENRE x TYPE
 
-Dans cette analyse, nous cherchons à étudier la relation entre le genre du dresseur et le type de Pokémon échangé dans le système de Wonder Trade.
+## Définition de la qualité des échanges
 
-Le type de Pokémon (feu, eau, plante, etc.) constitue une caractéristique importante du jeu, souvent associée à des préférences personnelles ou à des stratégies de combat.
-De son côté, le genre du dresseur peut potentiellement refléter des comportements ou des choix différents dans la manière de jouer.
+La qualité d’un échange dans le système de Wonder Trade ne peut pas être mesurée de manière unique, car une partie importante des données est manquante concernant la satisfaction des joueurs (liked).
 
-L’objectif est donc de déterminer si les préférences d’échange varient selon le genre, ou si les joueurs adoptent un comportement homogène indépendamment de cette caractéristique.
+Ainsi, la qualité est approchée selon deux dimensions complémentaires :
 
-Autrement dit, nous cherchons à savoir si le genre influence le choix des types de Pokémon échangés, ou si ces choix restent globalement similaires entre les différents profils de joueurs.
+une mesure subjective, basée sur la satisfaction des joueurs (liked) lorsque celle-ci est renseignée ;
+une mesure objective, basée sur les caractéristiques des Pokémon échangés, telles que la rareté, la puissance ou la facilité de capture.
 
-Hypothèses : 
-Nous utilisons ici un test du Khi² d’indépendance, qui permet d’évaluer l’existence d’une relation entre deux variables qualitatives.
-**Hypothèse nulle(H0)** : le genre du dresseur et le type de Pokémon sont indépendants
-c’est-à-dire que le type de Pokémon échangé ne dépend pas du genre du joueur
-**Hypothèse alternative(H1)** : il existe une dépendance entre les deux variables
-c’est-à-dire que le genre influence les préférences de types de Pokémon échangés
-
-```{r, echo = FALSE}
-# Import des données
-trades <- read.csv("Trades.csv", sep = ";")
-pokemon <- read.csv("pokemon.csv", sep = ",")
-trainers <- read.csv("Trainers.csv", sep = ";")
-
-# Fusion des tables
-# Ajout des informations Pokémon aux échanges
-df_khi <- merge(trades, pokemon, by.x = "pokemonId", by.y = "pokedex_number")
-# Ajout des informations des dresseurs
-df_khi <- merge(df_khi, trainers, by = "trainerId")
-
-# Tableau croisé : genre du dresseur × type de Pokémon
-table_genre_type <- table(df_khi$trainerGender, df_khi$type1)
-
-# Test d’indépendance entre les deux variables
-test_khi2 <- chisq.test(table_genre_type)
-
-# Résultats principaux
-test_khi2$statistic   # statistique du test
-test_khi2$p.value     # p-value
-
-# effectifs théoriques pour vérifier la validité
-test_khi2$expected
-```
-
-**Interprétation du test**:
-La p-value obtenue est de 0.9845, ce qui est largement supérieur au seuil de 0,05.
-
-On ne rejette pas l’hypothèse nulle donc on conserve l'hypothèse nulle. 
-
-Cela signifie qu’il n’existe aucune relation statistiquement significative entre le genre du dresseur et le type de Pokémon échangé.
-
-Autrement dit, le choix du type de Pokémon échangé ne dépend pas du genre : les comportements observés sont globalement homogènes entre les joueurs.
-
-Cependant, un avertissement a été généré lors du test (Chi-squared approximation may be incorrect), indiquant que certains effectifs sont faibles.
-Les résultats doivent donc être interprétés avec prudence, même si la conclusion reste très claire compte tenu de la p-value très élevée.
-
-```{r, echo = FALSE}
-library(ggplot2)
-ggplot(df_khi, aes(x = type1, fill = trainerGender)) +
-  geom_bar(position = "dodge") +
-  scale_fill_manual(values = c(
-    "male" = "lightblue",
-    "female" = "pink"
-  )) +
-  theme_minimal() +
-  labs(title = "Répartition des types de Pokémon selon le genre du dresseur",
-       x = "Type de Pokémon",
-       y = "Nombre d'échanges",
-       fill = "Genre") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-```
-
-**Interprétation Graphique**:
-
-Le graphique représente la distribution des types de Pokémon échangés selon le genre des dresseurs.
-
-On observe une répartition très similaire des types entre les différentes catégories de genre.
-Aucun type de Pokémon ne semble particulièrement associé à un genre spécifique.
-
-La présence d’une catégorie supplémentaire (gris foncé) correspondant aux valeurs manquantes montre qu’une partie des données ne contient pas d’information sur le genre.
-Cependant, cette catégorie ne modifie pas la tendance globale observée.
-
-Globalement, la forte dispersion et l’absence de différences marquées entre les barres confirment visuellement les résultats du test du Khi².
-
-Cela suggère que le genre n’est pas un facteur déterminant dans les préférences d’échange, contrairement à d’autres variables comme la rareté ou la puissance des Pokémon.
+Cette double approche permet de limiter le biais lié aux données manquantes et d’obtenir une vision plus complète des échanges.
 
 \bigskip
 
-**Conclusion du test**
-Le test du Khi² met en évidence une absence totale de relation entre le genre du dresseur et le type de Pokémon échangé.
-Les résultats montrent que les préférences de types sont homogènes entre les joueurs, indépendamment de leur genre.
-Ainsi, contrairement à certaines idées reçues, le genre ne constitue pas un facteur explicatif des choix d’échange dans le système de Wonder Trade.
-Les comportements observés apparaissent donc universels et non différenciés selon cette caractéristique.
+## Mesure objective de la qualité des Pokémon
+
+Afin de quantifier la qualité intrinsèque des Pokémon échangés, un score a été construit à partir de plusieurs caractéristiques binaires :
+
+présence d’un objet (hasItem)
+capacité cachée (hasHiddenAbility)
+egg move (hasEggMove)
+présence de Pokérus (hasPokerus)
+IV parfaits (hasPerfectIV)
+Pokémon shiny (isShiny)
+
+Chaque caractéristique vaut 0 ou 1, et leur somme constitue un score de qualité compris entre 0 et 6.
+
+Ce score permet d’évaluer le niveau global d’optimisation ou de rareté des Pokémon échangés.
 
 
 \bigskip
@@ -1038,7 +974,7 @@ Les visualisations confirment les résultats du test ANOVA : les distributions d
 \bigskip
 
 
-# analyse  statistique
+## Analyse statistique
 L’objectif de cette analyse est de déterminer si les caractéristiques des Pokémon et des dresseurs influencent la qualité des échanges dans le système de Wonder Trade.
 
 La qualité d’un échange est mesurée à l’aide de la variable liked, qui traduit le ressenti du joueur (échange apprécié ou non).
