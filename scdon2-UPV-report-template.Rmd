@@ -1359,7 +1359,7 @@ Comme souligné dans les rapports de référence, toute analyse de données comp
 
 
 # **Codes** {-}
-
+Dans cette section, nous présentons les principales requêtes SQL et scripts R utilisés pour réaliser les analyses du projet. Les codes sont organisés selon les différentes étapes de l’étude.
 
 ## Ajout d’une clé primaire
 
