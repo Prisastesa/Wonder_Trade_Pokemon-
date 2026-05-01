@@ -85,38 +85,51 @@ Cette problématique s’inscrit à la fois dans le cadre de l’analyse de donn
 \medskip
 
 
-## Rôles et composition de l'équipe
+
+## Composition de l'équipe
+
+
+\begin{minipage}{\textwidth}
+\vspace{1cm}
+
+\textbf{Rôles}
+
+\vspace{0.5cm}
+
 
 \textbf{Fenina Sara (22411291)}\\
-Recherche des bases de données, analyse descriptive, modélisation des tables, interprétation des résultats, structuration globale.
+Responsable de la recherche des bases de données, de la modélisation des tables et de la structuration globale ; participation aux analyses et à l’interprétation des résultats.
 
-\nopagebreak % Empêche de couper juste après
-\vspace{0.3cm}
+\vspace{0.5cm}
 
 \textbf{Guilleminot Sarah (22405827)}\\
-Recherche des bases de données, requêtes SQL, modélisation statistique, mise en forme du rapport, analyses et interprétations.
+En charge des requêtes SQL et de la modélisation statistique ; contribution aux analyses, à l’interprétation et à la mise en forme du rapport.
 
-\nopagebreak
-\vspace{0.3cm}
+\vspace{0.5cm}
 
 \textbf{Rakoto Ambinintsoa Prisca (22402951)}\\
-Élaboration SQL, modélisation statistique, analyses et validation des résultats.
+Élaboration des requêtes SQL, modélisation statistique et visualisation des données ; contribution aux analyses et à la validation des résultats.
 
-\nopagebreak
-\vspace{0.3cm}
-
-\textbf{Sbircea Stéphanie (22304694)}\\
-Import des données, structuration base, nettoyage, transformation des données, diaporama.
-\end{minipage}
 \vspace{0.5cm}
+
+\textbf{Sbircea Stéphanie (22404694)}\\
+Responsable de l'import, du nettoyage et de la transformation des données ; contrôle de la cohérence des requêtes SQL et de la qualité des résultats; préparation du diaporama et relecture globale du rapport.
+
+\vspace{0.5cm}
+\end{minipage}
 
 
 
 # Base de données
 
-## Provenance des données
-pokemon: https://www.kaggle.com/datasets/rounakbanik/pokemon) et
-wonder trades: (https://github.com/solash/pokemon-wondertrade-analytics/blob/master/data/wondertrades-03142015.json)
+## Provenance des données  
+
+
+  pokemon: https://www.kaggle.com/datasets/rounakbanik/pokemon) 
+  
+\bigskip
+
+  wonder trades: (https://github.com/solash/pokemon-wondertrade-analytics/blob/master/data/wondertrades-03142015.json)
 
 
 \bigskip
@@ -147,14 +160,14 @@ La population étudiée correspond à l’ensemble des Pokémon du fichier pokem
 \bigskip 
 \bigskip 
 \medskip 
-
+\vspace{2.5cm}
 ## Descriptif des tables
 
 \bigskip
 
 La table Pokemon sert de dictionnaire de référence. Elle contient toutes les statistiques immuables et globale de chaque espèce de Pokémon (force, types, résistances).
 
-\begin{longtable}{|m{3cm}|m{2cm}|m{4cm}|m{5cm}|}
+\begin{longtable}{|m{3.5cm}|m{1.5cm}|m{5cm}|m{5cm}|}
 \caption{Table : pokemon ($802 \times 41$)} \label{tab:pokemon} \\
 \hline
 \textbf{Nom colonne} & \textbf{Type} & \textbf{Signification} & \textbf{Caractéristique} \\ \hline
@@ -162,11 +175,10 @@ La table Pokemon sert de dictionnaire de référence. Elle contient toutes les s
 \hline
 \textbf{Nom colonne} & \textbf{Type} & \textbf{Signification} & \textbf{Caractéristique} \\ \hline
 \endhead
-id\_pokemon & Entier & Identifiant interne du Pokémon & \textbf{Clé primaire} \\ \hline
-pokedex\_number & Entier & Numéro officiel du Pokédex & Unique par espèce \\ \hline
+pokedex\_number & Entier & Numéro officiel du Pokédex & \textbf{Clé primaire} \\ \hline
 name & Chaîne & Nom anglais de l'espèce & EX : Abra \\ \hline
 abilities & Liste & Capacités spéciales possibles & EX : ['Overgrow'] \\ \hline
-type1 / type2 & Chaîne & Types élémentaires & type2 peut être \textbf{vide} (NULL) \\ \hline
+type1 / type2 & Chaîne & Types élémentaires & type2 peut être \textbf{vide} \\ \hline
 
 \begin{minipage}[c]{3cm}
 \scriptsize\renewcommand{\arraystretch}{0.8}
@@ -176,7 +188,7 @@ attack & sp\_defense \\
 defense & speed 
 \end{tabular}
 \end{minipage} & Entier & Statistiques de combat & 
-\begin{minipage}[c]{6cm}
+\begin{minipage}[c]{7cm}
 \scriptsize
 \vspace{2mm}
 - HP : $[1 ; 255]$  \\
@@ -189,9 +201,14 @@ defense & speed
 \end{minipage} \\ \hline
 
 
-base\_total & Entier & Somme des statistiques AKA Puissance globale & base\_total : $[180 ; 780]$  \\ \hline
+base\_total & Entier & Somme des statistiques AKA Puissance globale & base\_total :$[180 ; 780]$  \\ \hline
+base\_egg\_steps & Entier & Etapes pour avoir un EggMove(capacité herité) & base\_egg\_step:$[1280;30.7k]$ \\ \hline
+capture\_rate & Entier & Valeur de la probabilité de capture de l'especes & capture\_rate: $[3;255]$ \\ \hline
 is\_legendary & Booléen & Statut de Pokémon légendaire & 0 = Non, 1 = Oui \\ \hline
 resistance & Réel & Multiplicateurs de dégâts & resistance : $[0 ; 36]$  \\ \hline
+generation & Entier & Géneration auquel appartient le pokémon & generation : $[1 ; 7]$ \\ \hline
+
+ 
 
 
 \end{longtable}
@@ -199,7 +216,7 @@ resistance & Réel & Multiplicateurs de dégâts & resistance : $[0 ; 36]$  \\ \
 \smallskip
 \bigskip
 
-\begin{longtable}{|p{3cm}|p{2cm}|p{4cm}|p{5cm}|}
+\begin{longtable}{|m{3.5cm}|m{1.5cm}|m{5cm}|m{5cm}|}
 \caption{Table : trades} \label{tab:trades} \\
 \hline
 \textbf{Nom colonne} & \textbf{Type} & \textbf{Signification} & \textbf{Caractéristique} \\ \hline
@@ -210,13 +227,13 @@ resistance & Réel & Multiplicateurs de dégâts & resistance : $[0 ; 36]$  \\ \
 pokemonId & Entier & ID du Pokémon échangé & \textbf{Clé étrangère} vers pokemon \\ \hline
 trainerId & Entier & ID du dresseur partenaire & \textbf{Clé étrangère} vers trainers \\ \hline
 userId & Entier & ID de l'utilisateur local & \textbf{Clé étrangère} vers users \\ \hline
-level & Entier & Niveau du Pokémon lors de l'échange &$ level : [0 ;100]$  \\ \hline
-isShiny & Texte & Aspect chromatique rare & "VRAI" ou "FAUX" \\ \hline
-hasItem & Texte & Le Pokémon tient-il un objet ? & "VRAI" ou "FAUX" \\ \hline
-hasHiddenAbility & Texte & Possède un talent caché rare & "VRAI" ou "FAUX" \\ \hline
-hasPerfectIV & Texte & Possède des stats innées au max & "VRAI" ou "FAUX" \\ \hline
-hasPokerus & Texte & Infecté par le virus bénéfique & "VRAI" ou "FAUX" \\ \hline
-hasEggMove & Texte & Possède une capacité de reproduction & "VRAI" ou "FAUX" \\ \hline
+level & Entier & Niveau du Pokémon lors de l'échange & level : $[0 ;100]$  \\ \hline
+isShiny & Texte & Aspect chromatique rare & 0 = Non, 1 = Oui \\ \hline
+hasItem & Texte & Le Pokémon tient-il un objet ? & 0 = Non, 1 = Oui \\ \hline
+hasHiddenAbility & Texte & Possède un talent caché rare & 0 = Non, 1 = Oui \\ \hline
+hasPerfectIV & Texte & Possède des stats innées au max & 0 = Non, 1 = Oui \\ \hline
+hasPokerus & Texte & Infecté par le virus bénéfique & 0 = Non, 1 = Oui \\ \hline
+hasEggMove & Texte & Possède une capacité de reproduction & 0 = Non, 1 = Oui \\ \hline
 liked & Chaîne & Avis de l'utilisateur sur l'échange & "like", "dislike" ou \textbf{vide} \\ \hline
 date / time & Date / Heure & Moment précis de l'échange & EX : 2015-02-08 / 54817 \\ \hline
 \end{longtable}
@@ -226,7 +243,7 @@ La table Trades est centrale. Elle enregistre l'historique de tous les échanges
 
 \smallskip
 
-\begin{longtable}{|p{3cm}|p{2cm}|p{4cm}|p{5cm}|}
+\begin{longtable}{|m{3.5cm}|m{1.5cm}|m{5cm}|m{5cm}|}
 \caption{Table : trainers} \label{tab:trainers} \\
 \hline
 \textbf{Nom colonne} & \textbf{Type} & \textbf{Signification} & \textbf{Caractéristique} \\ \hline
@@ -234,11 +251,10 @@ La table Trades est centrale. Elle enregistre l'historique de tous les échanges
 \hline
 \textbf{Nom colonne} & \textbf{Type} & \textbf{Signification} & \textbf{Caractéristique} \\ \hline
 \endhead
-id\_trainer & Entier & Identifiant unique du dresseur & \textbf{Clé primaire} \\ \hline
-trainer\_name & Chaîne & Pseudo du dresseur & Peut être \textbf{vide} (si anonyme) \\ \hline
-gender & Chaîne & Sexe du dresseur & "male" ou "female" \\ \hline
-country & Chaîne & Code pays (ISO) & EX : US, JP, FR \\ \hline
-country\_sub1 & Chaîne & Région ou État d'origine & EX : California, Texas, Tokyo \\ \hline
+trainerId & Entier & Identifiant unique du dresseur & \textbf{Clé primaire} \\ \hline
+trainerGender & Chaîne & Sexe du dresseur & "male" ou "female" \\ \hline
+trainerCountry & Chaîne & Code pays (ISO) & EX : US, JP, FR \\ \hline
+trainerCountrySub1 & Chaîne & Région ou État d'origine & EX : California, Texas, Tokyo \\ \hline
 \end{longtable}
 
 \smallskip
@@ -246,7 +262,7 @@ La table Trainers contient les profils des partenaires d'échange. Elle permet d
 \smallskip
 
 
-\begin{longtable}{|p{3cm}|p{2cm}|p{4cm}|p{5cm}|}
+\begin{longtable}{|m{3.5cm}|m{1.5cm}|m{5cm}|m{5cm}|}
 \caption{Table : users} \label{tab:users} \\
 \hline
 \textbf{Nom colonne} & \textbf{Type} & \textbf{Signification} & \textbf{Caractéristique} \\ \hline
@@ -273,9 +289,9 @@ La table Users est très courte et sert simplement à identifier les comptes loc
   ![**MOD**.](pokewonder (1).png){#MOD width="16cm"height="8cm"}
   
 
-\bigskip
-\bigskip 
-\bigskip 
+\vspace{1.5cm}
+
+
 
   MOD :
   
@@ -398,10 +414,6 @@ Pour finir wous ajoutons une clé primaire auto-incrémentée dans phpMyAdmin en
       “ALTER TABLE trades ADD IdTrade INT AUTO_INCREMENT PRIMARY KEY;”
 
 
-\bigskip 
-\bigskip 
-
-
 
 
 # Requêtes réalisées
@@ -414,7 +426,7 @@ con <- DBI::dbConnect(
   username = "root", 
   password = "root", 
   dbname = "wonderpoke",  
-  unix.sock = "/Applications/MAMP/tmp/mysql/mysql.sock"
+
 )
 ```
 \bigskip
@@ -423,7 +435,9 @@ REQUETE 0: Pokémon échangés
 
 \bigskip
 
-Pour commencer, nous avons interrogé le logiciel pour connaître le nombre de pokémon échangé parmi les échanges, et par rapport au nombre total de Pokémon. Cette première requête nous donne une vision d'ensemble et va être à l’origine des autres requêtes qui vous surtout se concentrer sur les pokémons échangés. 
+
+Pour commencer, l'exécution de la requête SQL a permis d'extraire le nombre de pokémon échangé parmi les échanges, et par rapport au nombre total de Pokémon. Cette première requête nous donne une vision d'ensemble et va être à l’origine des autres requêtes qui vous surtout se concentrer sur les pokémons échangés. 
+
 
 
 
@@ -527,7 +541,7 @@ L’objectif est d’évaluer si les Pokémon rares sont fréquemment échangés
 ```{sql connection = con}
 SELECT COUNT(*) AS nb_shiny 
 FROM trades 
-WHERE isShiny = 'VRAI';
+WHERE isShiny = '1';
 ```
 
 
@@ -679,7 +693,10 @@ Dans l’ensemble, ces résultats suggèrent que les échanges Wonder Trade sont
 \bigskip
 \bigskip
 
+
 Si les requêtes SQL précédentes nous permettent d'observer des tendances globales (comme la prédominance du niveau 1), elles ne permettent pas de conclure à une causalité. La section suivante utilise l'inférence statistique pour valider si ces différences sont significatives ou dues au hasard.
+
+
 
 \bigskip
 
@@ -1318,7 +1335,9 @@ Enfin, les données utilisées datent de **2015**, ce qui constitue une limite t
 ## Perspectives
 
 Plusieurs pistes pourraient être envisagées afin d’améliorer et d’approfondir cette étude.
-Tout d’abord, il serait pertinent de disposer d’un jeu de données plus récent et plus volumineux, incluant davantage de Pokémon rares (notamment shiny), afin d’obtenir des résultats statistiques plus robustes et représentatifs.Ensuite, une amélioration importante consisterait à construire un indice de qualité des échanges plus complet, en combinant plusieurs variables (niveau, statistiques, rareté, capacités spéciales). Cela permettrait de dépasser la simple variable liked et d’obtenir une mesure plus objective.Il serait également intéressant d’intégrer des variables supplémentaires, telles que :la nature du Pokémon, ou les objets tenus,afin d’affiner l’analyse du comportement des joueurs, notamment dans une perspective compétitive.Par ailleurs, des méthodes plus avancées pourraient être mobilisées, comme des modèles de machine learning (par exemple Random Forest ou régression logistique améliorée) pour prédire la probabilité qu’un échange soit apprécié.Enfin, une extension possible serait d’analyser la dimension **temporelle et géographique** des échanges, afin d’identifier d’éventuelles tendances selon les périodes ou les régions du monde.
+
+Tout d’abord, il serait pertinent de disposer d’un jeu de données plus récent et plus volumineux, incluant davantage de Pokémon rares (notamment shiny), afin d’obtenir des résultats statistiques plus robustes et représentatifs.Ensuite, une amélioration importante consisterait à construire un indice de qualité des échanges plus complet, en combinant plusieurs variables (niveau, statistiques, rareté, capacités spéciales). Cela permettrait de dépasser la simple variable liked et d’obtenir une mesure plus objective.Il serait également intéressant d’intégrer des variables supplémentaires, telles que :la nature du Pokémon, ou les objets tenus,afin d’affiner l’analyse du comportement des joueurs, notamment dans une perspective compétitive.Par ailleurs, des méthodes plus avancées pourraient être mobilisées, comme des modèles de machine learning (par exemple Random Forest ou régression logistique améliorée) pour prédire la probabilité qu’un échange soit apprécié.Enfin, une extension possible serait d’analyser la dimension temporelle des échanges, afin d’identifier d’éventuelles tendances selon les périodes ou les régions du monde.
+
 \bigskip
 En conclusion, malgré certaines limites liées aux données et aux hypothèses retenues, ce projet constitue une première approche pertinente de l’analyse des comportements dans le système Wonder Trade. Les perspectives évoquées ouvrent la voie à des analyses plus fines et plus complètes.
 
@@ -1327,26 +1346,34 @@ En conclusion, malgré certaines limites liées aux données et aux hypothèses 
 
 #  Discussion
 L'analyse de nos résultats permet de mettre en lumière plusieurs phénomènes structurants du système Wonder Trade, en confrontant les données statistiques aux comportements des joueurs.
+
 ## Prépondérance de la valeur esthétique
 
 Nos résultats montrent que la rareté (isShiny) possède un poids statistique supérieur à la puissance technique dans la satisfaction des utilisateurs. Cela suggère que le Wonder Trade n'est pas utilisé comme un outil d'optimisation stratégique pour le combat, mais plutôt comme une plateforme de collection. La valeur d'un échange réside davantage dans l'aspect "exceptionnel" du spécimen reçu que dans son utilité immédiate pour progresser dans le jeu.
+
+
 ## Universalité des comportements de jeu
 
 Le test du Khi$^2$ réalisé sur le croisement entre le genre du dresseur et le type de Pokémon (p-value = 0.9845) révèle une absence totale de corrélation. Ce résultat est fondamental : il démontre que les préférences pour certains types de Pokémon (Feu, Eau, Dragon, etc.) sont universelles et ne dépendent pas du profil sociologique du joueur. Cette homogénéité témoigne d'une culture de jeu commune qui transcende les genres.
-6.3. Le paradoxe de l'abondance et du recyclage
+
+## Le paradoxe de l'abondance et du recyclage
 
 La corrélation de Pearson entre le taux de capture et le volume d'échanges (0.23) confirme que le système est saturé par des Pokémon dits "communs". Les joueurs utilisent majoritairement le Wonder Trade pour recycler des Pokémon capturés facilement lors de leur aventure. Cependant, cette faible corrélation indique aussi que le système n'est pas uniquement une déchetterie : une part non négligeable d'échanges concerne des Pokémon rares, ce qui entretient l'attractivité de la plateforme.
+
+
 ## Limites de l'étude
 
 Comme souligné dans les rapports de référence, toute analyse de données comporte des limites :
 
-    Temporalité : Les données datent de 2015, ce qui correspond à la sixième génération de Pokémon. Les comportements pourraient différer sur les versions plus récentes (Switch).
+Temporalité : Les données datent de 2015, ce qui correspond à la sixième génération de Pokémon. Les comportements pourraient différer sur les versions plus récentes (Switch).
 
-    Variables manquantes : L'absence de données sur les "objets tenus" lors de l'échange limite notre interprétation, car un objet rare peut transformer un échange "commun" en échange "apprécié".
+Variables manquantes : L'absence de données sur les "objets tenus" lors de l'échange limite notre interprétation, car un objet rare peut transformer un échange "commun" en échange "apprécié".
 
 
 
 # Bibliographie {-}
+
+
   Jean-Michel, R. (2023). Manuel de Statistiques avec R.
 
   Bringay, S., & Ben-Sassi, I. Supports de cours : Bases de Données et Sciences des Données 2, Université Paul Valéry Montpellier 3.
@@ -1354,6 +1381,7 @@ Comme souligné dans les rapports de référence, toute analyse de données comp
   DellaData. L'ANOVA à un facteur : théorie et pratique. Consulté sur https://delladata.fr.
 
   The Pokémon Company. Données issues du système Global Trade Station (GTS).
+
 
 # Annexes {-}
 
