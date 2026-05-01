@@ -1358,130 +1358,119 @@ Comme souligné dans les rapports de référence, toute analyse de données comp
 # Annexes {-}
 
 
-## **Codes** {-}
+# **Codes** {-}
 
 
-Codes utilisés
+## Ajout d’une clé primaire
 
-Dans cette section, nous présentons les principales requêtes SQL et scripts R utilisés pour réaliser les analyses du projet. Les codes sont organisés selon les différentes étapes de l’étude.
-
-
-### Création et modification de la base de données
-Cette étape permet d’identifier de manière unique chaque enregistrement de la table des échanges.
-
-Ajout d’une clé primaire
-ALTER TABLE trades 
+ALTER TABLE trades
 ADD IdTrade INT AUTO_INCREMENT PRIMARY KEY;
 
-###  Requêtes SQL
-### Requête 0 : Nombre de Pokémon échangés
-Cette requête permet d’évaluer le nombre de Pokémon échangés ainsi que la couverture du Pokédex.
+Cette requête permet d’ajouter un identifiant unique à chaque ligne de la table trades, facilitant les jointures et l’intégrité des données.
 
-SELECT 
-    COUNT(DISTINCT t.pokemonId) AS "nb_pokemon_echanges",
-    COUNT(t.pokemonId) AS nb_echanges,
-    (SELECT COUNT(*) FROM Pokemon) AS "nb_total_pokemon"
+## Requêtes SQL
+### Nombre de Pokémon échangés
+
+SELECT
+COUNT(DISTINCT t.pokemonId) AS nb_pokemon_echanges,
+COUNT(t.pokemonId) AS nb_echanges,
+(SELECT COUNT(*) FROM Pokemon) AS nb_total_pokemon
 FROM Pokemon p
-LEFT JOIN Trades t 
+LEFT JOIN Trades t
 ON p.pokedex_number = t.pokemonId;
 
+Cette requête permet de comparer le nombre total de Pokémon existants avec ceux réellement échangés, ainsi que le nombre total d’échanges effectués.
 
-
-### Requête 1 : Pokémon de niveau 1
-
+### Pokémon de niveau 1
 
 SELECT COUNT(*) AS nb_pokemon_niveau1
 FROM trades
 WHERE level = 1;
 
+Cette requête permet d’identifier la proportion de Pokémon échangés au niveau minimal.
 
-### Requête 2 : Comparaison des HP
+### Comparaison des HP
 
-
-SELECT 
+SELECT
 (SELECT AVG(hp) FROM pokemon) AS moyenne_hp_total,
 
-(SELECT AVG(p.hp) 
- FROM pokemon p, trades t 
- WHERE p.pokedex_number = t.pokemonId) AS hp_echanges,
+(SELECT AVG(p.hp)
+FROM pokemon p, trades t
+WHERE p.pokedex_number = t.pokemonId) AS hp_echanges,
 
-(SELECT AVG(p.hp) 
- FROM pokemon p 
- WHERE p.pokedex_number IN 
- (SELECT pokemonId FROM trades)) AS hp_echanges_distincts,
+(SELECT AVG(p.hp)
+FROM pokemon p
+WHERE p.pokedex_number IN (SELECT pokemonId FROM trades)) AS hp_echanges_distincts,
 
-(SELECT AVG(hp) 
- FROM pokemon
- WHERE pokedex_number NOT IN 
- (SELECT pokemonId FROM trades)) AS hp_non_echanges;
+(SELECT AVG(hp)
+FROM pokemon
+WHERE pokedex_number NOT IN (SELECT pokemonId FROM trades)) AS hp_non_echanges;
 
+Cette analyse compare les statistiques de points de vie (HP) entre Pokémon échangés et non échangés.
 
+### Types les moins appréciés
 
-### Requête 3 : Types les moins appréciés
-
-
-SELECT Pokemon.type1, Pokemon.type2, COUNT(*) AS nb_dislikes 
-FROM Trades 
-INNER JOIN Pokemon 
-ON Trades.pokemonId = Pokemon.pokedex_number 
-WHERE Trades.liked = "dislike" 
-GROUP BY Pokemon.type1, Pokemon.type2 
-ORDER BY nb_dislikes DESC 
+SELECT Pokemon.type1, Pokemon.type2, COUNT(*) AS nb_dislikes
+FROM Trades
+INNER JOIN Pokemon
+ON Trades.pokemonId = Pokemon.pokedex_number
+WHERE Trades.liked = 'dislike'
+GROUP BY Pokemon.type1, Pokemon.type2
+ORDER BY nb_dislikes DESC
 LIMIT 1;
 
+Cette requête identifie les types de Pokémon les plus souvent rejetés lors des échanges.
 
+### Nombre de Pokémon shiny
 
-### Requête 4 : Nombre de Pokémon shiny
-
-
-SELECT COUNT(*) AS nb_shiny 
-FROM trades 
+SELECT COUNT(*) AS nb_shiny
+FROM trades
 WHERE isShiny = 'VRAI';
 
+Cette requête calcule la proportion de Pokémon shiny présents dans les échanges.
 
+### Egg Move et HP
 
-### Requête 5 : Egg Move et HP
-
-
-SELECT t.hasEggMove, AVG(p.hp) 
-FROM pokemon p, trades t 
-WHERE p.pokedex_number = t.pokemonId 
+SELECT t.hasEggMove, AVG(p.hp)
+FROM pokemon p, trades t
+WHERE p.pokedex_number = t.pokemonId
 GROUP BY t.hasEggMove;
 
+Cette analyse permet de comparer les HP moyens selon la présence d’un Egg Move.
 
-### Requête 6 : Capture rate et échanges
+### Capture rate et échanges
 
-
-SELECT Pokemon.capture_rate, COUNT(*) AS nb_echanges 
-FROM Pokemon 
-JOIN Trades 
-ON Pokemon.pokedex_number = Trades.pokemonId 
-GROUP BY Pokemon.capture_rate 
+SELECT Pokemon.capture_rate, COUNT(*) AS nb_echanges
+FROM Pokemon
+JOIN Trades
+ON Pokemon.pokedex_number = Trades.pokemonId
+GROUP BY Pokemon.capture_rate
 ORDER BY nb_echanges DESC;
 
-### Requête 7 : Genre et qualité des échanges
+Cette requête étudie la relation entre le taux de capture et la fréquence des échanges.
 
+### Genre et qualité des échanges
 
-SELECT 
-    tr.trainerGender,
-    AVG(
-        t.hasItem +
-        t.hasHiddenAbility +
-        t.hasEggMove +
-        t.hasPokerus +
-        t.hasPerfectIV +
-        t.isShiny
-    ) AS score_moyen
+SELECT
+tr.trainerGender,
+AVG(
+t.hasItem +
+t.hasHiddenAbility +
+t.hasEggMove +
+t.hasPokerus +
+t.hasPerfectIV +
+t.isShiny
+) AS score_moyen
 FROM trades t
-INNER JOIN trainers tr 
+INNER JOIN trainers tr
 ON t.trainerId = tr.trainerId
-INNER JOIN pokemon p 
+INNER JOIN pokemon p
 ON t.pokemonId = p.pokedex_number
 GROUP BY tr.trainerGender;
 
+Cette requête calcule un score moyen de qualité des échanges selon le genre du dresseur.
 
-### Requête 8 : Anonymat et qualité
-
+### Anonymat et qualité des échanges
 
 SELECT 'Anonyme' AS Statut,
 AVG(CAST(level AS UNSIGNED)) AS niveau_moyen,
@@ -1490,10 +1479,10 @@ AVG(hasItem) * 100 AS pourcentage_objet,
 AVG(hasPerfectIV) * 100 AS pourcentage_IV,
 AVG(hasHiddenAbility) * 100 AS pourcentage_talent,
 AVG(hasEggMove) * 100 AS pourcentage_eggmove
-FROM trades 
+FROM trades
 WHERE trainerId <= 80
 
-UNION ALL 
+UNION ALL
 
 SELECT 'Identifie',
 AVG(CAST(level AS UNSIGNED)),
@@ -1502,36 +1491,43 @@ AVG(hasItem) * 100,
 AVG(hasPerfectIV) * 100,
 AVG(hasHiddenAbility) * 100,
 AVG(hasEggMove) * 100
-FROM trades 
+FROM trades
 WHERE trainerId > 80;
 
+Cette requête compare les comportements d’échange entre utilisateurs anonymes et identifiés.
 
-##  Scripts R
-### test de corrélation (capture rate)
+## Scripts R
+### Test de corrélation (capture rate)
 
 library(dplyr)
 
 trades <- read.csv("Trades.csv", sep = ";")
 pokemon <- read.csv("pokemon.csv", sep = ",")
 
+Nettoyage et transformation du taux de capture :
+
 pokemon$capture_rate <- as.numeric(gsub("[^0-9]", "", pokemon$capture_rate))
 pokemon$capture_rate_norm <- pokemon$capture_rate / 255
 
-df_corr <- merge(trades, pokemon, 
-                 by.x = "pokemonId", 
-                 by.y = "pokedex_number")
+Fusion des données :
+
+df_corr <- merge(trades, pokemon,
+by.x = "pokemonId",
+by.y = "pokedex_number")
+
+Calcul du nombre d’échanges par Pokémon :
 
 nb_echanges <- df_corr %>%
-  group_by(pokemonId, capture_rate_norm) %>%
-  summarise(nb = n(), .groups = "drop")
+group_by(pokemonId, capture_rate_norm) %>%
+summarise(nb = n(), .groups = "drop")
+
+Test de corrélation :
 
 cor.test(nb_echanges$capture_rate_norm, nb_echanges$nb)
 
+Cette analyse permet de mesurer le lien entre la facilité de capture et la fréquence d’échange.
 
-
-
-### Test du Khi² (shiny vs satisfaction)
-
+Test du Khi² (shiny vs satisfaction)
 
 trades$liked[trades$liked == "" | is.na(trades$liked)] <- "no_opinion"
 
@@ -1539,70 +1535,63 @@ table_shiny <- table(trades$isShiny, trades$liked)
 
 chisq.test(table_shiny)
 
+Ce test permet d’évaluer l’association entre le statut shiny et la satisfaction des échanges.
+
 ### Régression logistique
 
 trades$liked_bin <- ifelse(trades$liked == "Liked", 1, 0)
 
 df_model <- merge(trades, pokemon,
-                  by.x = "pokemonId",
-                  by.y = "pokedex_number")
+by.x = "pokemonId",
+by.y = "pokedex_number")
 
 modele <- glm(liked_bin ~ isShiny + base_total + capture_rate + level,
-              data = df_model,
-              family = "binomial")
+data = df_model,
+family = "binomial")
 
 summary(modele)
 
+Ce modèle permet d’identifier les facteurs influençant la probabilité qu’un échange soit apprécié.
 
-
-
-
-###  Graphique corrélation
+Graphique de corrélation
 
 plot(nb_echanges$capture_rate_norm, nb_echanges$nb,
-     main = "Capture rate vs échanges",
-     xlab = "Capture rate normalisé",
-     ylab = "Nombre d'échanges",
-     pch = 16)
+main = "Capture rate vs échanges",
+xlab = "Capture rate normalisé",
+ylab = "Nombre d’échanges",
+pch = 16)
 
 abline(lm(nb ~ capture_rate_norm, data = nb_echanges),
-       col = "red", lwd = 2)
+col = "red",
+lwd = 2)
+
+Ce graphique illustre la relation entre taux de capture et nombre d’échanges.
 
 ### ANOVA anonymat / niveau
 
 trades$level <- as.numeric(as.character(trades$level))
 
 trades$anonymat <- ifelse(trades$trainerId <= 80,
-                          "Anonyme", "Identifie")
+"Anonyme", "Identifie")
 
 res_anova <- aov(level ~ anonymat, data = trades)
 summary(res_anova)
 
-
+Cette analyse permet de comparer le niveau moyen selon le statut des utilisateurs.
 
 ## Traitements Excel / LibreOffice
 ### Création des Trainer ID
 
 =SI(J103=J104;
-   SI(K103=K104;
-      SI(L103=L104;Q103;Q103+1);
-   Q103+1);
+SI(K103=K104;
+SI(L103=L104;Q103;Q103+1);
+Q103+1);
 Q103+1)
 
-### Conversion booléens
+Cette formule permet de générer des identifiants uniques de dresseurs en fonction des duplications.
+
+### Conversion des booléens
 
 =SI(B2="FAUX";0;1)
 
-### Calcul résistance Pokémon
-
-=SOMME(B2:S2)
-
-
-
-
-
-
-
-
-
-
+Conversion des valeurs booléennes en format numérique pour analyses statistiques.
