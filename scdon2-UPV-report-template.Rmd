@@ -679,6 +679,7 @@ Dans l’ensemble, ces résultats suggèrent que les échanges Wonder Trade sont
 \bigskip
 \bigskip
 
+Si les requêtes SQL précédentes nous permettent d'observer des tendances globales (comme la prédominance du niveau 1), elles ne permettent pas de conclure à une causalité. La section suivante utilise l'inférence statistique pour valider si ces différences sont significatives ou dues au hasard.
 
 \bigskip
 
