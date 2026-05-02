@@ -1221,7 +1221,7 @@ WHERE trainerId > 80;
 
 Cette requête compare les comportements d’échange entre utilisateurs anonymes et identifiés.
 
-# **Codes** {-}
+ **Codes** 
 Dans cette section, nous présentons les  codes utilisés pour réaliser les analyses du projet. 
 
 ## Ajout d’une clé primaire
