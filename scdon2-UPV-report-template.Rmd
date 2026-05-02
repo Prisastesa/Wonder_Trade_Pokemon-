@@ -1092,18 +1092,6 @@ Variables manquantes : L'absence de données sur les "objets tenus" lors de l'é
 
 
 # Annexes {-}
-
-
-# **Codes** {-}
-Dans cette section, nous présentons les  codes utilisés pour réaliser les analyses du projet. 
-
-## Ajout d’une clé primaire
-
-ALTER TABLE trades
-ADD IdTrade INT AUTO_INCREMENT PRIMARY KEY;
-
-Cette requête permet d’ajouter un identifiant unique à chaque ligne de la table trades, facilitant les jointures et l’intégrité des données.
-
 ## Requêtes SQL: chapitre 3
 
 ### Nombre de Pokémon échangés
@@ -1232,6 +1220,18 @@ FROM trades
 WHERE trainerId > 80;
 
 Cette requête compare les comportements d’échange entre utilisateurs anonymes et identifiés.
+
+# **Codes** {-}
+Dans cette section, nous présentons les  codes utilisés pour réaliser les analyses du projet. 
+
+## Ajout d’une clé primaire
+
+ALTER TABLE trades
+ADD IdTrade INT AUTO_INCREMENT PRIMARY KEY;
+
+Cette requête permet d’ajouter un identifiant unique à chaque ligne de la table trades, facilitant les jointures et l’intégrité des données.
+
+
 
 ## Scripts R chapitre 4
 ### Test de corrélation (capture rate)
