@@ -1012,27 +1012,27 @@ Ainsi, les échanges apparaissent globalement structurés par des logiques simpl
 
 La réalisation de ce projet a mis en évidence plusieurs limites, à la fois techniques, méthodologiques et liées aux données.
 
-\midskip
+\medskip
 
 Tout d’abord, un problème majeur concerne le déséquilibre des données. Certaines variables sont très peu représentées, en particulier les Pokémon shiny (un seul individu dans la base). Cela rend les tests statistiques classiques, comme le test du Khi², peu fiables en raison d’effectifs trop faibles. Pour contourner cette limite, nous avons construit un indicateur plus robuste en agrégeant plusieurs caractéristiques des Pokémon (objet, capacités, IV, etc.), afin d’obtenir une mesure plus exploitable de la qualité.
 
-\midskip
+\medskip
 
 Ensuite, la qualité des données a posé plusieurs difficultés techniques. Certaines variables, comme la résistance, étaient mal interprétées lors de l’import (problème de virgule décimale), ce qui a généré des valeurs manquantes (NA) et faussé certaines analyses et visualisations. De plus, l’utilisation de noms de colonnes avec accents a entraîné des erreurs dans le code, nécessitant un nettoyage préalable des données.
 
-\midskip
+\medskip
 
 Un autre problème important concerne la taille des groupes. Certaines catégories, notamment les pays des dresseurs, contiennent très peu d’observations. Cela rend certains graphiques, comme les boxplots, peu pertinents ou difficilement interprétables. Il a donc été nécessaire de filtrer les groupes avec un effectif suffisant afin d’obtenir des résultats fiables.
 
-\midskip
+\medskip
 
 Par ailleurs, la variable de satisfaction (liked) est incomplète, puisqu’elle n’est renseignée que pour une partie des échanges. Nous avons choisi de considérer les valeurs manquantes comme neutres ou de les exclure selon les analyses, ce qui introduit une incertitude dans l’interprétation des résultats.
 
-\midskip
+\medskip
 
 Enfin, certaines hypothèses simplificatrices ont été nécessaires. Par exemple, nous avons supposé que des dresseurs partageant les mêmes caractéristiques (genre, pays, région) correspondaient à un même individu. Cette approximation peut entraîner une perte de précision dans l’analyse des comportements individuels.
 
-\midskip
+\medskip
 
 D’un point de vue pratique, la collecte des données a également été une contrainte : la source initialement envisagée n’étant plus disponible, nous avons dû nous tourner vers des données issues de GitHub, avec un contrôle limité sur leur qualité et leur structure.
 
@@ -1041,11 +1041,11 @@ D’un point de vue pratique, la collecte des données a également été une co
 
 Plusieurs pistes pourraient être envisagées afin d’améliorer et d’approfondir cette étude.
 
-\midskip
+\medskip
 
 Tout d’abord, il serait pertinent de disposer d’un jeu de données plus récent et plus volumineux, incluant davantage de Pokémon, afin d’obtenir des résultats statistiques plus représentatifs. Ensuite, une amélioration importante consisterait à construire un indice de qualité des échanges plus complet, en combinant plusieurs variables. Cela permettrait de dépasser la simple variable liked et d’obtenir une mesure plus objective.
 
-\midskip
+\medskip
 
 Il serait également intéressant d’intégrer des variables supplémentaires, telles que la nature du Pokémon ou les objets tenus, afin d’affiner l’analyse du comportement des joueurs, notamment dans une perspective compétitive. 
 
