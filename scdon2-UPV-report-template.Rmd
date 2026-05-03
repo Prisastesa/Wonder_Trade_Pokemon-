@@ -430,7 +430,7 @@ Pour finir wous ajoutons une clé primaire auto-incrémentée dans phpMyAdmin en
 
 
 # Requêtes réalisées
-```{r, echo=FALSE}
+```{r, echo=FALSE, warning=FALSE}
 library(DBI)
 con <- DBI::dbConnect(
   drv = RMySQL::MySQL(),    # database driver à utiliser
@@ -913,7 +913,7 @@ test_corr$p.value
 
 \bigskip
 
-Interprétation : La p-value (0.01053) étant inférieure à 0.05, on rejette $H_0$. Il existe une corrélation positive (0.23) : les Pokémon faciles à capturer sont légèrement plus échangés, bien que la relation soit faible.
+Interprétation : La p-value (0.01053) étant inférieure à 0.05, nous rejettons $H_0$. Il existe une corrélation positive (0.23) : les Pokémon faciles à capturer sont légèrement plus échangés, bien que la relation soit faible.
 
 \bigskip
 
@@ -1059,29 +1059,35 @@ En conclusion, malgré certaines limites liées aux données et aux hypothèses 
 
 
 #  Discussion
-L'analyse de nos résultats permet de mettre en lumière plusieurs phénomènes structurants du système Wonder Trade, en confrontant les données statistiques aux comportements des joueurs.
 
-## Prépondérance de la valeur esthétique
+Nos résultats permettent de confirmer que le système Wonder Trade, bien qu'aléatoire dans son attribution, est structurellement biaisé par les comportements rationnels des dresseurs.
 
-Nos résultats montrent que la rareté (isShiny) possède un poids statistique supérieur à la puissance technique dans la satisfaction des utilisateurs. Cela suggère que le Wonder Trade n'est pas utilisé comme un outil d'optimisation stratégique pour le combat, mais plutôt comme une plateforme de collection. La valeur d'un échange réside davantage dans l'aspect "exceptionnel" du spécimen reçu que dans son utilité immédiate pour progresser dans le jeu.
+\bigskip
 
+**L'optimisation au détriment de l'aléatoire**
 
-## Universalité des comportements de jeu
+\smallskip
 
-Le test du Khi$^2$ réalisé sur le croisement entre le genre du dresseur et le type de Pokémon (p-value = 0.9845) révèle une absence totale de corrélation. Ce résultat est fondamental : il démontre que les préférences pour certains types de Pokémon (Feu, Eau, Dragon, etc.) sont universelles et ne dépendent pas du profil sociologique du joueur. Cette homogénéité témoigne d'une culture de jeu commune qui transcende les genres.
+Notre problématique interrogeait l'existence d'un "pattern" d'échange. Les résultats montrent une stratégie claire de rétention des ressources. Nous voyons clairement que les Pokémons échangés sont pour la plupart de niveau faible, avec peu d'avantages liés à la rareté et la puissance, ceci démontre que les joueurs opèrent un tri qualitatif avant l'envoi. 
 
-## Le paradoxe de l'abondance et du recyclage
-
-La corrélation de Pearson entre le taux de capture et le volume d'échanges (0.23) confirme que le système est saturé par des Pokémon dits "communs". Les joueurs utilisent majoritairement le Wonder Trade pour recycler des Pokémon capturés facilement lors de leur aventure. Cependant, cette faible corrélation indique aussi que le système n'est pas uniquement une déchetterie : une part non négligeable d'échanges concerne des Pokémon rares, ce qui entretient l'attractivité de la plateforme.
+Le Wonder Trade ne sert pas à partager sa puissance, mais à recycler des spécimens jugés "non essentiels".
 
 
-## Limites de l'étude
+\medskip
 
-Comme souligné dans les rapports de référence, toute analyse de données comporte des limites :
+**L'influence de l'anonymat et de l'origine**
 
-Temporalité : Les données datent de 2015, ce qui correspond à la sixième génération de Pokémon. Les comportements pourraient différer sur les versions plus récentes (Switch).
+\smallskip
 
-Variables manquantes : L'absence de données sur les "objets tenus" lors de l'échange limite notre interprétation, car un objet rare peut transformer un échange "commun" en échange "apprécié".
+L'analyse des profils de dresseurs apporte une nuance intéressante : l'anonymat n'influence pas la qualité du Pokémon envoyé. Cela suggère que les logiques d'optimisation sont transversales à la communauté et ne dépendent pas de la réputation ou de l'exposition du profil du joueur. Seul le Mexique a montré une légère variation dans la résistance des Pokémon envoyés, mais l'échantillon réduit nous incite à la prudence quant à une conclusion géographique globale.  
+
+\medskip
+
+**Conclusion sur le système**
+
+\smallskip
+
+En conclusion, le Wonder Trade reflète un mécanisme économique de gestion des surplus. La corrélation entre taux de capture et fréquence d'échange prouve que le système incite l'échange des Pokémon "communs". Le "hasard" du Wonder Trade est donc une illusion statistique : c'est un marché asymétrique où la rareté est l'exception.
 
 
 
@@ -1089,7 +1095,6 @@ Variables manquantes : L'absence de données sur les "objets tenus" lors de l'é
 
 
 Sandra Bringay et Marine Demangeot. Supports de cours : Bases de Données et Sciences des Données 2, Université Paul Valéry Montpellier 3.
-
   
 
 
@@ -1213,7 +1218,7 @@ summarise(nb = n(), .groups = "drop")
 
 **Test de corrélation**
 
-```{r}
+```{r, warning=FALSE}
 cor.test(nb_echanges$capture_rate_norm, nb_echanges$nb)
 ```
 
@@ -1223,7 +1228,7 @@ Cette analyse permet de mesurer le lien entre la facilité de capture et la fré
 
 **Test du Khi² (shiny vs satisfaction)**
 
-```{r}
+```{r, warning=FALSE}
 trades$liked[trades$liked == "" | is.na(trades$liked)] <- "no_opinion"
 table_shiny <- table(trades$isShiny, trades$liked)
 chisq.test(table_shiny)
@@ -1232,7 +1237,7 @@ chisq.test(table_shiny)
 Ce test permet d’évaluer l’association entre le statut shiny et la satisfaction des échanges.
 
 **Régression logistique**
-```{r}
+```{r, warning=FALSE}
 trades$liked_bin <- ifelse(trades$liked == "Liked", 1, 0)
 
 df_model <- merge(trades, pokemon,
@@ -1250,7 +1255,7 @@ Ce modèle permet d’identifier les facteurs influençant la probabilité qu’
 
 **Graphique de corrélation**
 
-```{r}
+```{r, warning=FALSE}
 plot(nb_echanges$capture_rate_norm, nb_echanges$nb,
 main = "Capture rate vs échanges",
 xlab = "Capture rate normalisé",
@@ -1266,7 +1271,7 @@ Ce graphique illustre la relation entre taux de capture et nombre d’échanges.
 
 **ANOVA anonymat / niveau**
 
-```{r}
+```{r, warning=FALSE}
 trades$level <- as.numeric(as.character(trades$level))
 trades$anonymat <- ifelse(trades$trainerId <= 80,
 "Anonyme", "Identifie")
@@ -1294,4 +1299,3 @@ Cette formule permet de générer des identifiants uniques de dresseurs en fonct
 =SI(B2="FAUX";0;1)
 
 Conversion des valeurs booléennes en format numérique pour analyses statistiques.
-
