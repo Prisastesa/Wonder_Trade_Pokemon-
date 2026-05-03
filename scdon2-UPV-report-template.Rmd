@@ -727,7 +727,7 @@ Nous gardons la définition de qualité des échanges avec :
 
 \bigskip
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, message=FALSE, warning=FALSE}
 # Chargement des bibliothèques et données
 library(dplyr)
 library(ggplot2)
@@ -895,6 +895,37 @@ Les niveaux entre 11 et 30 représentent plus d'individus identifiés alors que 
 
 Cela suggère que les deux types de joueurs échangent globalement les mêmes niveaux.
 
+```{r, echo=FALSE}
+ggplot(df_anova_lvl, aes(x = anonymat, y = level, fill = anonymat)) +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "Niveau des Pokémon selon l’anonymat",
+       x = "Statut du dresseur",
+       y = "Niveau") +
+  scale_fill_manual(values = c(
+    "Anonyme" = "orange",
+    "Identifie" = "lightblue"
+  ))
+```
+\bigskip
+Sur ce graphique les médianes sont très proches entre anonymes et identifiés, les boîtes (dispersion) sont quasiment identiques.
+
+Nous observons une forte concentration sur les niveaux faibles dans les deux cas, même si quelques valeurs extrêmes existent.
+
+Visuellement, il n’y a aucune différence marquée entre les distributions
+
+\bigskip
+
+Les deux graphiques convergent vers la même conclusion :
+
+\bigskip
+
+- Les dresseurs anonymes et identifiés échangent des Pokémon de niveaux très similaires
+
+\smallskip
+
+- Il n’y a ni différence structurelle, ni tendance claire distinguant les deux groupes
+
 \bigskip
 
 ## Analyses bivariées : Tests d'hypothèses
@@ -1018,14 +1049,21 @@ Le V de Cramer nous montre que la relation est légère sans être pour autant n
 
 L’ensemble des analyses descriptives et tests statistiques montre que les échanges dans le système Wonder Trade ne sont pas totalement aléatoires.
 
-On observe d’abord une forte influence de la facilité de capture : les Pokémon communs sont nettement surreprésentés dans les échanges, ce qui traduit un flux principalement alimenté par des espèces abondantes. En revanche, les analyses par pays et par niveau ne révèlent pas de structure claire, suggérant que ces facteurs ont un impact limité, donc les différences des traineurs n'influencent pas le contenu des échanges.
+\bigskip
 
-Les tests d’hypothèses confirment partiellement ces observations. Une légère corrélation existe entre la rareté et la fréquence d’échange, mais elle reste faible. De même, l’anonymat des joueurs ne semble pas influencer les niveaux échangés.
+Nous observons d’abord une forte influence de la facilité de capture : les Pokémon communs sont nettement surreprésentés dans les échanges, ce qui traduit un flux principalement alimenté par des espèces abondantes. 
 
-En revanche, la satisfaction des joueurs est significativement liée à la présence de caractéristiques rares chez les Pokémon reçus. Le test du Khi² montre que les Pokémon possédant au moins un attribut spécial sont plus souvent appréciés, même si l’intensité de cette relation reste modérée.
+En revanche, les analyses par pays et par niveau ne révèlent pas de structure claire, comme pour les trainers anonymes ou non, suggérant que ces facteurs ont un impact limité, donc les différences des traineurs n'ont pas l'air d'influencer le contenu des échanges.
 
-Ainsi, les échanges apparaissent globalement structurés par des logiques simples liées à la rareté et à la valeur perçue des Pokémon, mais restent en grande partie influencés par des comportements diffus et peu prédictibles. Le système Wonder Trade combine donc une forte composante d’aléa avec quelques tendances comportementales identifiables.
+\bigskip
 
+Les tests d’hypothèses confirment partiellement ces observations. Une légère corrélation existe entre la rareté et la fréquence d’échange, mais elle reste faible.
+
+En revanche, la satisfaction des joueurs est significativement liée à la présence de caractéristiques rares chez les Pokémon reçus. Le test du Khi² montre que les Pokémon possédant au moins un attribut spécial sont plus souvent appréciés.
+
+\bigskip
+
+Ainsi, les échanges apparaissent globalement structurés par des logiques simples liées à la rareté et à la valeur perçue des Pokémon, mais restent en partie influencés par des comportements peu prédictibles. 
 
 
 # Limites et percpectives
