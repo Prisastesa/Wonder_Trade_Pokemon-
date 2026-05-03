@@ -1007,7 +1007,7 @@ En revanche, la satisfaction des joueurs est significativement liée à la prés
 Ainsi, les échanges apparaissent globalement structurés par des logiques simples liées à la rareté et à la valeur perçue des Pokémon, mais restent en partie influencés par des comportements peu prédictibles. 
 
 
-# Limites et percpectives
+# Limites et perspectives
 ## Difficultés rencontrées
 
 La réalisation de ce projet a mis en évidence plusieurs limites, à la fois techniques, méthodologiques et liées aux données.
