@@ -1088,9 +1088,6 @@ Variables manquantes : L'absence de données sur les "objets tenus" lors de l'é
 # Bibliographie {-}
 
 
-Pierre Lafaye de Micheaux,Remy Drouilhet, Benoit Liquet. Le logiciel R Maitriser le langage Effectuer des analyses (bio)statistiques
-
-
 Sandra Bringay et Marine Demangeot. Supports de cours : Bases de Données et Sciences des Données 2, Université Paul Valéry Montpellier 3.
 
   
