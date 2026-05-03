@@ -629,7 +629,7 @@ AVG(isShiny)
 FROM trades WHERE trainerId > 80;
 ```
 
-Il est compliquer d'analyser ces données, les qualités des Pokémon qui changent réelement entre anonyme et identifiés sont le IV parfait qui est bien plus élevé chez les identifiés.
+Il est compliqué d'analyser ces données, les qualités des Pokémon qui changent réelement entre anonymes et identifiés sont le IV parfait qui est bien plus élevé chez les identifiés.
 
 Pourtant la qualité "eggMove" et les talents cachés sont plus élevés chez les individus anonymes. Nous ne pouvons pas tirer de conclusion de cette requête, mais il est tout de même interessant de la garder, pour montrer que tout n'est pas prévisible.
 
