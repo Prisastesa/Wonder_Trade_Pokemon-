@@ -1065,13 +1065,12 @@ Variables manquantes : L'absence de données sur les "objets tenus" lors de l'é
 # Bibliographie {-}
 
 
-  Jean-Michel, R. (2023). Manuel de Statistiques avec R.
+Pierre Lafaye de Micheaux,Remy Drouilhet, Benoit Liquet. Le logiciel R Maitriser le langage Effectuer des analyses (bio)statistiques
 
-  Bringay, S., & Ben-Sassi, I. Supports de cours : Bases de Données et Sciences des Données 2, Université Paul Valéry Montpellier 3.
 
-  DellaData. L'ANOVA à un facteur : théorie et pratique. Consulté sur https://delladata.fr.
+Sandra Bringay et Marine Demangeot. Supports de cours : Bases de Données et Sciences des Données 2, Université Paul Valéry Montpellier 3.
 
-  The Pokémon Company. Données issues du système Global Trade Station (GTS).
+  
 
 
 # Annexes {-}
