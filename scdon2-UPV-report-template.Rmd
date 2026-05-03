@@ -470,7 +470,7 @@ Nous voyons que 119 pokémons différents sont échangés dans les 200 échanges
 
 \bigskip 
 
-REQUETE 1:  Pokémon de niveau 1(breeding)
+REQUETE 1 :  Pokémon de niveau 1(breeding)
 
 \bigskip
 
@@ -486,41 +486,7 @@ Plus d'1/3 des Pokémon sont de niveau 1, donc le niveau le plus faible. Cela mo
 
 \bigskip
 
-REQUETE 2: HP échangés vs non échangés
-
-\bigskip
-
-Nous avons ensuite comparé les points de vie moyens (HP) des Pokémon échangés et non échangés.
-
-L’objectif est de déterminer si les dresseurs ont tendance à échanger des Pokémon plus faibles, plus forts ou équivalents à la moyenne.
-
-```{sql connection = con}
-
-SELECT 
-(SELECT AVG(hp) FROM pokemon) AS "moyenne.tous.hp",
-
-(SELECT AVG(p.hp) FROM pokemon p, trades t 
-WHERE p.pokedex_number = t.pokemonId) AS "hp.échangés",
-
-(SELECT AVG(p.hp) FROM pokemon p 
-WHERE p.pokedex_number IN (SELECT pokemonId FROM trades))
-AS "hp.échangés.distincts",
-
-(SELECT AVG(hp) FROM pokemon
-WHERE pokedex_number NOT IN (SELECT pokemonId FROM trades)) 
-AS "hp.non.échangeé";
-```
-
-Nous constatons que les Pokémon conservés par les dresseurs affichent une moyenne de 71,40 HP, une valeur supérieure à la moyenne générale du Pokédex (68,96 HP).
-
-À l'inverse, les Pokémon échangés présentent une moyenne de points de vie nettement plus faible, avec une moyenne de 54,99 HP pour les espèces distinctes, qui tombe même à 49,59 HP lorsque l'on analyse l'ensemble des flux, indiquant que les spécimens les plus fragiles sont échangés de manière répétitive. 
-
-Dans l'ensemble, ces résultats mettent en évidence une tendance des dresseurs à se séparer des Pokémon les moins robustes au profit de spécimens plus endurants qu'ils préfèrent garder. 
-
-
-\bigskip
-
-REQUETE 3: Types les moins appréciés
+REQUETE 2 : Types les moins appréciés
 
 \bigskip
 
@@ -542,7 +508,7 @@ Enfin, comme les dresseurs utilisent souvent le Wonder Trade comme un outil d'op
 
 \bigskip 
 
-REQUETE 4: Shiny
+REQUETE 3 : Shiny
 
 \bigskip
 
@@ -564,7 +530,7 @@ Cela confirme un comportement de rétention des ressources rares.
 \bigskip
 
 
-REQUETE 5: Egg Move et HP
+REQUETE 4 : Egg Move et HP
 
 \bigskip
 
@@ -586,36 +552,11 @@ L'avantage d'un Egg Move serait purement technique ou tactique, sans influence m
 
 \bigskip
 
-Requête 6 : Relation entre la facilité de capture et le nombre d’échanges
-
-\bigskip
-
-Nous avons étudié la relation entre la facilité de capture et le nombre d’échanges. L’objectif est de tester si les Pokémon faciles à capturer sont plus échangés.
-
-
-```{sql connection = con}
-SELECT Pokemon.capture_rate, COUNT(*) AS nb_echanges 
-FROM Pokemon 
-JOIN Trades ON Pokemon.pokedex_number = Trades.pokemonId 
-GROUP BY Pokemon.capture_rate 
-ORDER BY nb_echanges DESC;
-```
-
-
-Les résultats montrent que les Pokémon ayant un taux de capture de 255 (le plus élevé possible) dominent largement le classement avec 62 échanges. De manière plus surprenante, les Pokémon ayant un taux de capture de 45 arrivent en deuxième position, alors même qu’ils sont nettement moins faciles à capturer.
-
-Cette distribution confirme que les Pokémon les plus accessibles constituent une part importante des échanges entre dresseurs. Toutefois, la présence marquée de certaines espèces moins faciles à capturer suggère que la fréquence des échanges ne dépend pas uniquement de la facilité d’obtention. D’autres facteurs comme l’intérêt stratégique peuvent également intervenir.
-
-Dans l’ensemble, les données indiquent que les joueurs échangent majoritairement des espèces communes, capturables en grande quantité. À l’inverse, les Pokémon plus rares apparaissent de manière marginale dans les échanges. Une tendance générale se dégage donc : plus un Pokémon est facile à obtenir, plus il circule dans les échanges.
-
-Cette observation devra néanmoins être confirmée par une analyse de corrélation plus rigoureuse dans la suite du rapport, afin de mesurer précisément l’intensité de cette relation.
-
-
 ## Liens entre échanges et trainers
 
 \bigskip
 
-REQUETE 7: Genre du dresseur et capacités du Pokémon
+REQUETE 5 : Genre du dresseur et capacités du Pokémon
 
 \bigskip
 
@@ -650,7 +591,7 @@ Globalement, ces résultats indiquent une forte homogénéité des comportements
 
 \bigskip
 
-Requête 8 : Anonymat vs qualité
+Requête 6 : Anonymat vs qualité
 
 \bigskip
 
@@ -1134,190 +1075,145 @@ Variables manquantes : L'absence de données sur les "objets tenus" lors de l'é
 
 
 # Annexes {-}
-## Requêtes SQL: chapitre 3
 
-### Nombre de Pokémon échangés
 
-SELECT
-COUNT(DISTINCT t.pokemonId) AS nb_pokemon_echanges,
-COUNT(t.pokemonId) AS nb_echanges,
-(SELECT COUNT(*) FROM Pokemon) AS nb_total_pokemon
-FROM Pokemon p
-LEFT JOIN Trades t
-ON p.pokedex_number = t.pokemonId;
-
-Cette requête permet de comparer le nombre total de Pokémon existants avec ceux réellement échangés, ainsi que le nombre total d’échanges effectués.
-
-### Pokémon de niveau 1
-
-SELECT COUNT(*) AS nb_pokemon_niveau1
-FROM trades
-WHERE level = 1;
-
-Cette requête permet d’identifier la proportion de Pokémon échangés au niveau minimal.
-
-### Comparaison des HP
-
-SELECT
-(SELECT AVG(hp) FROM pokemon) AS moyenne_hp_total,
-
-(SELECT AVG(p.hp)
-FROM pokemon p, trades t
-WHERE p.pokedex_number = t.pokemonId) AS hp_echanges,
-
-(SELECT AVG(p.hp)
-FROM pokemon p
-WHERE p.pokedex_number IN (SELECT pokemonId FROM trades)) AS hp_echanges_distincts,
-
-(SELECT AVG(hp)
-FROM pokemon
-WHERE pokedex_number NOT IN (SELECT pokemonId FROM trades)) AS hp_non_echanges;
-
-Cette analyse compare les statistiques de points de vie (HP) entre Pokémon échangés et non échangés.
-
-### Types les moins appréciés
-
-SELECT Pokemon.type1, Pokemon.type2, COUNT(*) AS nb_dislikes
-FROM Trades
-INNER JOIN Pokemon
-ON Trades.pokemonId = Pokemon.pokedex_number
-WHERE Trades.liked = 'dislike'
-GROUP BY Pokemon.type1, Pokemon.type2
-ORDER BY nb_dislikes DESC
-LIMIT 1;
-
-Cette requête identifie les types de Pokémon les plus souvent rejetés lors des échanges.
-
-### Nombre de Pokémon shiny
-
-SELECT COUNT(*) AS nb_shiny
-FROM trades
-WHERE isShiny = 'VRAI';
-
-Cette requête calcule la proportion de Pokémon shiny présents dans les échanges.
-
-### Egg Move et HP
-
-SELECT t.hasEggMove, AVG(p.hp)
-FROM pokemon p, trades t
-WHERE p.pokedex_number = t.pokemonId
-GROUP BY t.hasEggMove;
-
-Cette analyse permet de comparer les HP moyens selon la présence d’un Egg Move.
-
-### Capture rate et échanges
-
-SELECT Pokemon.capture_rate, COUNT(*) AS nb_echanges
-FROM Pokemon
-JOIN Trades
-ON Pokemon.pokedex_number = Trades.pokemonId
-GROUP BY Pokemon.capture_rate
-ORDER BY nb_echanges DESC;
-
-Cette requête étudie la relation entre le taux de capture et la fréquence des échanges.
-
-### Genre et qualité des échanges
-
-SELECT
-tr.trainerGender,
-AVG(
-t.hasItem +
-t.hasHiddenAbility +
-t.hasEggMove +
-t.hasPokerus +
-t.hasPerfectIV +
-t.isShiny
-) AS score_moyen
-FROM trades t
-INNER JOIN trainers tr
-ON t.trainerId = tr.trainerId
-INNER JOIN pokemon p
-ON t.pokemonId = p.pokedex_number
-GROUP BY tr.trainerGender;
-
-Cette requête calcule un score moyen de qualité des échanges selon le genre du dresseur.
-
-### Anonymat et qualité des échanges
-
-SELECT 'Anonyme' AS Statut,
-AVG(CAST(level AS UNSIGNED)) AS niveau_moyen,
-AVG(isShiny) * 100 AS pourcentage_shiny,
-AVG(hasItem) * 100 AS pourcentage_objet,
-AVG(hasPerfectIV) * 100 AS pourcentage_IV,
-AVG(hasHiddenAbility) * 100 AS pourcentage_talent,
-AVG(hasEggMove) * 100 AS pourcentage_eggmove
-FROM trades
-WHERE trainerId <= 80
-
-UNION ALL
-
-SELECT 'Identifie',
-AVG(CAST(level AS UNSIGNED)),
-AVG(isShiny) * 100,
-AVG(hasItem) * 100,
-AVG(hasPerfectIV) * 100,
-AVG(hasHiddenAbility) * 100,
-AVG(hasEggMove) * 100
-FROM trades
-WHERE trainerId > 80;
-
-Cette requête compare les comportements d’échange entre utilisateurs anonymes et identifiés.
-
- **Codes** 
+## Requêtes
 Dans cette section, nous présentons les  codes utilisés pour réaliser les analyses du projet. 
 
-## Ajout d’une clé primaire
+\bigskip
 
+**Ajout d’une clé primaire**
 ALTER TABLE trades
 ADD IdTrade INT AUTO_INCREMENT PRIMARY KEY;
 
 Cette requête permet d’ajouter un identifiant unique à chaque ligne de la table trades, facilitant les jointures et l’intégrité des données.
 
+\bigskip
+
+**REQUETE 1 : HP échangés vs non échangés**
+
+\bigskip
+
+Nous avons comparé les points de vie moyens (HP) des Pokémon échangés et non échangés.
+
+L’objectif est de déterminer si les dresseurs ont tendance à échanger des Pokémon plus faibles, plus forts ou équivalents à la moyenne.
+
+```{sql connection = con}
+
+SELECT 
+(SELECT AVG(hp) FROM pokemon) AS "moyenne.tous.hp",
+
+(SELECT AVG(p.hp) FROM pokemon p, trades t 
+WHERE p.pokedex_number = t.pokemonId) AS "hp.échangés",
+
+(SELECT AVG(p.hp) FROM pokemon p 
+WHERE p.pokedex_number IN (SELECT pokemonId FROM trades))
+AS "hp.échangés.distincts",
+
+(SELECT AVG(hp) FROM pokemon
+WHERE pokedex_number NOT IN (SELECT pokemonId FROM trades)) 
+AS "hp.non.échangeé";
+```
+
+Nous constatons que les Pokémon conservés par les dresseurs affichent une moyenne de 71,40 HP, une valeur supérieure à la moyenne générale du Pokédex (68,96 HP).
+
+À l'inverse, les Pokémon échangés présentent une moyenne de points de vie nettement plus faible, avec une moyenne de 54,99 HP pour les espèces distinctes, qui tombe même à 49,59 HP lorsque l'on analyse l'ensemble des flux, indiquant que les spécimens les plus fragiles sont échangés de manière répétitive. 
+
+Dans l'ensemble, ces résultats mettent en évidence une tendance des dresseurs à se séparer des Pokémon les moins robustes au profit de spécimens plus endurants qu'ils préfèrent garder. 
+
+\bigskip
+
+**REQUETE 2 : Egg Move et HP**
+
+\bigskip
+
+Nous avons analysé si la présence d’une capacité spéciale (Egg Move) influence les HP moyens afin de voir  si cette caractéristique apporte un avantage mesurable.
+
+```{sql connection = con}
+SELECT t.hasEggMove, AVG(p.hp) 
+FROM pokemon p, trades t 
+WHERE p.pokedex_number = t.pokemonId 
+GROUP BY t.hasEggMove;
+```
 
 
-## Scripts R chapitre 4
-### Test de corrélation (capture rate)
+L’analyse croisée entre la présence d’une capacité spéciale (Egg Move) et les points de vie moyens des Pokémon échangés révèle des résultats quasi identiques. Nous observons que les Pokémon possédant un Egg Move affichent 48,61 HP en moyenne, contre 49,78 HP pour ceux n'en possédant pas. 
 
+Cet écart semble infime et suggèrerait que la possession d'une capacité rare n'est pas corrélée à une robustesse physique supérieure chez les Pokémon échangés.
+
+L'avantage d'un Egg Move serait purement technique ou tactique, sans influence mesurable sur la statistique de HP. À ce stade, aucune tendance dominante ne semble se dégager visuellement, ce qui indique que ces deux caractéristiques évolueraient de manière indépendante. 
+
+\bigskip
+
+**REQUETE 3 : Dresseur le plus actif**
+
+\bigskip
+
+Cette requête permet d’observer le comportement du dresseur le plus actif. Cependant, elle constitue une analyse de cas particulier et ne permet pas de généraliser à l’ensemble des joueurs.
+Nous avons identifié le niveau maximal du Pokémon appartenant au dresseur ayant effectué le plus d’échanges.
+L’objectif est de relier activité (nombre d’échanges) et performance (niveau du Pokémon)
+
+```{sql connection = con}
+SELECT trainerId, COUNT(idTrade) AS nombre_echanges, MAX(level) AS niveau_maximal_pokemon 
+FROM trades 
+GROUP BY trainerId 
+ORDER BY nombre_echanges DESC 
+LIMIT 1;
+```
+
+\bigskip
+
+
+## Codes
+### Partie Statistique
+**Test de corrélation (capture rate)**
+
+```{r}
 library(dplyr)
 
 trades <- read.csv("Trades.csv", sep = ";")
 pokemon <- read.csv("pokemon.csv", sep = ",")
 
-Nettoyage et transformation du taux de capture :
+# Nettoyage et transformation du taux de capture :
 
 pokemon$capture_rate <- as.numeric(gsub("[^0-9]", "", pokemon$capture_rate))
 pokemon$capture_rate_norm <- pokemon$capture_rate / 255
 
-Fusion des données :
+# Fusion des données :
 
 df_corr <- merge(trades, pokemon,
 by.x = "pokemonId",
 by.y = "pokedex_number")
 
-Calcul du nombre d’échanges par Pokémon :
+# Calcul du nombre d’échanges par Pokémon :
 
 nb_echanges <- df_corr %>%
 group_by(pokemonId, capture_rate_norm) %>%
 summarise(nb = n(), .groups = "drop")
+```
 
-Test de corrélation :
+**Test de corrélation**
 
+```{r}
 cor.test(nb_echanges$capture_rate_norm, nb_echanges$nb)
+```
 
 Cette analyse permet de mesurer le lien entre la facilité de capture et la fréquence d’échange.
 
-Test du Khi² (shiny vs satisfaction)
+\bigskip 
 
+**Test du Khi² (shiny vs satisfaction)**
+
+```{r}
 trades$liked[trades$liked == "" | is.na(trades$liked)] <- "no_opinion"
-
 table_shiny <- table(trades$isShiny, trades$liked)
-
 chisq.test(table_shiny)
+```
 
 Ce test permet d’évaluer l’association entre le statut shiny et la satisfaction des échanges.
 
-### Régression logistique
-
+**Régression logistique**
+```{r}
 trades$liked_bin <- ifelse(trades$liked == "Liked", 1, 0)
 
 df_model <- merge(trades, pokemon,
@@ -1329,11 +1225,13 @@ data = df_model,
 family = "binomial")
 
 summary(modele)
+```
 
 Ce modèle permet d’identifier les facteurs influençant la probabilité qu’un échange soit apprécié.
 
-Graphique de corrélation
+**Graphique de corrélation**
 
+```{r}
 plot(nb_echanges$capture_rate_norm, nb_echanges$nb,
 main = "Capture rate vs échanges",
 xlab = "Capture rate normalisé",
@@ -1343,23 +1241,24 @@ pch = 16)
 abline(lm(nb ~ capture_rate_norm, data = nb_echanges),
 col = "red",
 lwd = 2)
+```
 
 Ce graphique illustre la relation entre taux de capture et nombre d’échanges.
 
-### ANOVA anonymat / niveau
+**ANOVA anonymat / niveau**
 
+```{r}
 trades$level <- as.numeric(as.character(trades$level))
-
 trades$anonymat <- ifelse(trades$trainerId <= 80,
 "Anonyme", "Identifie")
-
 res_anova <- aov(level ~ anonymat, data = trades)
 summary(res_anova)
+```
 
 Cette analyse permet de comparer le niveau moyen selon le statut des utilisateurs.
 
-## Traitements Excel / LibreOffice
-### Création des Trainer ID
+### Traitements Excel / LibreOffice
+**Création des Trainer ID**
 
 =SI(J103=J104;
 SI(K103=K104;
@@ -1369,8 +1268,11 @@ Q103+1)
 
 Cette formule permet de générer des identifiants uniques de dresseurs en fonction des duplications.
 
-### Conversion des booléens
+\bigskip
+
+**Conversion des booléens**
 
 =SI(B2="FAUX";0;1)
 
 Conversion des valeurs booléennes en format numérique pour analyses statistiques.
+
