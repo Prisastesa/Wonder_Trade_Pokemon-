@@ -1266,6 +1266,7 @@ Cette requête permet d’ajouter un identifiant unique à chaque ligne de la ta
 ### Scripts R chapitre 4
 **Test de corrélation (capture rate)**
 
+```{r, warning=FALSE}
 library(dplyr)
 
 trades <- read.csv("Trades.csv", sep = ";")
@@ -1288,12 +1289,14 @@ nb_echanges <- df_corr %>%
 group_by(pokemonId, capture_rate_norm) %>%
 summarise(nb = n(), .groups = "drop")
 
+```
+
 Test de corrélation :
 
 ```{r, warning=FALSE}
-
 cor.test(nb_echanges$capture_rate_norm, nb_echanges$nb)
 ```
+
 Cette analyse permet de mesurer le lien entre la facilité de capture et la fréquence d’échange.
 
 
