@@ -327,11 +327,11 @@ A partir des fichiers **Pokemon** et **WonderTrade**, nous avons créé les tabl
 
 ### Transformation du fichier Json en csv
 
-Nous avons importé le fichier **WonderTrade** qui est en Json sur Excel en allant sur “obtenir des données” puis “à partir d’un fichier” puis “à partir de JSON” comme le montre la Figure.1, ce qui nous a permi de le convertir en table avec l'éditeur Power Query.
+Nous avons importé le fichier **WonderTrade** qui est en Json sur Excel en allant sur “obtenir des données” puis “à partir d’un fichier” puis “à partir de JSON”, ce qui nous a permi de le convertir en table avec l'éditeur Power Query.
 
 \bigskip 
 
-Nous avons choisi de garder toutes les colonnes en cliquant sur la double flèche et en sélectionnant le tout comme le montre la Figure.3, puis nous avons pu avoir le fichier en csv grâce au bouton “fermer et charger”.
+Nous avons choisi de garder toutes les colonnes en cliquant sur la double flèche et en sélectionnant le tout, puis nous avons pu avoir le fichier en csv grâce au bouton “fermer et charger”.
 
 \bigskip 
 
