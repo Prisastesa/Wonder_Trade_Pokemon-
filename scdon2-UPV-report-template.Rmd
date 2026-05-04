@@ -65,7 +65,7 @@ Ce système peut nous mener à une certaine réflexion :
 
 \bigskip
 
-  **Est-ce qu'il y a un certain paterne à ces échanges ? Et quels éléments peuvent influencer la qualité de ceux-ci?**
+  **Est-ce qu'il y a un certain pattern à ces échanges ? Et quels éléments peuvent influencer la qualité de ceux-ci?**
 
 
 \bigskip
