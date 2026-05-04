@@ -50,7 +50,7 @@ groupeTD : TD1
 always_allow_html: true
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, warning=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
@@ -65,7 +65,7 @@ Ce système peut nous mener à une certaine réflexion :
 
 \bigskip
 
-  **Est-ce qu'il y a un certain pattern à ces échanges ? Et quels éléments peuvent influencer la qualité de ceux-ci?**
+  **Est-ce qu'il y a un certain paterne à ces échanges ? Et quels éléments peuvent influencer la qualité de ceux-ci?**
 
 
 \bigskip
@@ -662,7 +662,7 @@ Si les requêtes SQL précédentes nous permettent d'observer des tendances glob
 
 # Analyse statistique
 
-L’objectif de cette analyse est de déterminer ce qui influence la qualité des échanges dans le système Wonder Trade, donc si nous pouvons y trouver un pattern. Nous cherchons à comprendre si les échanges sont purement aléatoires ou s'ils répondent à des logiques comportementales précises.
+L’objectif de cette analyse est de déterminer ce qui influence la qualité des échanges dans le système Wonder Trade, donc si nous pouvons y trouver un paterne. Nous cherchons à comprendre si les échanges sont purement aléatoires ou s'ils répondent à des logiques comportementales précises.
 
 \medskip
 
@@ -711,7 +711,7 @@ Rédaction : Composition du rapport avec l'appui de ChatGPT pour l'optimisation 
 
 **Distribution selon la facilité de capture**
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, warning=FALSE}
 library(ggplot2)
 
 pokemon <- read.csv("pokemon.csv", sep = ",")
@@ -741,7 +741,7 @@ Le flux du Wonder Trade semble donc alimenté par l'abondance des captures facil
 **Résistance des Pokémon par origine géographique**
 
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, warning=FALSE}
 library(dplyr)
 library(ggplot2)
 
@@ -802,7 +802,7 @@ Nous pouvons conclure que le pays du trainer a un impacte faible sur la qualité
 
 **Niveau des Pokémon et anonymat**
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, warning=FALSE}
 library(ggplot2)
 # Création des classes de niveau (tranches de 5)
 
@@ -853,7 +853,7 @@ Les niveaux entre 11 et 30 représentent plus d'individus identifiés alors que 
 
 Cela suggère que les deux types de joueurs échangent globalement les mêmes niveaux.
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, warning=FALSE}
 ggplot(df_anova_lvl, aes(x = anonymat, y = level, fill = anonymat)) +
   geom_boxplot() +
   theme_minimal() +
@@ -901,7 +901,7 @@ Nous testons si la rareté (taux de capture) influence la fréquence à laquelle
 -  $H_1$ : Il existe une corrélation. 
 - Formule (Coefficient de Corrélation de Pearson) :$$r = \frac{\sum (x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum (x_i - \bar{x})^2 \sum (y_i - \bar{y})^2}}$$
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, warning=FALSE}
 # Import des données
 library(dplyr)
 
@@ -946,7 +946,7 @@ Nous avons comparé le niveau moyen des Pokémon envoyés par les dresseurs "Ano
 
 \bigskip
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, warning=FALSE}
 trades$anonymat <- ifelse(trades$trainerId <= 80, "Anonyme", "Identifie")
 
 res_anova_lvl <- aov(level ~ anonymat, data = trades[!is.na(trades$level),])
@@ -970,7 +970,7 @@ Ce test vérifie si un Pokémon avec au moins un avantage influence sa probabili
 
 \bigskip
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, warning=FALSE}
 # Création du score total
 trades$score_bonus <- trades$hasItem +
                       trades$hasHiddenAbility +
@@ -1187,7 +1187,7 @@ L'avantage d'un Egg Move serait purement technique ou tactique, sans influence m
 **Regression multimodale**
 Nous avons choisi ce modèle car notre variable liked comporte trois catégories : Like, Dislike et Neutral. Contrairement à une régression classique limitée à deux choix, la méthode multinomiale permet d'analyser simultanément ce qui influence chaque niveau de satisfaction par rapport à un point de référence (ici, l'avis neutre). C'est l'outil idéal pour comprendre les nuances de choix des utilisateurs.
 
-``` {r, echo = FALSE}
+``` {r, echo = FALSE, warning=FALSE}
 
 # Chargement des librairies
 library(nnet)
@@ -1272,7 +1272,7 @@ Cette requête permet d’ajouter un identifiant unique à chaque ligne de la ta
 ### Scripts R chapitre 4
 **Test de corrélation (capture rate)**
 
-
+```{r echo=TRUE, results='hide', warning=FALSE}
       library(dplyr)
       
       trades <- read.csv("Trades.csv", sep = ";")
@@ -1294,13 +1294,16 @@ Cette requête permet d’ajouter un identifiant unique à chaque ligne de la ta
       nb_echanges <- df_corr %>%
       group_by(pokemonId, capture_rate_norm) %>%
       summarise(nb = n(), .groups = "drop")
+```
 
 \bigskip
 \bigskip
 
 **Test de corrélation :**
 
+```{r echo=TRUE, results='hide', warning=FALSE}
       cor.test(nb_echanges$capture_rate_norm, nb_echanges$nb)
+```
 
 \smallskip
 
@@ -1311,11 +1314,13 @@ Cette analyse permet de mesurer le lien entre la facilité de capture et la fré
 
 **Test du $\chi^2$ (shiny vs satisfaction)**
 
+```{r echo=TRUE, results='hide', warning=FALSE}
       trades$liked[trades$liked == "" | is.na(trades$liked)] <- "no_opinion"
       
       table_shiny <- table(trades$isShiny, trades$liked)
       
       chisq.test(table_shiny)
+```
 
 \smallskip
 
@@ -1326,6 +1331,7 @@ Ce test permet d’évaluer l’association entre le statut shiny et la satisfac
 
 **Graphique de corrélation**
 
+```{r echo=TRUE, results='hide', warning=FALSE}
       plot(nb_echanges$capture_rate_norm, nb_echanges$nb,
       main = "Capture rate vs échanges",
       xlab = "Capture rate normalisé",
@@ -1335,6 +1341,7 @@ Ce test permet d’évaluer l’association entre le statut shiny et la satisfac
       abline(lm(nb ~ capture_rate_norm, data = nb_echanges),
       col = "red",
       lwd = 2)
+```
 
 \smallskip
 
@@ -1345,7 +1352,7 @@ Ce graphique illustre la relation entre taux de capture et nombre d’échanges.
 
 **ANOVA anonymat / niveau**
 
-
+```{r echo=TRUE, results='hide', warning=FALSE}
       trades$level <- as.numeric(as.character(trades$level))
       
       trades$anonymat <- ifelse(trades$trainerId <= 80,
@@ -1353,6 +1360,7 @@ Ce graphique illustre la relation entre taux de capture et nombre d’échanges.
       
       res_anova <- aov(level ~ anonymat, data = trades)
       summary(res_anova)
+```
 
 \smallskip
 
