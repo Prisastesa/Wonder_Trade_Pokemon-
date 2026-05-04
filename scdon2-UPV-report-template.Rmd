@@ -732,7 +732,7 @@ ggplot(df_complet, aes(x = capture_rate)) +
 
 \smallskip
 
-L'observation des données montre que les Pokémon possédant un taux de capture élevé (espèces communes) sont massivement plus présents dans les échanges. Avec tout de même une étange concentration du taux de capture 45, qui peut être interprété comme une anomalie, avec des Pokémon anormalement plus présents que les autres.  
+L'observation des données montre que les Pokémon possédant un taux de capture élevé (espèces communes) sont massivement plus présents dans les échanges. Avec tout de même une étrange concentration du taux de capture 45, qui peut être interprété comme une anomalie, avec des Pokémon anormalement plus présents que les autres.  
 
 Le flux du Wonder Trade semble donc alimenté par l'abondance des captures faciles plutôt que par la rareté.  
 
@@ -955,7 +955,7 @@ summary(res_anova_lvl)
 
 \bigskip
 
-RLe test ANOVA affiche une p-value de 0.571, bien au-dessus du seuil de 0,05. Nous ne pouvons pas rejeter l'hypothèse nulle. Il n'y a aucune différence statistiquement significative entre les deux groupes : l'anonymat n'influence pas le niveau du Pokémon envoyé.  
+Le test ANOVA affiche une p-value de 0.571, bien au-dessus du seuil de 0,05. Nous ne pouvons pas rejeter l'hypothèse nulle. Il n'y a aucune différence statistiquement significative entre les deux groupes : l'anonymat n'influence pas le niveau du Pokémon envoyé.  
 
 \bigskip
 
