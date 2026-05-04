@@ -1188,14 +1188,11 @@ L'avantage d'un Egg Move serait purement technique ou tactique, sans influence m
 Nous avons choisi ce modèle car notre variable liked comporte trois catégories : Like, Dislike et Neutral. Contrairement à une régression classique limitée à deux choix, la méthode multinomiale permet d'analyser simultanément ce qui influence chaque niveau de satisfaction par rapport à un point de référence (ici, l'avis neutre). C'est l'outil idéal pour comprendre les nuances de choix des utilisateurs.
 
 ``` {r, echo = FALSE}
-# 0. Vérification et installation automatique des packages
-packages_requis <- c("nnet", "ggplot2", "broom")
-packages_a_installer <- packages_requis[!(packages_requis %in% installed.packages()[,"Package"])]
-if(length(packages_a_installer)) install.packages(packages_a_installer)
 
 # Chargement des librairies
 library(nnet)
 library(ggplot2)
+if (!require(broom)) install.packages("broom", repos = "https://cloud.r-project.org")
 library(broom)
 
 # 1. Chargement et Fusion
@@ -1252,111 +1249,139 @@ L'analyse multinomiale, prenant pour référence la neutralité, permet de déga
 
 
 ## Codes
+
+\bigskip
+
 Dans cette section, nous présentons les  codes utilisés pour réaliser les analyses du projet. 
+
+\bigskip
+\bigskip
 
 **Ajout d’une clé primaire**
 
-ALTER TABLE trades
-ADD IdTrade INT AUTO_INCREMENT PRIMARY KEY;
+      ALTER TABLE trades
+      ADD IdTrade INT AUTO_INCREMENT PRIMARY KEY;
+
+\smallskip
 
 Cette requête permet d’ajouter un identifiant unique à chaque ligne de la table trades, facilitant les jointures et l’intégrité des données.
 
-
+\bigskip
+\bigskip
 
 ### Scripts R chapitre 4
 **Test de corrélation (capture rate)**
 
-```{r, warning=FALSE}
-library(dplyr)
 
-trades <- read.csv("Trades.csv", sep = ";")
-pokemon <- read.csv("pokemon.csv", sep = ",")
+      library(dplyr)
+      
+      trades <- read.csv("Trades.csv", sep = ";")
+      pokemon <- read.csv("pokemon.csv", sep = ",")
+      
+      # Nettoyage et transformation du taux de capture :
+      
+      pokemon$capture_rate <- as.numeric(gsub("[^0-9]", "", pokemon$capture_rate))
+      pokemon$capture_rate_norm <- pokemon$capture_rate / 255
+      
+      # Fusion des données :
+      
+      df_corr <- merge(trades, pokemon,
+      by.x = "pokemonId",
+      by.y = "pokedex_number")
+      
+      # Calcul du nombre d’échanges par Pokémon :
+      
+      nb_echanges <- df_corr %>%
+      group_by(pokemonId, capture_rate_norm) %>%
+      summarise(nb = n(), .groups = "drop")
 
-Nettoyage et transformation du taux de capture :
+\bigskip
+\bigskip
 
-pokemon$capture_rate <- as.numeric(gsub("[^0-9]", "", pokemon$capture_rate))
-pokemon$capture_rate_norm <- pokemon$capture_rate / 255
+**Test de corrélation :**
 
-Fusion des données :
+      cor.test(nb_echanges$capture_rate_norm, nb_echanges$nb)
 
-df_corr <- merge(trades, pokemon,
-by.x = "pokemonId",
-by.y = "pokedex_number")
-
-Calcul du nombre d’échanges par Pokémon :
-
-nb_echanges <- df_corr %>%
-group_by(pokemonId, capture_rate_norm) %>%
-summarise(nb = n(), .groups = "drop")
-
-```
-
-Test de corrélation :
-
-```{r, warning=FALSE}
-cor.test(nb_echanges$capture_rate_norm, nb_echanges$nb)
-```
+\smallskip
 
 Cette analyse permet de mesurer le lien entre la facilité de capture et la fréquence d’échange.
 
+\bigskip
+\bigskip
 
 **Test du $\chi^2$ (shiny vs satisfaction)**
 
-```{r, warning=FALSE}
-trades$liked[trades$liked == "" | is.na(trades$liked)] <- "no_opinion"
+      trades$liked[trades$liked == "" | is.na(trades$liked)] <- "no_opinion"
+      
+      table_shiny <- table(trades$isShiny, trades$liked)
+      
+      chisq.test(table_shiny)
 
-table_shiny <- table(trades$isShiny, trades$liked)
-
-chisq.test(table_shiny)
-```
+\smallskip
 
 Ce test permet d’évaluer l’association entre le statut shiny et la satisfaction des échanges.
 
+\bigskip
+\bigskip
 
 **Graphique de corrélation**
 
-```{r, warning=FALSE}
-plot(nb_echanges$capture_rate_norm, nb_echanges$nb,
-main = "Capture rate vs échanges",
-xlab = "Capture rate normalisé",
-ylab = "Nombre d’échanges",
-pch = 16)
+      plot(nb_echanges$capture_rate_norm, nb_echanges$nb,
+      main = "Capture rate vs échanges",
+      xlab = "Capture rate normalisé",
+      ylab = "Nombre d’échanges",
+      pch = 16)
+      
+      abline(lm(nb ~ capture_rate_norm, data = nb_echanges),
+      col = "red",
+      lwd = 2)
 
-abline(lm(nb ~ capture_rate_norm, data = nb_echanges),
-col = "red",
-lwd = 2)
-```
+\smallskip
 
 Ce graphique illustre la relation entre taux de capture et nombre d’échanges.
 
+\bigskip
+\bigskip
+
 **ANOVA anonymat / niveau**
 
-```{r, warning=FALSE}
 
-trades$level <- as.numeric(as.character(trades$level))
+      trades$level <- as.numeric(as.character(trades$level))
+      
+      trades$anonymat <- ifelse(trades$trainerId <= 80,
+      "Anonyme", "Identifie")
+      
+      res_anova <- aov(level ~ anonymat, data = trades)
+      summary(res_anova)
 
-trades$anonymat <- ifelse(trades$trainerId <= 80,
-"Anonyme", "Identifie")
+\smallskip
 
-res_anova <- aov(level ~ anonymat, data = trades)
-summary(res_anova)
-```
 Cette analyse permet de comparer le niveau moyen selon le statut des utilisateurs.
+
+\bigskip
+\bigskip
 
 ### Traitements Excel / LibreOffice
 **Création des Trainer ID**
 
-=SI(J103=J104;
-SI(K103=K104;
-SI(L103=L104;Q103;Q103+1);
-Q103+1);
-Q103+1)
+      =SI(J103=J104;
+      SI(K103=K104;
+      SI(L103=L104;Q103;Q103+1);
+      Q103+1);
+      Q103+1)
+
+\smallskip
 
 Cette formule permet de générer des identifiants uniques de dresseurs en fonction des duplications.
 
+\bigskip
+\bigskip
+
 **Conversion des booléens**
 
-=SI(B2="FAUX";0;1)
+      =SI(B2="FAUX";0;1)
+
+\smallskip
 
 Conversion des valeurs booléennes en format numérique pour analyses statistiques.
 
