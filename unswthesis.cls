@@ -451,7 +451,7 @@
                 {\rmfamily\normalsize \@author}\\
         \end{center}
 \begin{figure} \begin{center}
-\includegraphics[width=5cm]{logo-upvm_4.jpg}
+\includegraphics[width=5cm]{images/logo-upvm_4.jpg}
 \end{center} \end{figure}
         \vskip1cm
         \begin{center}  % Department changed to School July 1995
@@ -478,7 +478,7 @@
                 {\rmfamily\normalsize \@author}\\
         \end{center}
 \begin{figure} \begin{center}
-\includegraphics[width=5cm]{logo-upvm_4.jpg}
+\includegraphics[width=5cm]{images/logo-upvm_4.jpg}
 \end{center} \end{figure}
         \vskip1cm
         \begin{center}  % Department changed to School July 1995
@@ -503,7 +503,7 @@
                 {\rmfamily\normalsize \@author}\\
         \end{center}
 \begin{figure} \begin{center}
-\includegraphics[width=5cm]{logo-upvm_4.jpg}
+\includegraphics[width=5cm]{images/logo-upvm_4.jpg}
 \end{center} \end{figure}
         \vskip1cm
         \begin{center}  % Department changed to School July 1995
@@ -529,7 +529,7 @@
                 {\rmfamily\normalsize \@author}\\
         \end{center}
 \begin{figure} \begin{center}
-\includegraphics[width=5cm]{logo-upvm_4.jpg}
+\includegraphics[width=5cm]{images/logo-upvm_4.jpg}
 \end{center} \end{figure}
         \vskip1cm
         \begin{center}  % Department changed to School July 1995
@@ -555,7 +555,7 @@
                 {\rmfamily\normalsize \@author}\\
         \end{center}
 \begin{figure} \begin{center}
-\includegraphics[width=5cm]{logo-upvm_4.jpg}
+\includegraphics[width=5cm]{images/logo-upvm_4.jpg}
 \end{center} \end{figure}
         \vskip1cm
         \begin{center}  % Department changed to School July 1995
@@ -581,7 +581,7 @@
                 {\rmfamily\normalsize \@author}\\
         \end{center}
 \begin{figure} \begin{center}
-\includegraphics[width=5cm]{logo-upvm_4.jpg}
+\includegraphics[width=5cm]{images/logo-upvm_4.jpg}
 \end{center} \end{figure}
         \vskip1cm
         \begin{center}  % Department changed to School July 1995

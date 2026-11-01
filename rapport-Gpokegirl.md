@@ -1,0 +1,1330 @@
+---
+title: "Rapport de groupe des UE \\newline  Bases de données + Sciences des Données 2"
+author:
+- 'Fenina Sara, '
+- Guilleminot Sarah, 
+- Rakoto Ambinintsoa Prisca,
+- Sbircea Stephanie.
+date: "04 mai 2026"
+output:
+  pdf_document:
+    latex_engine: xelatex
+    fig_caption: yes
+    keep_md: yes
+    keep_tex: yes
+    md_extensions: +raw_attribute
+    number_sections: yes
+    pandoc_args:
+    - --top-level-division="chapter"
+    - --bibliography="references.bib"
+    template: template.tex
+    toc: yes
+    toc_depth: 1
+  word_document:
+    fig_caption: yes
+    number_sections: yes
+    pandoc_args: 
+    - --top-level-division="chapter"
+    - --to="odt+native_numbering"
+    toc: yes
+    toc_depth: '2'
+  html_document:
+    df_print: paged
+    toc: yes
+    toc_depth: '2'
+header-includes:
+  - \usepackage{xcolor}
+toc-title: "Table des matières"
+bibliography: references.bib
+coursecode: TV15MI-TV25MI
+csl: iso690-author-date-fr-no-abstract.csl
+Acknowledgements:
+- Nous tenons à exprimer notre profonde gratitude   envers les personnes suivantes qui ont contribué à la réalisation de ce projet.
+- Mme Sandra Bringay pour ses précieux conseils et son soutien constant tout au long de ce projet.
+- Mme Marine Demangeot pour son accompagnement et son aide au cours des séances.
+- L’équipe de ce groupe pour leur collaboration et leur dévouement, chaque membre de ce projet a apporté des idées originales et a fait preuve de rigueur et de sérieux dans la réalisation de nos objectifs communs.
+biblio-style: elsarticle-harv
+session: 2026
+team: PokéGirl
+groupeTD : TD1
+always_allow_html: true
+---
+
+
+
+
+# Introduction 
+## Problématique
+
+Dans ce projet, nous nous intéressons au système d’échange Wonder Trade du jeu Pokémon, dans lequel les joueurs échangent des Pokémon de manière aléatoire avec d’autres utilisateurs à travers le monde.
+Les trainers, donc les personnes qui offrent leurs Pokémon auraient tout intérêt à se débarasser de ceux qui leurs sont le moins utile, mais est-ce réelement le cas?
+
+Ce système peut nous mener à une certaine réflexion :  
+
+\bigskip
+
+  **Est-ce qu'il y a un certain pattern à ces échanges ? Et quels éléments peuvent influencer la qualité de ceux-ci?**
+
+
+\bigskip
+
+La qualité d’un échange est une notion que nous approchons ici sous deux angles complémentaires pour pallier le manque de données sur la satisfaction des utilisateurs :  
+\bigskip
+
+  **Mesure subjective** : Basée sur la variable liked (satisfaction déclarée par le joueur).  
+
+\medskip
+
+  **Mesure objective** : Basée sur les variables suivantes : présence d’un objet, capacité cachée, egg move, Pokérus, IV parfaits, statut shiny, level, facilité de capture et hp.
+
+\bigskip
+
+Cette question conduit à s’interroger sur le caractère réellement aléatoire des échanges réalisés dans le Wonder Trade du point de vue de la qualité des Pokémon. Il s’agit notamment de déterminer si les joueurs échangent davantage des Pokémon moins qualitatifs, ou si des Pokémon puissants et recherchés circulent également dans ce système. Cette analyse vise à mettre en évidence les logiques sous-jacentes aux choix d’échange ainsi que les stratégies potentielles des joueurs.
+
+\medskip
+
+Cette problématique s’inscrit à la fois dans le cadre de l’analyse de données et de l’étude des comportements en environnement numérique. Elle permet d’évaluer si les échanges relèvent d’une logique d’optimisation, caractérisée par la conservation des Pokémon à forte valeur, ou s’ils traduisent des dynamiques plus variées telles que l’aléatoire, la générosité ou des stratégies non systématiques. L’objectif est ainsi de mettre en lumière les paramètres déterminants de la qualité des échanges à l’aide d’outils statistiques.
+
+\bigskip 
+\bigskip 
+
+
+
+
+\medskip
+
+
+
+## Composition de l'équipe
+
+
+\begin{minipage}{\textwidth}
+\vspace{1cm}
+
+\textbf{Rôles}
+
+\vspace{0.5cm}
+
+
+\textbf{Fenina Sara (22411291)}\\
+Responsable de la recherche des bases de données, de la modélisation des tables et de la structuration globale ; participation aux analyses et à l’interprétation des résultats.
+
+\vspace{0.5cm}
+
+\textbf{Guilleminot Sarah (22405827)}\\
+En charge des requêtes SQL et de la modélisation statistique ; contribution aux analyses, à l’interprétation et à la mise en forme du rapport.
+
+\vspace{0.5cm}
+
+\textbf{Rakoto Ambinintsoa Prisca (22402951)}\\
+Élaboration des requêtes SQL, modélisation statistique et visualisation des données ; contribution aux analyses et à la validation des résultats.
+
+\vspace{0.5cm}
+
+\textbf{Sbircea Stéphanie (22404694)}\\
+Responsable de l'import, du nettoyage et de la transformation des données ; contrôle de la cohérence des requêtes SQL et de la qualité des résultats; préparation du diaporama et relecture globale du rapport.
+
+\vspace{0.5cm}
+\end{minipage}
+
+
+
+# Base de données
+
+## Provenance des données  
+
+
+  pokemon: https://www.kaggle.com/datasets/rounakbanik/pokemon) 
+  
+\bigskip
+
+  wonder trades: (https://github.com/solash/pokemon-wondertrade-analytics/blob/master/data/wondertrades-03142015.json)
+
+
+\bigskip
+Nous avons sélectionné la table pokemon car elle contient les données relatives à la description des Pokémon, et la table wonder trade car elle contient les informations concernant les échanges.
+
+Les données des Pokémons sont stockées sous format CSV : le fichier contient 38 colonnes et 802 lignes.
+
+Le fichier wonder trade est sous format Json, il contient 18 colonnes et 201 lignes.
+
+\bigskip
+
+Afin de faciliter l’analyse, nous avons choisi de filtrer certaines colonnes. En effet, toutes les variables n’étaient pas nécessaires pour répondre à notre problématique.
+
+Dans la table pokemon, nous avons conservé uniquement les colonnes les plus pertinentes, notamment celles liées aux caractéristiques principales comme les statistiques (attack, defense, speed, base_total), les types (type1, type2), ainsi que des informations générales comme la génération et le caractère légendaire.
+
+Dans la table wonder trade, nous avons également sélectionné un sous-ensemble de colonnes parmi les 18 colonnes initiales, pour créer les tables trades, trainers et users comme explicité dans la partie import des données.
+
+\bigskip
+
+Ce filtrage permet de réduire le nombre de variables tout en gardant les informations essentielles, ce qui rend l’analyse plus claire et plus pertinente.
+
+Concernant les lignes, nous avons choisi de conserver l’ensemble des observations, soit 802 Pokémon et 200 échanges, afin de ne pas biaiser les résultats et de garder une vision globale des données.
+
+\bigskip
+
+La population étudiée correspond à l’ensemble des Pokémon du fichier pokemon.csv ainsi qu’aux échanges du fichier wonder trade.json.
+
+\bigskip 
+\bigskip 
+\medskip 
+\vspace{2.5cm}
+## Descriptif des tables
+
+\bigskip
+
+
+\begin{longtable}{|m{3.5cm}|m{1.5cm}|m{5cm}|m{5cm}|}
+\caption{Table : pokemon ($802 \times 41$)} \label{tab:pokemon} \\
+\hline
+\textbf{Nom colonne} & \textbf{Type} & \textbf{Signification} & \textbf{Caractéristique} \\ \hline
+\endfirsthead
+\hline
+\textbf{Nom colonne} & \textbf{Type} & \textbf{Signification} & \textbf{Caractéristique} \\ \hline
+\endhead
+pokedex\_number & Entier & Numéro officiel du Pokédex & \textbf{Clé primaire} \\ \hline
+name & Chaîne & Nom anglais de l'espèce & EX : Abra \\ \hline
+abilities & Liste & Capacités spéciales possibles & EX : ['Overgrow'] \\ \hline
+type1 / type2 & Chaîne & Types élémentaires & type2 peut être \textbf{vide} \\ \hline
+
+\begin{minipage}[c]{3cm}
+\scriptsize\renewcommand{\arraystretch}{0.8}
+\begin{tabular}{@{}l l@{}} 
+hp & sp\_attack \\ 
+attack & sp\_defense \\ 
+defense & speed 
+\end{tabular}
+\end{minipage} & Entier & Statistiques de combat & 
+\begin{minipage}[c]{7cm}
+\scriptsize
+\vspace{2mm}
+- HP : $[1 ; 255]$  \\
+- Attaque : $[5 ; 190]$  \\
+- Défense : $[5 ; 230]$ \\
+- Att. Spé : $[10 ; 216]$  \\
+- Déf. Spé : $[20 ; 230]$  \\
+- Vitesse : $[5 ; 200]$ 
+\vspace{2mm}
+\end{minipage} \\ \hline
+
+
+base\_total & Entier & Somme des statistiques AKA Puissance globale & base\_total :$[180 ; 780]$  \\ \hline
+base\_egg\_steps & Entier & Etapes pour avoir un EggMove(capacité herité) & base\_egg\_step:$[1280;30.7k]$ \\ \hline
+capture\_rate & Entier & Valeur de la probabilité de capture de l'especes & capture\_rate: $[3;255]$ \\ \hline
+is\_legendary & Booléen & Statut de Pokémon légendaire & 0 = Non, 1 = Oui \\ \hline
+resistance & Réel & Multiplicateurs de dégâts & resistance : $[0 ; 36]$  \\ \hline
+generation & Entier & Géneration auquel appartient le pokémon & generation : $[1 ; 7]$ \\ \hline
+
+\end{longtable}
+
+\smallskip
+
+La table Pokemon sert de dictionnaire de référence. Elle contient toutes les statistiques immuables et globale de chaque espèce de Pokémon (force, types, résistances).
+
+\bigskip
+
+\begin{longtable}{|m{3.5cm}|m{1.5cm}|m{5cm}|m{5cm}|}
+\caption{Table : trainers} \label{tab:trainers} \\
+\hline
+\textbf{Nom colonne} & \textbf{Type} & \textbf{Signification} & \textbf{Caractéristique} \\ \hline
+\endfirsthead
+\hline
+\textbf{Nom colonne} & \textbf{Type} & \textbf{Signification} & \textbf{Caractéristique} \\ \hline
+\endhead
+trainerId & Entier & Identifiant unique du dresseur & \textbf{Clé primaire} \\ \hline
+trainerGender & Chaîne & Sexe du dresseur & "male" ou "female" \\ \hline
+trainerCountry & Chaîne & Code pays (ISO) & EX : US, JP, FR \\ \hline
+trainerCountrySub1 & Chaîne & Région ou État d'origine & EX : California, Texas, Tokyo \\ \hline
+\end{longtable}
+
+\smallskip
+La table Trainers contient les profils des partenaires d'échange. Elle permet de savoir avec qui l'utilisateur a interagi et de quelle région du monde provient le Pokémon reçu.
+
+\bigskip
+
+\begin{longtable}{|m{3.5cm}|m{1.5cm}|m{5cm}|m{5cm}|}
+\caption{Table : trades} \label{tab:trades} \\
+\hline
+\textbf{Nom colonne} & \textbf{Type} & \textbf{Signification} & \textbf{Caractéristique} \\ \hline
+\endfirsthead
+\hline
+\textbf{Nom colonne} & \textbf{Type} & \textbf{Signification} & \textbf{Caractéristique} \\ \hline
+\endhead
+pokemonId & Entier & ID du Pokémon échangé & \textbf{Clé étrangère} vers pokemon \\ \hline
+trainerId & Entier & ID du dresseur partenaire & \textbf{Clé étrangère} vers trainers \\ \hline
+userId & Entier & ID de l'utilisateur local & \textbf{Clé étrangère} vers users \\ \hline
+level & Entier & Niveau du Pokémon lors de l'échange & level : $[0 ;100]$  \\ \hline
+isShiny & Texte & Aspect chromatique rare & 0 = Non, 1 = Oui \\ \hline
+hasItem & Texte & Le Pokémon tient-il un objet ? & 0 = Non, 1 = Oui \\ \hline
+hasHiddenAbility & Texte & Possède un talent caché rare & 0 = Non, 1 = Oui \\ \hline
+hasPerfectIV & Texte & Possède des stats innées au max & 0 = Non, 1 = Oui \\ \hline
+hasPokerus & Texte & Infecté par le virus bénéfique & 0 = Non, 1 = Oui \\ \hline
+hasEggMove & Texte & Possède une capacité de reproduction & 0 = Non, 1 = Oui \\ \hline
+liked & Chaîne & Avis de l'utilisateur sur l'échange & "like", "dislike" ou \textbf{vide} \\ \hline
+date / time & Date / Heure & Moment précis de l'échange & EX : 2015-02-08 / 54817 \\ \hline
+\end{longtable}
+
+\smallskip
+La table Trades est centrale. Elle enregistre l'historique de tous les échanges effectués. Contrairement à la table précédente, les données ici (niveau, objet, shiny) sont spécifiques au spécimen précis qui a été reçu lors de l'échange.
+
+\bigskip
+
+
+\begin{longtable}{|m{3.5cm}|m{1.5cm}|m{5cm}|m{5cm}|}
+\caption{Table : users} \label{tab:users} \\
+\hline
+\textbf{Nom colonne} & \textbf{Type} & \textbf{Signification} & \textbf{Caractéristique} \\ \hline
+\endfirsthead
+\hline
+\textbf{Nom colonne} & \textbf{Type} & \textbf{Signification} & \textbf{Caractéristique} \\ \hline
+\endhead
+id\_user & Entier & Identifiant unique de l'utilisateur & \textbf{Clé primaire} \\ \hline
+\end{longtable}
+
+\smallskip 
+La table Users est très courte et sert simplement à identifier les comptes locaux sur le logiciel du site web qui a enregistré les données.
+
+\bigskip
+
+
+
+## Modèles MCD et MOD
+
+  ![**MCD**.](images/tuto-0019(1).png){#MCD width="16cm"}
+  
+\bigskip 
+\bigskip 
+\bigskip 
+
+  ![**MOD**.](images/pokewonder (1).png){#MOD width="16cm"height="8cm"}
+  
+
+\vspace{1.5cm}
+
+
+
+  MOD :
+  
+**USERS** (id_user)
+
+**TRAINER** (id_trainer, original_trainer_id, trainer_name, gender, country, country_sub1)
+
+**POKEMON** (pokedex_number, name, abilities, classication, type1, type2, hp, attack, défense, sp_attack, sp_defense, speed, base_total, base_egg_steps, percentage_male, capture_rate, résistence, is_legendary, generation)
+
+**TRADE** (id_trade, hasItem, hasHiddenAbility, hasEggMove,hasPokerus, hasPerfectIV, isShiny, level, date, time, liked, #id_user, #id_trainer, #pokedex_number) 
+
+\bigskip 
+\bigskip 
+
+## Import des données 
+
+A partir des fichiers **Pokemon** et **WonderTrade**, nous avons créé les tables **Pokemon**, **Trades**, **Trainers** et **Users** comme indiqué si-dessous.
+
+\bigskip 
+
+### Transformation du fichier Json en csv
+
+Nous avons importé le fichier **WonderTrade** qui est en Json sur Excel en allant sur “obtenir des données” puis “à partir d’un fichier” puis “à partir de JSON”, ce qui nous a permi de le convertir en table avec l'éditeur Power Query.
+
+\bigskip 
+
+Nous avons choisi de garder toutes les colonnes en cliquant sur la double flèche et en sélectionnant le tout, puis nous avons pu avoir le fichier en csv grâce au bouton “fermer et charger”.
+
+\bigskip 
+
+### Création des nouveaux Trainer ID
+
+Directement dans le fichier CSV **WonderTrade** ouvert dans LibreOffice, nous avons procédé de la manière suivante :
+
+\bigskip 
+
+Nous avons d’abord activé l’autofiltre sur l’ensemble des données afin de faciliter les opérations de tri, pour ensuite trier par ordre croissant ***trainerGender*** puis ***TrainerCountry*** puis ***TrainerCountrySub1***.
+
+\bigskip 
+
+Ce tri permet de regrouper les lignes présentant des caractéristiques similaires, ce qui est nécessaire pour la suite du traitement.
+
+\bigskip 
+
+Nous avons ensuite trié la colonne ***trainerId*** par ordre croissant. Nous avons constaté que les lignes situées en bas du tableau correspondent aux échanges avec un trainerId vide. Ce sont ces lignes pour lesquelles nous devons créer de nouveaux identifiants.
+
+\bigskip 
+
+Nous faisons ici l’hypothèse que des individus ayant le même genre, le même pays et la même sous-localisation correspond à une seule et même personne. Sachant qu’il y a environ 100 lignes sans ID et que les identifiants existants commencent à 783, il n’y aura pas de problème pour créer les nouveaux.
+
+\bigskip 
+
+Sous le dernier ***trainerId*** connu, nous saisissons la valeur 1, puis dans la cellule suivante, nous entrons la formule :
+
+\bigskip 
+
+      “=SI(J103=J104;SI(K103=K104;SI(L103=L104;Q103;Q103+1);Q103+1);Q103+1)”
+
+\bigskip 
+
+Nous étirons ensuite cette formule jusqu’à la dernière ligne du tableau.
+
+\bigskip 
+
+Cette formule permet de comparer chaque ligne à la précédente : si le genre, le pays et la sous-localisation sont identiques, l’identifiant reste le même ; dans le cas contraire, il est incrémenté de 1.
+
+\bigskip 
+
+Nous avons choisi cette méthode en considérant que les trainers partageant les mêmes caractéristiques correspondent à une seule personne. Il aurait également été possible d’attribuer un identifiant distinct à chaque trainer anonyme, mais ce choix n’a pas d’impact sur notre analyse, qui porte sur les caractéristiques des individus (genre, pays, etc.) et non sur leur identification individuelle.
+
+\bigskip 
+
+### Création des tables dérivées de WonderTrade
+
+À partir du fichier **WonderTrade** modifié, nous avons construit plusieurs tables : 
+
+\bigskip 
+
+  ![**Schéma explication tables dérivées wondertrade.**](images/schema_wondertrade.png){#wond width="12cm"}
+
+Ce découpage suit rigoureusement les règles de passage du MCD au MOD pour garantir la normalisation de la base de données.
+ Eviter de répéter inutilement les informations. Par exemple, les caractéristiques d'un dresseur (pays, genre) ne sont enregistrées qu'une seule fois dans la table Trainers, même s'il effectue des dizaines d'échanges.
+Chaque entité distincte identifiée dans notre analyse a été transformée en table indépendante : Users, Trainers et Trades.
+Pour maintenir les liens relationnels, les identifiants userId et id_trainer ont été intégrés à la table centrale Trades en tant que clés étrangères (#id_user, #id_trainer).
+
+Cette structure relationnelle est indispensable pour réaliser des jointures SQL optimisées et mener les analyses statistiques (ANOVA, Khi$^2$) demandées sans biais de répétition
+
+\bigskip 
+
+### Dernières modifications
+
+Table **Pokemon** : 
+Nous avons ouvert le fichier CSV pokemon avec LibreOffice afin de supprimer les colonnes inutiles : ***weight_kg, japanese_name, height_m, experience_growth, base_happiness***.
+
+\bigskip 
+
+Pour diminuer les colonnes en gardant les données de résistance nécessaire, nous commençons par rechercher et remplacer les “.” par des “,” pour que les réels soient bien tous considérés comme des nombres par LibreOffice. 
+
+\bigskip 
+
+Ensuite nous créons une nouvelle colonne ***résistance*** avec le code “=SOMME(B2:S2)” donc la somme de toutes les colonnes commençant par ***against***, que nous étirons jusqu'à la dernière ligne. Puis nous faisons un copié collé de cette colonne ***résistance*** au même endroit en texte non formaté avec un séparateur qui n’est pas ”,”afin de conserver les données après avoir supprimé les autres colonnes, et enfin dernier nous pouvons supprimer toutes les colonnes ***against...***.
+
+
+\bigskip 
+
+Tables **Trainers** et **Users** : 
+Nous avons ouvert ces tables dans LibreOffice, puis nous avons trié les données par identifiant croissant, et enfin nous avons ensuite supprimé manuellement les lignes en double.
+
+\bigskip 
+
+Table **Trades** : 
+Afin de simplifier l'analyse future, dans LibreOffice nous faisons un copié-collé des noms de colonnes ***hasItem, hasHiddenAbility, hasEggMove, hasPokerus, hasPerfectIV et isShiny*** à droite des autres colonnes. Nous écrivons ensuite le code “=SI(B2="FAUX";0;1)” dans la case sous ***hasItem*** que nous étirons jusqu’à la dernière case du nouveau ***isShiny***. Comme précédemment nous copions et collons en texte non formaté et supprimons les colonnes de trop.
+
+\bigskip 
+
+Pour finir wous ajoutons une clé primaire auto-incrémentée dans phpMyAdmin en utilisant la requête SQL suivante :
+
+\bigskip 
+
+      “ALTER TABLE trades ADD IdTrade INT AUTO_INCREMENT PRIMARY KEY;”
+
+
+
+
+# Requêtes réalisées
+
+
+\bigskip
+
+REQUETE 0: Pokémon échangés
+
+\bigskip
+
+
+Pour commencer, l'exécution de la requête SQL a permis d'extraire le nombre de pokémon échangé parmi les échanges, et par rapport au nombre total de Pokémon. Cette première requête nous donne une vision d'ensemble et va être à l’origine des autres requêtes qui vous surtout se concentrer sur les pokémons échangés. 
+
+
+
+
+
+``` sql
+SELECT 
+    COUNT(DISTINCT t.pokemonId) AS "nb_pokémon_échangés",
+    COUNT(t.pokemonId) AS nb_échanges,
+   (SELECT COUNT(*) FROM Pokemon) AS "nb_total_pokémon"
+FROM Pokemon p
+LEFT JOIN Trades t ON p.pokedex_number = t.pokemonId;
+```
+
+
+
+
+Table: 1 records
+
+| nb_pokémon_échangés| nb_échanges| nb_total_pokémon|
+|-------------------:|-----------:|----------------:|
+|                 119|         200|              801|
+
+Nous voyons que 119 pokémons différents sont échangés dans les 200 échanges, donc certains sont échangés plusieurs fois, ce qui peut nous laisser penser que ces échanges ne sont pas une question de hasard. La suite nous aidera à approffondir cette idée.
+
+## Echanges et caractéristiques des Pokémon
+
+
+\bigskip 
+
+REQUETE 1:  Pokémon de niveau 1(breeding)
+
+\bigskip
+
+Nous cherchons à savoir combien de Pokémon échangés sont de niveau 1, ce qui correspond souvent à des Pokémon issus d’élevage.
+
+
+``` sql
+SELECT COUNT(*) AS "nb_pokemon_niveau1"
+FROM trades
+WHERE level = 1;
+```
+
+
+
+
+Table: 1 records
+
+| nb_pokemon_niveau1|
+|------------------:|
+|                 72|
+
+Plus d'1/3 des Pokémon sont de niveau 1, donc le niveau le plus faible. Cela montre bien que les joueurs préfèrent échanger des Pokémon moins essentiels en terme de niveau.
+
+\bigskip
+
+
+REQUETE 2: Types les moins appréciés
+
+\bigskip
+
+Nous avons analysé les types des Pokémons dans les détails pour étudier lesquels sont les moins appréciés.
+
+
+
+``` sql
+SELECT Pokemon.type1, Pokemon.type2, COUNT(*) AS nb_dislikes 
+FROM Trades 
+INNER JOIN Pokemon ON Trades.pokemonId = Pokemon.pokedex_number 
+WHERE Trades.liked = "dislike" 
+GROUP BY Pokemon.type1, Pokemon.type2 
+ORDER BY nb_dislikes DESC 
+LIMIT 1;
+```
+
+
+
+
+Table: 1 records
+
+|type1  |type2 | nb_dislikes|
+|:------|:-----|-----------:|
+|normal |      |          11|
+
+Le type Normal est le moins aimé car il regroupe les Pokémon les plus communs et faciles à capturer dès le début du jeu. Statistiquement, ils possèdent souvent des caractéristiques de combat plus faibles (HP, Attaque, Défense) que les types plus rares ou "exotiques".
+Enfin, comme les dresseurs utilisent souvent le Wonder Trade comme un outil d'optimisation pour se débarrasser de leurs spécimens les plus faibles, le système se retrouve saturé de Pokémon de type Normal, provoquant une déception systématique enregistrée dans la colonne liked (dislike) par les destinataires
+
+\bigskip 
+
+REQUETE 3: Shiny
+
+\bigskip
+
+Nous avons cherché à identifier les Pokémon shiny présents dans les échanges.
+
+L’objectif est d’évaluer si les Pokémon rares sont fréquemment échangés.
+
+
+``` sql
+SELECT COUNT(*) AS nb_shiny 
+FROM trades 
+WHERE isShiny = '1';
+```
+
+
+
+
+Table: 1 records
+
+| nb_shiny|
+|--------:|
+|        1|
+
+
+Les résultats montrent qu’ils sont très peu échangés (1 seul), ce qui est logique car ils sont rares et ont une forte valeur pour les joueurs.
+
+Cela confirme un comportement de rétention des ressources rares.
+
+\bigskip
+
+
+REQUETE 4 : Relation entre la facilité de capture et le nombre d’échanges
+
+\bigskip
+
+Nous avons étudié la relation entre la facilité de capture et le nombre d’échanges. L’objectif est de tester si les Pokémon faciles à capturer sont plus échangés.
+
+
+
+``` sql
+SELECT Pokemon.capture_rate, COUNT(*) AS nb_echanges 
+FROM Pokemon 
+JOIN Trades ON Pokemon.pokedex_number = Trades.pokemonId 
+GROUP BY Pokemon.capture_rate 
+ORDER BY nb_echanges DESC;
+```
+
+
+
+
+Table: Displaying records 1 - 10
+
+|capture_rate | nb_echanges|
+|:------------|-----------:|
+|255          |          62|
+|45           |          35|
+|190          |          30|
+|225          |          13|
+|200          |          12|
+|120          |          11|
+|235          |           9|
+|180          |           8|
+|75           |           6|
+|90           |           3|
+
+
+Les résultats montrent que les Pokémon ayant un taux de capture de 255 (le plus élevé possible) dominent largement le classement avec 62 échanges. De manière plus surprenante, les Pokémon ayant un taux de capture de 45 arrivent en deuxième position, alors même qu’ils sont nettement moins faciles à capturer.
+
+Cette distribution confirme que les Pokémon les plus accessibles constituent une part importante des échanges entre dresseurs. Toutefois, la présence marquée de certaines espèces moins faciles à capturer suggère que la fréquence des échanges ne dépend pas uniquement de la facilité d’obtention. D’autres facteurs comme l’intérêt stratégique peuvent également intervenir.
+
+Dans l’ensemble, les données indiquent que les joueurs échangent majoritairement des espèces communes, capturables en grande quantité. À l’inverse, les Pokémon plus rares apparaissent de manière marginale dans les échanges. Une tendance générale se dégage donc : plus un Pokémon est facile à obtenir, plus il circule dans les échanges.
+
+Cette observation devra néanmoins être confirmée par une analyse de corrélation plus rigoureuse dans la suite du rapport, afin de mesurer précisément l’intensité de cette relation.
+
+
+## Liens entre échanges et trainers
+
+\bigskip
+
+REQUETE 5: Genre du dresseur et capacités du Pokémon
+
+\bigskip
+
+Nous avons étudié le lien entre le genre des dresseurs et les qualités du Pokémon échangé, considérant les qualités hasItem, hasHiddenHability, hasEggMove, hasPokerus, hasPerfectIv et isShiny.
+
+L’objectif est de vérifier s’il existe une corrélation entre le genre et ses préférences d’échange.
+
+
+
+``` sql
+SELECT 
+    tr.trainerGender,
+    AVG(
+        t.hasItem +
+        t.hasHiddenAbility +
+        t.hasEggMove +
+        t.hasPokerus +
+        t.hasPerfectIV +
+        t.isShiny
+    ) AS score_moyen
+FROM trades t
+INNER JOIN trainers tr ON t.trainerId = tr.trainerId
+INNER JOIN pokemon p ON t.pokemonId = p.pokedex_number
+GROUP BY tr.trainerGender;
+```
+
+
+
+
+Table: 3 records
+
+|trainerGender | score_moyen|
+|:-------------|-----------:|
+|              |      0.0000|
+|female        |      0.4118|
+|male          |      0.4207|
+
+
+Les résultats montrent des scores moyens très proches entre les dresseurs féminins (0,4118) et masculins (0,4207), sur une échelle maximale de 6. Cette différence est négligeable et suggère que le genre n’a pas d’impact notable sur la “qualité” des Pokémon échangés.
+
+En revanche, la catégorie correspondant aux genres non renseignés présente un score nul, ce qui indique que les personnes qui ne voulaient pas s'exposer échangent des pokémons moins qualitatifs.
+
+Globalement, ces résultats indiquent une forte homogénéité des comportements d’échange entre hommes et femmes, le genre ne semblant pas être un facteur discriminant dans la qualité des échanges.
+
+\bigskip
+
+REQUETE 6 : Anonymat vs qualité
+
+\bigskip
+
+
+Nous avons comparé les échanges entre dresseurs anonymes et identifiés à partir de plusieurs indicateurs (niveau, shiny, objets, IV…).
+
+L’objectif est de mesurer si l’anonymat influence la qualité des échanges. Elle permet de vérifier si les joueurs anonymes proposent des échanges moins intéressants ou si aucune différence significative n’existe
+
+En revanche la qualité est multidimensionnelle, donc une analyse SQL seule ne suffit pas. Il faudrait pondérer les variables pour créer un score global.
+
+
+``` sql
+SELECT 'Anonyme' AS Statut,
+AVG(CAST(level AS UNSIGNED))
+AS "Niveau.Moy", AVG(isShiny) 
+* 100 AS "%Shiny", AVG(hasItem) 
+* 100 AS "%Objet", AVG(hasPerfectIV) 
+* 100 AS "%IV.Parfait", AVG(hasHiddenAbility) 
+* 100 AS "%Talent.Caché", AVG(hasEggMove) 
+* 100 AS "%EggMoves" 
+FROM trades WHERE trainerId <= 80 
+UNION ALL 
+SELECT 'Identifié',
+AVG(CAST(level AS UNSIGNED)),
+AVG(isShiny) 
+* 100, AVG(hasItem) 
+* 100, AVG(hasPerfectIV) 
+* 100, AVG(hasHiddenAbility) 
+* 100, AVG(hasEggMove) * 100 
+FROM trades WHERE trainerId > 80;
+```
+
+
+
+
+Table: 2 records
+
+|Statut    | Niveau.Moy| %Shiny| %Objet| %IV.Parfait| %Talent.Caché| %EggMoves|
+|:---------|----------:|------:|------:|-----------:|-------------:|---------:|
+|Anonyme   |    10.6970| 0.0000| 3.0303|      7.0707|       10.1010|   21.2121|
+|Identifié |    11.7822| 0.9901| 3.9604|     17.8218|        4.9505|   11.8812|
+
+Il est compliqué d'analyser ces données, les qualités des Pokémon qui changent réelement entre anonymes et identifiés sont le IV parfait qui est bien plus élevé chez les identifiés.
+
+Pourtant la qualité "eggMove" et les talents cachés sont plus élevés chez les individus anonymes. Nous ne pouvons pas tirer de conclusion de cette requête, mais il est tout de même interessant de la garder, pour montrer que tout n'est pas prévisible.
+
+\bigskip
+\bigskip
+
+## Conclusion générale
+
+L’ensemble des analyses réalisées sur les échanges Wonder Trade met en évidence que les échanges ne sont pas totalement aléatoires.
+
+Plusieurs facteurs semblent influencer les décisions des joueurs, notamment les caractéristiques des Pokémon et leur niveau de performance. Les résultats montrent que les Pokémon échangés sont fréquemment de niveau faible ou intermédiaire, ce qui suggère une tendance des joueurs à se séparer des Pokémon les moins optimisés.
+
+Par ailleurs, les analyses liées à la rareté indiquent que les Pokémon les plus rares ou difficiles à obtenir sont moins souvent échangés, confirmant un comportement de conservation des ressources précieuses par les joueurs.
+
+Enfin, l’étude des profils de dresseurs montre que certains comportements peuvent varier selon les caractéristiques des utilisateurs, mais ces différences restent globalement modérées.
+
+Dans l’ensemble, ces résultats suggèrent que les échanges Wonder Trade sont influencés par une logique d’optimisation des joueurs, plutôt que purement aléatoire : les Pokémon jugés faibles ou communs sont davantage échangés, tandis que les Pokémon rares ou performants sont majoritairement conservés.
+
+\bigskip
+\bigskip
+
+
+Si les requêtes SQL précédentes nous permettent d'observer des tendances globales (comme la prédominance du niveau 1), elles ne permettent pas de conclure à une causalité. La section suivante utilise l'inférence statistique pour valider si ces différences sont significatives ou dues au hasard.
+
+
+
+\bigskip
+
+
+
+# Analyse statistique
+
+L’objectif de cette analyse est de déterminer ce qui influence la qualité des échanges dans le système Wonder Trade, donc si nous pouvons y trouver un pattern. Nous cherchons à comprendre si les échanges sont purement aléatoires ou s'ils répondent à des logiques comportementales précises.
+
+\medskip
+
+Nous gardons la définition de qualité des échanges avec :
+
+  **Mesure subjective** : Basée sur la variable liked (satisfaction déclarée par le joueur).  
+
+\medskip
+
+  **Mesure objective** : Basée sur les variables suivantes : présence d’un objet, capacité cachée, egg move, Pokérus, IV parfaits, statut shiny, level, facilité de capture et hp.
+
+
+
+
+
+## Logiciels
+
+Coordination : Utilisation de Google Drive pour la planification et de GitHub pour le versionnage et le travail collaboratif asynchrone.
+
+Préparation des données : Premier nettoyage sur tableur (Excel/LibreOffice) pour l'agrégation des variables, suivi d'une structuration SQL sous MAMP (phpMyAdmin) pour l'implémentation.
+
+Analyse Statistique : Centralisation des traitements sur RStudio (scripts, tests d'hypothèses et visualisations).
+
+Rédaction : Composition du rapport avec l'appui de ChatGPT pour l'optimisation du code et de Overleaf pour les formules mathématiques , puis finalisation au format R Markdown pour garantir la reproductibilité des analyses.
+
+
+\bigskip
+
+## Analyse descriptive : Profil des échanges
+
+\bigskip
+
+**Distribution selon la facilité de capture**
+
+![](rapport-Gpokegirl_files/figure-latex/unnamed-chunk-10-1.pdf)<!-- --> 
+
+\smallskip
+
+L'observation des données montre que les Pokémon possédant un taux de capture élevé (espèces communes) sont massivement plus présents dans les échanges. Avec tout de même une étrange concentration du taux de capture 45, qui peut être interprété comme une anomalie, avec des Pokémon anormalement plus présents que les autres.  
+
+Le flux du Wonder Trade semble donc alimenté par l'abondance des captures faciles plutôt que par la rareté.  
+
+\bigskip
+
+**Résistance des Pokémon par origine géographique**
+
+
+![](rapport-Gpokegirl_files/figure-latex/unnamed-chunk-11-1.pdf)<!-- --> 
+
+\smallskip
+
+Nous avons choisi d'analyser ici les pays avec plus de 5 échanges chacun.
+
+Nous pouvons voir que la médiane est assez similaire dans chacun de ces pays, mais les moyennes varient, surtout pour le Mexique (MX) qui a visiblement une plus forte résistance (car 0 est la résistance la plus haute).
+
+Donc en dehors du Mexique, une certaine homogénéité est observée.
+
+Nous pouvons conclure que le pays du trainer a un impacte faible sur la qualité (résistance) du Pokémon, pour la plupart des pays.
+
+\bigskip
+
+**Niveau des Pokémon et anonymat**
+
+![](rapport-Gpokegirl_files/figure-latex/unnamed-chunk-12-1.pdf)<!-- --> 
+\smallskip
+
+Le graphique nous permet d’observer la répartition des échanges selon des tranches de niveaux pour les dresseurs anonymes et identifiés.
+
+Il n'y a pas de groupe qui se démarque dans toutes les tranches de niveaux, c'est assez varié.
+La majorité des échanges se concentre dans les faibles niveaux (1–5) pour les deux groupes.
+
+Les niveaux entre 11 et 30 représentent plus d'individus identifiés alors que la tranche de niveaux 31 à 50 montre plus d'individus anonymes, donc il n'y a pas de schéma, il est compliqué de prévoir qui va échanger quoi.
+
+Cela suggère que les deux types de joueurs échangent globalement les mêmes niveaux.
+
+![](rapport-Gpokegirl_files/figure-latex/unnamed-chunk-13-1.pdf)<!-- --> 
+
+Sur ce graphique les médianes sont très proches entre anonymes et identifiés, les boîtes (dispersion) sont quasiment identiques.
+
+Nous observons une forte concentration sur les niveaux faibles dans les deux cas, même si quelques valeurs extrêmes existent.
+
+Visuellement, il n’y a aucune différence marquée entre les distributions
+
+\smallskip
+
+Les deux graphiques convergent vers la même conclusion :
+
+\bigskip
+
+- Les dresseurs anonymes et identifiés échangent des Pokémon de niveaux très similaires
+
+\smallskip
+
+- Il n’y a ni différence structurelle, ni tendance claire distinguant les deux groupes
+
+\bigskip
+
+## Analyses bivariées : Tests d'hypothèses
+
+\bigskip
+
+**Facilité de capture vs Fréquence d'échange (Corrélation)**
+
+Nous testons si la rareté (taux de capture) influence la fréquence à laquelle un Pokémon est envoyé. 
+
+\bigskip
+
+-  $H_0$ : Aucune corrélation entre taux de capture et nombre d'échanges.  
+\bigskip
+-  $H_1$ : Il existe une corrélation. 
+- Formule (Coefficient de Corrélation de Pearson) :$$r = \frac{\sum (x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum (x_i - \bar{x})^2 \sum (y_i - \bar{y})^2}}$$
+
+
+```
+##       cor 
+## 0.2336852
+```
+
+```
+## [1] 0.01053322
+```
+
+\bigskip
+
+Interprétation : La p-value (0.01053) étant inférieure à 0.05, nous rejettons $H_0$. Il existe une corrélation positive (0.23) : les Pokémon faciles à capturer sont légèrement plus échangés, bien que la relation soit faible.
+
+\bigskip
+
+**Impact de l'anonymat sur le niveau échangé (ANOVA)**
+
+\bigskip
+
+Nous avons comparé le niveau moyen des Pokémon envoyés par les dresseurs "Anonymes" (trainerId inférieur à 80) et "Identifiés".  
+- $H_0$ : La moyenne des niveaux des Pokémon envoyés est identique quel que soit le type de dresseur ($\mu_1 = \mu_2$).
+- $H_1$ : Au moins une moyenne de niveau diffère selon le type de dresseur.
+- Formule (Statistique F de l'ANOVA) :$$F = \frac{\text{Variance inter-groupes}}{\text{Variance intra-groupes}}$$
+
+\bigskip
+
+
+```
+##              Df Sum Sq Mean Sq F value Pr(>F)
+## anonymat      1     59   58.88   0.323  0.571
+## Residuals   198  36130  182.48
+```
+
+\bigskip
+
+Le test ANOVA affiche une p-value de 0.571, bien au-dessus du seuil de 0,05. Nous ne pouvons pas rejeter l'hypothèse nulle. Il n'y a aucune différence statistiquement significative entre les deux groupes : l'anonymat n'influence pas le niveau du Pokémon envoyé.  
+
+\bigskip
+
+**Rareté et satisfaction des joueurs (Test du $\chi^2$)**
+
+\bigskip
+
+Ce test vérifie si un Pokémon avec au moins un avantage influence sa probabilité d'être "liké" lors d'un échange. 
+- $H_0$ : Les deux variables sont indépendantes.
+- $H_1$ : Il existe un lien de dépendance entre les deux variables.
+- Formule :$$\chi^2 = \sum \frac{(O_i - E_i)^2}{E_i}$$$O_i$ : Valeurs observées.$E_i$ : Valeurs attendues (théoriques).
+
+\bigskip
+
+
+```
+## [1] 0.0001791484
+```
+
+```
+## X-squared 
+## 0.2937226
+```
+
+\bigskip
+
+La p-value étant inférieure à 0,05, nous rejetons l'hypothèse nulle, confirmant que les joueurs sont plus satisfaits lorsqu'ils reçoivent un Pokémon présentant au moins une caractéristique rare.
+
+Le V de Cramer nous montre que la relation est légère sans être pour autant négligeable.
+
+\bigskip
+\bigskip
+
+## Conclusion de l'analyse statistique
+
+L’ensemble des analyses descriptives et tests statistiques montre que les échanges dans le système Wonder Trade ne sont pas totalement aléatoires.
+
+\bigskip
+
+Nous observons d’abord une forte influence de la facilité de capture : les Pokémon communs sont nettement surreprésentés dans les échanges, ce qui traduit un flux principalement alimenté par des espèces abondantes. 
+
+En revanche, les analyses par pays et par niveau ne révèlent pas de structure claire, comme pour les trainers anonymes ou non, suggérant que ces facteurs ont un impact limité, donc les différences des traineurs n'ont pas l'air d'influencer le contenu des échanges.
+
+\bigskip
+
+Les tests d’hypothèses confirment partiellement ces observations. Une légère corrélation existe entre la rareté et la fréquence d’échange, mais elle reste faible.
+
+En revanche, la satisfaction des joueurs est significativement liée à la présence de caractéristiques rares chez les Pokémon reçus. Le test du $\chi^2$ montre que les Pokémon possédant au moins un attribut spécial sont plus souvent appréciés.
+
+\bigskip
+
+Ainsi, les échanges apparaissent globalement structurés par des logiques simples liées à la rareté et à la valeur perçue des Pokémon, mais restent en partie influencés par des comportements peu prédictibles. 
+
+
+
+# Limites et percpectives
+## Difficultés rencontrées
+
+La réalisation de ce projet a mis en évidence plusieurs limites, à la fois techniques, méthodologiques et liées aux données.
+
+\medskip
+
+Tout d’abord, un problème majeur concerne le déséquilibre des données. Certaines variables sont très peu représentées, en particulier les Pokémon shiny (un seul individu dans la base). Cela rend les tests statistiques classiques, comme le test du $\chi^2$, peu fiables en raison d’effectifs trop faibles. Pour contourner cette limite, nous avons construit un indicateur plus robuste en agrégeant plusieurs caractéristiques des Pokémon (objet, capacités, IV, etc.), afin d’obtenir une mesure plus exploitable de la qualité.
+
+\medskip
+
+Ensuite, la qualité des données a posé plusieurs difficultés techniques. Certaines variables, comme la résistance, étaient mal interprétées lors de l’import (problème de virgule décimale), ce qui a généré des valeurs manquantes (NA) et faussé certaines analyses et visualisations. De plus, l’utilisation de noms de colonnes avec accents a entraîné des erreurs dans le code, nécessitant un nettoyage préalable des données.
+
+\medskip
+
+Un autre problème important concerne la taille des groupes. Certaines catégories, notamment les pays des dresseurs, contiennent très peu d’observations. Cela rend certains graphiques, comme les boxplots, peu pertinents ou difficilement interprétables. Il a donc été nécessaire de filtrer les groupes avec un effectif suffisant afin d’obtenir des résultats fiables.
+
+\medskip
+
+Par ailleurs, la variable de satisfaction (liked) est incomplète, puisqu’elle n’est renseignée que pour une partie des échanges. Nous avons choisi de considérer les valeurs manquantes comme neutres ou de les exclure selon les analyses, ce qui introduit une incertitude dans l’interprétation des résultats.
+
+\medskip
+
+Enfin, certaines hypothèses simplificatrices ont été nécessaires. Par exemple, nous avons supposé que des dresseurs partageant les mêmes caractéristiques (genre, pays, région) correspondaient à un même individu. Cette approximation peut entraîner une perte de précision dans l’analyse des comportements individuels.
+
+\medskip
+
+D’un point de vue pratique, la collecte des données a également été une contrainte : la source initialement envisagée n’étant plus disponible, nous avons dû nous tourner vers des données issues de GitHub, avec un contrôle limité sur leur qualité et leur structure.
+
+
+## Perspectives
+
+Plusieurs pistes pourraient être envisagées afin d’améliorer et d’approfondir cette étude.
+
+\medskip
+
+Tout d’abord, il serait pertinent de disposer d’un jeu de données plus récent et plus volumineux, incluant davantage de Pokémon, afin d’obtenir des résultats statistiques plus représentatifs. Ensuite, une amélioration importante consisterait à construire un indice de qualité des échanges plus complet, en combinant plusieurs variables. Cela permettrait de dépasser la simple variable liked et d’obtenir une mesure plus objective.
+
+\medskip
+
+Il serait également intéressant d’intégrer des variables supplémentaires, telles que la nature du Pokémon ou les objets tenus, afin d’affiner l’analyse du comportement des joueurs, notamment dans une perspective compétitive. 
+
+Enfin, une extension possible serait d’analyser la dimension temporelle des échanges, afin d’identifier d’éventuelles tendances selon les périodes ou les régions du monde.
+
+\bigskip
+En conclusion, malgré certaines limites liées aux données et aux hypothèses retenues, ce projet constitue une première approche pertinente de l’analyse des comportements dans le système Wonder Trade. Les perspectives évoquées ouvrent la voie à des analyses plus fines et plus complètes.
+
+
+
+
+#  Discussion
+
+
+Nos résultats permettent de confirmer que le système Wonder Trade, bien qu'aléatoire dans son attribution, est structurellement biaisé par les comportements rationnels des dresseurs.
+
+\bigskip
+
+**L'optimisation au détriment de l'aléatoire**
+
+\smallskip
+
+Notre problématique interrogeait l'existence d'un "pattern" d'échange. Les résultats montrent une stratégie claire de rétention des ressources. Nous voyons clairement que les Pokémons échangés sont pour la plupart de niveau faible, avec peu d'avantages liés à la rareté et la puissance, ceci démontre que les joueurs opèrent un tri qualitatif avant l'envoi. 
+
+Le Wonder Trade ne sert pas à partager sa puissance, mais à recycler des spécimens jugés "non essentiels".
+
+
+\medskip
+
+**L'influence de l'anonymat et de l'origine**
+
+\smallskip
+
+L'analyse des profils de dresseurs apporte une nuance intéressante : l'anonymat n'influence pas la qualité du Pokémon envoyé. Cela suggère que les logiques d'optimisation sont transversales à la communauté et ne dépendent pas de la réputation ou de l'exposition du profil du joueur. Seul le Mexique a montré une légère variation dans la résistance des Pokémon envoyés, mais l'échantillon réduit nous incite à la prudence quant à une conclusion géographique globale.  
+
+\medskip
+
+**Conclusion sur le système**
+
+\smallskip
+
+En conclusion, le Wonder Trade reflète un mécanisme économique de gestion des surplus. La corrélation entre taux de capture et fréquence d'échange prouve que le système incite l'échange des Pokémon "communs". Le "hasard" du Wonder Trade est donc une illusion statistique : c'est un marché asymétrique où la rareté est l'exception.
+
+
+
+
+# Bibliographie {-}
+
+
+
+Sandra Bringay et Marine Demangeot. Supports de cours et archives d'anciens rapport : Bases de Données et Sciences des Données 2, Université Paul Valéry Montpellier 3.
+  
+
+
+# Annexes {-}
+## Requêtes SQL: chapitre 3
+
+**REQUETE : HP échangés vs non échangés**
+
+\bigskip
+
+Nous avons comparé les points de vie moyens (HP) des Pokémon échangés et non échangés.
+
+L’objectif est de déterminer si les dresseurs ont tendance à échanger des Pokémon plus faibles, plus forts ou équivalents à la moyenne.
+
+
+``` sql
+
+SELECT 
+(SELECT AVG(hp) FROM pokemon) AS "moyenne.tous.hp",
+
+(SELECT AVG(p.hp) FROM pokemon p, trades t 
+WHERE p.pokedex_number = t.pokemonId) AS "hp.échangés",
+
+(SELECT AVG(p.hp) FROM pokemon p 
+WHERE p.pokedex_number IN (SELECT pokemonId FROM trades))
+AS "hp.échangés.distincts",
+
+(SELECT AVG(hp) FROM pokemon
+WHERE pokedex_number NOT IN (SELECT pokemonId FROM trades)) 
+AS "hp.non.échangeé";
+```
+
+
+
+
+Table: 1 records
+
+| moyenne.tous.hp| hp.échangés| hp.échangés.distincts| hp.non.échangeé|
+|---------------:|-----------:|---------------------:|---------------:|
+|         68.9588|       49.59|               54.9916|         71.3959|
+
+Nous constatons que les Pokémon conservés par les dresseurs affichent une moyenne de 71,40 HP, une valeur supérieure à la moyenne générale du Pokédex (68,96 HP).
+
+À l'inverse, les Pokémon échangés présentent une moyenne de points de vie nettement plus faible, avec une moyenne de 54,99 HP pour les espèces distinctes, qui tombe même à 49,59 HP lorsque l'on analyse l'ensemble des flux, indiquant que les spécimens les plus fragiles sont échangés de manière répétitive. 
+
+Dans l'ensemble, ces résultats mettent en évidence une tendance des dresseurs à se séparer des Pokémon les moins robustes au profit de spécimens plus endurants qu'ils préfèrent garder. 
+
+
+\bigskip
+
+**REQUETE : Egg Move et HP**
+
+\bigskip
+
+Nous avons analysé si la présence d’une capacité spéciale (Egg Move) influence les HP moyens afin de voir  si cette caractéristique apporte un avantage mesurable.
+
+
+``` sql
+SELECT t.hasEggMove, AVG(p.hp) 
+FROM pokemon p, trades t 
+WHERE p.pokedex_number = t.pokemonId 
+GROUP BY t.hasEggMove;
+```
+
+
+
+
+Table: 2 records
+
+|hasEggMove | AVG(p.hp)|
+|:----------|---------:|
+|0          |   49.7844|
+|1          |   48.6061|
+
+
+L’analyse croisée entre la présence d’une capacité spéciale (Egg Move) et les points de vie moyens des Pokémon échangés révèle des résultats quasi identiques. Nous observons que les Pokémon possédant un Egg Move affichent 48,61 HP en moyenne, contre 49,78 HP pour ceux n'en possédant pas. 
+
+Cet écart semble infime et suggèrerait que la possession d'une capacité rare n'est pas corrélée à une robustesse physique supérieure chez les Pokémon échangés.
+
+L'avantage d'un Egg Move serait purement technique ou tactique, sans influence mesurable sur la statistique de HP. À ce stade, aucune tendance dominante ne semble se dégager visuellement, ce qui indique que ces deux caractéristiques évolueraient de manière indépendante. 
+
+\bigskip
+
+**Regression multimodale**
+Nous avons choisi ce modèle car notre variable liked comporte trois catégories : Like, Dislike et Neutral. Contrairement à une régression classique limitée à deux choix, la méthode multinomiale permet d'analyser simultanément ce qui influence chaque niveau de satisfaction par rapport à un point de référence (ici, l'avis neutre). C'est l'outil idéal pour comprendre les nuances de choix des utilisateurs.
+
+
+``` r
+# Chargement des librairies
+library(nnet)
+library(ggplot2)
+if (!require(broom)) install.packages("broom", repos = "https://cloud.r-project.org")
+```
+
+```
+## Le chargement a nécessité le package : broom
+```
+
+``` r
+library(broom)
+
+# 1. Chargement et Fusion
+trades <- read.csv("CSV/Trades.csv", sep = ";")
+pokemon <- read.csv("CSV/pokemon.csv", sep = ",")
+data_etude <- merge(trades, pokemon, by.x = "pokemonId", by.y = "pokedex_number")
+
+# 2. GESTION DES NEUTRES : On remplace les vides par "neutral"
+data_etude$liked[data_etude$liked == "" | is.na(data_etude$liked)] <- "neutral"
+data_etude$liked <- as.factor(data_etude$liked)
+data_etude$liked <- relevel(data_etude$liked, ref = "neutral")
+
+# 3. CORRECTION DES VARIABLES NUMERIQUES
+data_etude$capture_rate <- as.numeric(as.character(data_etude$capture_rate))
+data_etude$hp <- as.numeric(as.character(data_etude$hp))
+data_etude$level <- as.numeric(as.character(data_etude$level))
+
+# 4. Le Modèle
+modele_multi <- multinom(liked ~ level + hasItem + hasHiddenAbility + 
+                         hasPerfectIV + hasEggMove + hp + capture_rate, 
+                         data = data_etude, trace = FALSE)
+
+# 5. Préparation des données pour le graphique
+resultats_propres <- tidy(modele_multi, conf.int = TRUE)
+resultats_propres <- subset(resultats_propres, term != "(Intercept)")
+
+# 6. Création du Graphique (Optimisé pour le centrage et la taille)
+p <- ggplot(resultats_propres, aes(x = estimate, y = term, color = y.level)) +
+  geom_point(size = 2.5) + 
+  geom_errorbar(aes(xmin = conf.low, xmax = conf.high), width = 0.2) + 
+  geom_vline(xintercept = 0, linetype = "dashed", color = "red",
+  linewidth = 0.8) + 
+  facet_wrap(~ y.level) + 
+  theme_minimal(base_size = 11) +
+  scale_color_manual(values = c("like" = "#2ecc71", "dislike" = "#e74c3c")) +
+  labs(title = "Facteurs influençant la satisfaction d'un échange",
+       subtitle = "Comparaison par rapport à l'avis 'Neutral'",
+       x = "Effet (Coefficient)",
+       y = "") +
+  theme(
+    legend.position = "none",
+    # MÉTHODE 1 : Ajout de marges pour aider au centrage visuel
+    plot.margin = margin(t = 10, r = 20, b = 10, l = 20, unit = "pt"),
+    strip.text = element_text(face = "bold")
+  )
+
+# Afficher le graphique
+print(p)
+```
+
+![](rapport-Gpokegirl_files/figure-latex/unnamed-chunk-19-1.pdf)<!-- --> 
+
+``` r
+# 7. EXPORTATION : Pour que l'image soit petite, centrée et sans vide à droite
+# Ajuste width et height pour changer la taille dans ton rapport
+ggsave("images/graphique_final.png", plot = p, width = 12, height = 8, units = "cm", dpi = 300)
+```
+L'analyse multinomiale, prenant pour référence la neutralité, permet de dégager un pattern de sélection très spécifique chez les utilisateurs pour prédire leur satisfaction lors d'un échange. Cette étude révèle l'insignifiance des bases statistiques traditionnelles, où des variables telles que le niveau, les HP ou le taux de capture n'exercent aucune influence sur la qualité perçue, leurs coefficients stagnant à zéro. À l'inverse, les véritables moteurs de satisfaction (le "Like") sont dictés par l'optimisation technique : la présence d'IV parfaits et d'un objet tenu constituent les seuls leviers capables de transformer une indifférence neutre en un retour positif.Parallèlement, le talent caché (hasHiddenAbility) fonctionne comme un bouclier contre le rejet. En réduisant statistiquement les occurrences de 'Dislike', signalant ainsi une valeur perçue élevée. En somme, ce pattern répond à une logique d'économie de temps où l'utilisateur valorise exclusivement l'expertise liée au breeding et à la préparation stratégique, privilégiant la qualité technique au simple stade de progression du Pokémon.
+
+
+## Codes
+
+\bigskip
+
+Dans cette section, nous présentons les  codes utilisés pour réaliser les analyses du projet. 
+
+\bigskip
+\bigskip
+
+**Ajout d’une clé primaire**
+
+      ALTER TABLE trades
+      ADD IdTrade INT AUTO_INCREMENT PRIMARY KEY;
+
+\smallskip
+
+Cette requête permet d’ajouter un identifiant unique à chaque ligne de la table trades, facilitant les jointures et l’intégrité des données.
+
+\bigskip
+\bigskip
+
+### Scripts R chapitre 4
+**Test de corrélation (capture rate)**
+
+    {r echo=TRUE, results='hide', warning=FALSE}
+      library(dplyr)
+      
+      trades <- read.csv("CSV/Trades.csv", sep = ";")
+      pokemon <- read.csv("CSV/pokemon.csv", sep = ",")
+      
+      # Nettoyage et transformation du taux de capture :
+      
+      pokemon$capture_rate <- as.numeric(gsub("[^0-9]", "", pokemon$capture_rate))
+      pokemon$capture_rate_norm <- pokemon$capture_rate / 255
+      
+      # Fusion des données :
+      
+      df_corr <- merge(trades, pokemon,
+      by.x = "pokemonId",
+      by.y = "pokedex_number")
+      
+      # Calcul du nombre d’échanges par Pokémon :
+      
+      nb_echanges <- df_corr %>%
+      group_by(pokemonId, capture_rate_norm) %>%
+      summarise(nb = n(), .groups = "drop")
+
+\bigskip
+\bigskip
+
+**Test de corrélation :**
+
+    {r echo=TRUE, results='hide', warning=FALSE}
+      cor.test(nb_echanges$capture_rate_norm, nb_echanges$nb)
+
+
+\smallskip
+
+Cette analyse permet de mesurer le lien entre la facilité de capture et la fréquence d’échange.
+
+\bigskip
+\bigskip
+
+**Test du $\chi^2$ (shiny vs satisfaction)**
+
+    {r echo=TRUE, results='hide', warning=FALSE}
+      trades$liked[trades$liked == "" | is.na(trades$liked)] <- "no_opinion"
+      
+      table_shiny <- table(trades$isShiny, trades$liked)
+      
+      chisq.test(table_shiny)
+
+
+\smallskip
+
+Ce test permet d’évaluer l’association entre le statut shiny et la satisfaction des échanges.
+
+\bigskip
+\bigskip
+
+**Graphique de corrélation**
+
+    {r echo=TRUE, results='hide', warning=FALSE}
+      plot(nb_echanges$capture_rate_norm, nb_echanges$nb,
+      main = "Capture rate vs échanges",
+      xlab = "Capture rate normalisé",
+      ylab = "Nombre d’échanges",
+      pch = 16)
+      
+      abline(lm(nb ~ capture_rate_norm, data = nb_echanges),
+      col = "red",
+      lwd = 2)
+
+
+\smallskip
+
+Ce graphique illustre la relation entre taux de capture et nombre d’échanges.
+
+\bigskip
+\bigskip
+
+**ANOVA anonymat / niveau**
+
+    {r echo=TRUE, results='hide', warning=FALSE}
+      trades$level <- as.numeric(as.character(trades$level))
+      
+      trades$anonymat <- ifelse(trades$trainerId <= 80,
+      "Anonyme", "Identifie")
+      
+      res_anova <- aov(level ~ anonymat, data = trades)
+      summary(res_anova)
+
+
+\smallskip
+
+Cette analyse permet de comparer le niveau moyen selon le statut des utilisateurs.
+
+\bigskip
+\bigskip
+
+### Traitements Excel / LibreOffice
+**Création des Trainer ID**
+
+      =SI(J103=J104;
+      SI(K103=K104;
+      SI(L103=L104;Q103;Q103+1);
+      Q103+1);
+      Q103+1)
+
+\smallskip
+
+Cette formule permet de générer des identifiants uniques de dresseurs en fonction des duplications.
+
+\bigskip
+\bigskip
+
+**Conversion des booléens**
+
+      =SI(B2="FAUX";0;1)
+
+\smallskip
+
+Conversion des valeurs booléennes en format numérique pour analyses statistiques.
+
